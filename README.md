@@ -12,10 +12,10 @@ The Funfair Airlines project follows the principles of Domain-Driven Design (DDD
 
 The project relies on several Azure components, including:
 
-- Azure Service Bus (ASB): Used for asynchronous communication between different services within the system.
-- PostgreSQL: The chosen database to store airplane data, flight reservations, and seat bookings.
 - .NET 7.0: The app environment
+- PostgreSQL: The chosen database to store airplane data, flight reservations, and seat bookings.
 - Docker: Containerization
+- Azure: Cloud provider
 
 ## Configuration
 
