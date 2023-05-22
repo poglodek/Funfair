@@ -16,5 +16,5 @@ provider "azurerm" {
 # Create a resource group
 resource "azurerm_resource_group" "rg" {
   name     = "funfair_rg"
-  location = "West Europe"
+  location = var.azure_region
 }
