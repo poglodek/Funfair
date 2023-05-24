@@ -74,6 +74,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funfair.Messaging.AzureServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funfair.Auth", "src\Framework\Funfair.Auth\Funfair.Auth.csproj", "{0F66029D-0DB5-4533-A9A0-9139F9BCF7B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funfair.KeyVault", "src\Framework\Funfair.KeyVault\Funfair.KeyVault.csproj", "{F3E4D908-3A44-41A7-ADB5-51668784CB87}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,6 +118,7 @@ Global
 		{56033C39-4573-497B-908F-98D624CD8BFB} = {D110B0B0-A01D-418B-A806-04E54B352796}
 		{91B62D11-02C6-4614-97C2-8802935851A1} = {D110B0B0-A01D-418B-A806-04E54B352796}
 		{0F66029D-0DB5-4533-A9A0-9139F9BCF7B5} = {D110B0B0-A01D-418B-A806-04E54B352796}
+		{F3E4D908-3A44-41A7-ADB5-51668784CB87} = {D110B0B0-A01D-418B-A806-04E54B352796}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C74801FC-E1A7-444C-88D8-BE86E35A58C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -210,5 +213,9 @@ Global
 		{0F66029D-0DB5-4533-A9A0-9139F9BCF7B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F66029D-0DB5-4533-A9A0-9139F9BCF7B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F66029D-0DB5-4533-A9A0-9139F9BCF7B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3E4D908-3A44-41A7-ADB5-51668784CB87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3E4D908-3A44-41A7-ADB5-51668784CB87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3E4D908-3A44-41A7-ADB5-51668784CB87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3E4D908-3A44-41A7-ADB5-51668784CB87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
