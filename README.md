@@ -12,12 +12,12 @@ The Funfair Airlines project follows the principles of Domain-Driven Design (DDD
 
 The project relies on several Azure components, including:
 
-- .NET 7.0: The app environment
-- MSSQL: The chosen database to store airplane data, flight reservations, and seat bookings.
+- The app environment: .NET 7.0
+- Database: Ms Sql
 - Messaging: Azure service bus
 - Secrets: Key vault
-- Docker: Containerization
-- Azure: Cloud provider
+- Containerization: Docker
+- Cloud provider: Azure
 
 ## Configuration
 
