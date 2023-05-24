@@ -14,6 +14,8 @@ The project relies on several Azure components, including:
 
 - .NET 7.0: The app environment
 - MSSQL: The chosen database to store airplane data, flight reservations, and seat bookings.
+- Messaging: Azure service bus
+- Secrets: Key vault
 - Docker: Containerization
 - Azure: Cloud provider
 
