@@ -8,6 +8,11 @@ variable "azure_rg_name" {
   default = "funfair-rg"
 }
 
+variable "azure_nsg_name" {
+  type    = string
+  default = "funfair-nsg"
+}
+
 variable "azure_vn_name" {
   type    = string
   default = "funfair-vn"
@@ -19,23 +24,23 @@ variable "azure_key_vault_name" {
   default = "funfair-key-vault"
 }
 
-variable "azure_postgres_user" {
+variable "azure_sql_user" {
   type    = string
-  default = "postgresadmin"
+  default = "sqladmin"
 }
 
-variable "azure_postgres_version" {
+variable "azure_sql_version" {
   type    = string
-  default = "12"
+  default = "12.0"
 }
 
-variable "azure_postgres_skuname" {
+variable "azure_sql_skuname" {
   type    = string
   default = "Standard_B2s"
 }
 
 
-variable "azure_postgres_ssl_enforcement_enabled" {
+variable "azure_sql_ssl_enforcement_enabled" {
   type    = bool
   default = true
 }
