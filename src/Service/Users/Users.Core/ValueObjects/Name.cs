@@ -13,4 +13,5 @@ public record Name
         
         Value = value;
     }
+    public static implicit operator Name(string date) => new (date);
 };

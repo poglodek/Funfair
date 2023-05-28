@@ -15,4 +15,5 @@ public record Password
         
         Value = value;
     }
+    public static implicit operator Password(string date) => new (date);
 }

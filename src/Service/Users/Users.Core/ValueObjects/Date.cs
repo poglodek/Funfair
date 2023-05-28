@@ -14,5 +14,5 @@ public record Date
     }
 
     public DateTime Value { get; }
-    
+    public static implicit operator Date(DateTime date) => new (date);
 };

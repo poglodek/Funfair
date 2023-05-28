@@ -12,4 +12,21 @@ public class User
     public EmailAddress Email { get; private set; }
     public Password Password { get; private set; }
     public Role Role { get; private set; }
+
+    private User()
+    {
+        
+    }
+
+    public User(int id, Name firstName, Name lastName, Date dateOfBirth, Date createdAt, EmailAddress email, Password password, Role role)
+    {
+        Id = id;
+        FirstName = firstName;
+        LastName = lastName;
+        DateOfBirth = dateOfBirth;
+        CreatedAt = createdAt;
+        Email = email;
+        Password = password;
+        Role = role;
+    }
 }

@@ -20,4 +20,6 @@ public record EmailAddress
         
         Value = value;
     }
+    
+    public static implicit operator EmailAddress(string date) => new (date);
 }
