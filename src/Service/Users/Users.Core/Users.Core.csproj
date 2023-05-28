@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Framework\Funfair.Messaging.AzureServiceBus\Funfair.Messaging.AzureServiceBus.csproj" />
+    </ItemGroup>
+
 </Project>
