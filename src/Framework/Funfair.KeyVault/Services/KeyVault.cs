@@ -21,4 +21,15 @@ internal sealed class KeyVault : IKeyVault
 
         return string.Empty;
     }
+
+    public string GetSecret(string secretName)
+    {
+        var secret =  _client.GetSecret(secretName, null, default);
+        if (secret.HasValue)
+        {
+            return secret.Value.Value;
+        }
+
+        return string.Empty;
+    }
 }
