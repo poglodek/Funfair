@@ -1,4 +1,6 @@
-﻿namespace Users.Core.ValueObjects;
+﻿using Users.Core.Exceptions;
+
+namespace Users.Core.ValueObjects;
 
 public record Name
 {
@@ -8,7 +10,7 @@ public record Name
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            
+            throw new InvalidNameException(value);
         }
         
         Value = value;

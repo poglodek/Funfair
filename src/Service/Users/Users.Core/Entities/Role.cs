@@ -6,6 +6,11 @@ public class Role
     public IEnumerable<string> Permissions { get; set; } = new List<string>();
     public IEnumerable<User> Users { get; set; } = new List<User>();
 
+    public Role()
+    {
+        Name = Default;
+    }
+    
     public static string Default => User;
     
     public const string User = nameof(User);
