@@ -1,28 +1,31 @@
-﻿using Azure.Core;
+﻿using System.Reflection;
+using System.Text;
+using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using Funfair.KeyVault.Services;
 using Funfair.KeyVault.Token;
-using Microsoft.Extensions.Azure;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+
 
 namespace Funfair.KeyVault;
 
 public static class Extensions
 {
-    public static IServiceCollection AddKeyVault(this IServiceCollection services, IConfiguration configuration)
+    public static WebApplicationBuilder ConfigureAppByKeyVault(this WebApplicationBuilder builder,string name)
     {
-        var options = configuration.GetSection("KeyVault").Get<Options>();
+        var options = builder.Configuration.GetSection("KeyVault").Get<Options>();
         
-        services.AddSingleton(_ => options);
+        var client = new SecretClient(new Uri(options.Url),  new DefaultAzureCredential());
+        
+        var secret =  client.GetSecret($"app-{name}");
 
-        services.AddSingleton<IKeyVault,Services.KeyVault>(_ =>
+        if (!secret.HasValue)
         {
-            var client = new SecretClient(new Uri(options.Url), new CustomTokenCredential(options.Token));
-
-            return new Services.KeyVault(client);
-        });
+            throw new Exception($"Secret not found for 'app-{name}'");
+        }
         
-        return services;
+        builder.Configuration.AddJsonStream(new MemoryStream(Encoding.UTF8.GetBytes(secret.Value.Value)));
+        
+        return builder;
     }
 }
