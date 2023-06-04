@@ -1,4 +1,5 @@
-﻿using Users.Core.ValueObjects;
+﻿using Microsoft.AspNetCore.Identity;
+using Users.Core.ValueObjects;
 
 namespace Users.Core.Entities;
 
@@ -27,5 +28,11 @@ public class User
         Email = email;
         Password = password;
         Role = role;
+    }
+
+    public void SetPassword(IPasswordHasher<User> hasher, string password)
+    {
+        var hashedPassword =  hasher.HashPassword(this, password);
+        Password = new Password(hashedPassword);
     }
 }

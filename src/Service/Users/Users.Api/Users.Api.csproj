@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Framework\Funfair.KeyVault\Funfair.KeyVault.csproj" />
+      <ProjectReference Include="..\Users.Infrastructure\Users.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

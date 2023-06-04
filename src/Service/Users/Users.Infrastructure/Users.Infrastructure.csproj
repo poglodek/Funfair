@@ -6,4 +6,17 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Framework\Funfair.DAL.MsSql\Funfair.DAL.MsSql.csproj" />
+      <ProjectReference Include="..\..\..\Framework\Funfair.KeyVault\Funfair.KeyVault.csproj" />
+      <ProjectReference Include="..\Users.Core\Users.Core.csproj" />
+    </ItemGroup>
+
 </Project>

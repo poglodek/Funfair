@@ -11,7 +11,7 @@ namespace Funfair.KeyVault;
 
 public static class Extensions
 {
-    public static WebApplicationBuilder ConfigureAppByKeyVault(this WebApplicationBuilder builder,string name)
+    public static WebApplicationBuilder AddAppByKeyVault(this WebApplicationBuilder builder,string name)
     {
         var options = builder.Configuration.GetSection("KeyVault").Get<Options>();
         

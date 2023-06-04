@@ -11,6 +11,11 @@ public class Role
         Name = Default;
     }
     
+    public Role(string name)
+    {
+        Name = name;
+    }
+    
     public static string Default => User;
     
     public const string User = nameof(User);
