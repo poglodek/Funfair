@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using GraphQL;
+using GraphQL.Types;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +23,19 @@ public static class Extensions
             x.UseSqlServer(options.ConnectionString, y => y.EnableRetryOnFailure());
         });
         
+        return builder;
+    }
+    
+    public static WebApplicationBuilder AddGraphQl<TEntity, TSchema>(this WebApplicationBuilder builder) where TSchema : ObjectGraphType<TEntity>, ISchema
+    {
+        builder.Services
+            .AddGraphQL(builder => builder
+                .AddSystemTextJson()
+                .AddGraphTypes()
+            );
+
+        builder.Services.AddScoped<TSchema>();
+
         return builder;
     }
 }
