@@ -1,4 +1,5 @@
 ﻿using GraphQL;
+using GraphQL.Server.Ui.Altair;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -37,5 +38,13 @@ public static class Extensions
         builder.Services.AddScoped<TSchema>();
 
         return builder;
+    }
+    public static WebApplication UseGraphQl(this WebApplication app)
+    {
+        app.UseGraphQL();
+        
+        app.UseGraphQLAltair("/graphql/ui");
+        
+        return app;
     }
 }
