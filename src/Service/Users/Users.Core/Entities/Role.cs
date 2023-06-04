@@ -3,7 +3,7 @@
 public class Role
 {
     public string Name { get; set; } = string.Empty;
-    public IEnumerable<string> Claims { get; set; } = new List<string>();
+    public IDictionary<string,string> Claims { get; set; } = new Dictionary<string, string>();
     public IEnumerable<User> Users { get; set; } = new List<User>();
 
     public Role()
