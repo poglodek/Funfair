@@ -1,10 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
+using Disco.Shared.Auth;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
-namespace Disco.Shared.Auth;
+namespace Funfair.Auth;
 
 public class JsonWebTokenManager : IJsonWebTokenManager
 {

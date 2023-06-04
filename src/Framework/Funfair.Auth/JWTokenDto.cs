@@ -1,4 +1,4 @@
-namespace Disco.Shared.Auth;
+namespace Funfair.Auth;
 
 public class JWTokenDto
 {

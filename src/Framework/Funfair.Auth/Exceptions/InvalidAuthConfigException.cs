@@ -1,4 +1,4 @@
-namespace Disco.Shared.Auth.Exceptions;
+namespace Funfair.Auth.Exceptions;
 
 public class InvalidAuthConfigException : Exception
 {

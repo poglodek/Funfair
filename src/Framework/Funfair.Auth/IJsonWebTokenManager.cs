@@ -1,6 +1,4 @@
-using Microsoft.IdentityModel.JsonWebTokens;
-
-namespace Disco.Shared.Auth;
+namespace Funfair.Auth;
 
 public interface IJsonWebTokenManager
 {

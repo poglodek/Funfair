@@ -1,13 +1,12 @@
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using Disco.Shared.Auth.Exceptions;
-using Microsoft.AspNetCore.Authentication.Certificate;
+using Funfair.Auth.Exceptions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Disco.Shared.Auth;
+namespace Funfair.Auth;
 
 public static class AuthExtensions
 {
