@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Users.Core.Entities;
 using Users.Core.Repositories;
+using Users.Core.ValueObjects;
 using Users.Infrastructure.DAL.DbContext;
 
 namespace Users.Infrastructure.DAL.Repositories;
@@ -28,9 +29,9 @@ public class UserRepository : IUserRepository
         return _dbContext.SaveChangesAsync();
     }
 
-    public Task<User> GetUserByEmail(string email)
+    public Task<User> GetUserByEmail(EmailAddress email)
     {
-        return _dbContext.User.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
+        return _dbContext.User.FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public async Task<User> GetUserByEmail(string requestMail, string requestPassword)

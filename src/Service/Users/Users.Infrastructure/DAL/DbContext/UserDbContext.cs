@@ -5,7 +5,7 @@ namespace Users.Infrastructure.DAL.DbContext;
 
 public class UserDbContext : Microsoft.EntityFrameworkCore.DbContext
 {
-    public DbSet<User> User { get; }
+    public DbSet<User> User { get; private set; }
 
     public UserDbContext()
     {
@@ -26,6 +26,7 @@ public class UserDbContext : Microsoft.EntityFrameworkCore.DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        //for migration only
         if (!optionsBuilder.IsConfigured)
         {
             var connectionString = "Server=.;Database=funfair-user;Trusted_Connection=True;TrustServerCertificate=True;";

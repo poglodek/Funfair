@@ -1,7 +1,4 @@
-﻿using GraphQL;
-using GraphQL.Server.Ui.Altair;
-using GraphQL.Types;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,23 +24,17 @@ public static class Extensions
         return builder;
     }
     
-    public static WebApplicationBuilder AddGraphQl<TEntity, TSchema>(this WebApplicationBuilder builder) where TSchema : ObjectGraphType<TEntity>
+    public static WebApplicationBuilder AddGraphQl<TSchema>(this WebApplicationBuilder builder) where TSchema : class
     {
-        builder.Services
-            .AddGraphQL(builder => builder
-                .AddSystemTextJson()
-                .AddGraphTypes()
-            );
-
-        builder.Services.AddScoped<TSchema>();
-
+        builder.Services.AddControllers();
+        builder.Services.AddGraphQLServer().AddQueryType<TSchema>().AddProjections().AddFiltering().AddSorting();
+        
         return builder;
     }
     public static WebApplication UseGraphQl(this WebApplication app)
     {
-        app.UseGraphQL();
-        
-        app.UseGraphQLAltair("/graphql/ui");
+        app.MapControllers();
+        app.MapGraphQL("/graphql");
         
         return app;
     }

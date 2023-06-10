@@ -1,0 +1,18 @@
+@url = https://localhost:7061
+@email = jack.doe@mail.com
+@password = SuperPassword123!
+
+###
+POST {{url}}/SignUp
+Content-Type: application/json
+
+{
+    "firstName": "Jack",
+    "lastName": "Doe",
+    "dateOfBirth": "2000-06-10T18:02:11.460Z",
+    "email": "{{email}}",
+    "password": "{{password}}"
+
+}
+
+###

@@ -1,10 +1,14 @@
 ﻿using Funfair.DAL.MsSql;
 using Funfair.KeyVault;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Users.Core.Entities;
+using Users.Core.Repositories;
 using Users.Infrastructure.DAL.DbContext;
+using Users.Infrastructure.DAL.Repositories;
 using Users.Infrastructure.Query;
 
 namespace Users.Infrastructure;
@@ -16,16 +20,17 @@ public static class Extensions
       builder
          .AddAppByKeyVault("users")
          .AddMsSql<UserDbContext>()
-         .AddGraphQl<User,UserSchema>();
+         .AddGraphQl<UserQuery>()
+            .Services.AddScoped<IUserRepository,UserRepository>()
+               .AddScoped<IPasswordHasher<User>,PasswordHasher<User>>();
       
-      
+
       return builder;
    }
 
    public static WebApplication UseInfrastructure(this WebApplication app)
    {
       app.UseGraphQl();
-
       var scope = app.Services.CreateScope();
       var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
       db.Database.Migrate();
