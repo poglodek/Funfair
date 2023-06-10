@@ -10,7 +10,7 @@ namespace Funfair.DAL.MsSql;
 
 public static class Extensions
 {
-    public static WebApplicationBuilder AddMsSql<T,T2>(this WebApplicationBuilder builder) where T2 : DbContext, T
+    public static WebApplicationBuilder AddMsSql<T>(this WebApplicationBuilder builder) where T : DbContext
     {
         var options = builder.Configuration.GetSection("DatabaseConnectionString").Get<Options>();
 
@@ -19,7 +19,7 @@ public static class Extensions
             throw new Exception("'DatabaseConnectionString' not found in configuration");
         }
         
-        builder.Services.AddDbContext<T,T2>(x =>
+        builder.Services.AddDbContext<T>(x =>
         {
             x.UseSqlServer(options.ConnectionString, y => y.EnableRetryOnFailure());
         });

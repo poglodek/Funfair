@@ -1,6 +1,7 @@
 ﻿using Funfair.DAL.MsSql;
 using Funfair.KeyVault;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Users.Core.Entities;
 using Users.Infrastructure.DAL.DbContext;
@@ -14,7 +15,7 @@ public static class Extensions
    {
       builder
          .AddAppByKeyVault("users")
-         .AddMsSql<IUserDbContext,UserDbContext>()
+         .AddMsSql<UserDbContext>()
          .AddGraphQl<User,UserSchema>();
       
       
@@ -25,8 +26,9 @@ public static class Extensions
    {
       app.UseGraphQl();
 
-      var db = app.Services.GetRequiredService<UserDbContext>();
-      db.Migration();
+      var scope = app.Services.CreateScope();
+      var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
+      db.Database.Migrate();
       
       return app;
    }

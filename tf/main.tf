@@ -47,11 +47,6 @@ resource "azurerm_key_vault" "key_vault" {
 
 }
 
-resource "azurerm_key_vault_secret" "sql-password" {
-  name         = "sql-password"
-  value        = random_password.sql-password.result
-  key_vault_id = azurerm_key_vault.key_vault.id
-}
 
 resource "azurerm_key_vault_access_policy" "key_vault_policy" {
 
@@ -59,14 +54,21 @@ resource "azurerm_key_vault_access_policy" "key_vault_policy" {
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = data.azurerm_client_config.current.object_id
 
-  key_permissions = [
-      "Get",
-    ]
+  
 
-    secret_permissions = [
-      "Get",
-    ]
+  secret_permissions = [
+    "Get", "List", "Set",
+  ]
+
 }
+
+resource "azurerm_key_vault_secret" "sql-password" {
+  name         = "sql-password"
+  value        = random_password.sql-password.result
+  key_vault_id = azurerm_key_vault.key_vault.id
+}
+
+
 
 resource "azurerm_mssql_server" "sql_server" {
   name                          = "funfair-mssqlserver"
@@ -80,8 +82,8 @@ resource "azurerm_mssql_server" "sql_server" {
   tags                          = var.tags
 }
 
-resource "azurerm_mssql_database" "sql_database" {
-  name                        = "funfair-database"
+resource "azurerm_mssql_database" "funfair-user-database" {
+  name                        = "funfair-user-database"
   server_id                   = azurerm_mssql_server.sql_server.id
   auto_pause_delay_in_minutes = 60
   max_size_gb                 = 5

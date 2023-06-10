@@ -14,6 +14,11 @@ public static class Extensions
     public static WebApplicationBuilder AddAppByKeyVault(this WebApplicationBuilder builder,string name)
     {
         var options = builder.Configuration.GetSection("KeyVault").Get<Options>();
+
+        if (!options.Enabled)
+        {
+            return builder;
+        }
         
         var client = new SecretClient(new Uri(options.Url),  new DefaultAzureCredential());
         

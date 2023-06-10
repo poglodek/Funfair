@@ -3,7 +3,7 @@ using Users.Core.Exceptions;
 
 namespace Users.Core.ValueObjects;
 
-public record EmailAddress
+public sealed record EmailAddress
 {
     public string Value { get; }
 

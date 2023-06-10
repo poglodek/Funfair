@@ -9,11 +9,11 @@ namespace Users.Infrastructure.DAL.Repositories;
 
 public class UserRepository : IUserRepository
 {
-    private readonly IUserDbContext _dbContext;
+    private readonly UserDbContext _dbContext;
     private readonly IPasswordHasher<User> _hasher;
     private readonly ILogger<UserRepository> _logger;
 
-    public UserRepository(IUserDbContext dbContext,IPasswordHasher<User> hasher, ILogger<UserRepository> logger)
+    public UserRepository(UserDbContext dbContext,IPasswordHasher<User> hasher, ILogger<UserRepository> logger)
     {
         _dbContext = dbContext;
         _hasher = hasher;
@@ -25,7 +25,7 @@ public class UserRepository : IUserRepository
         
         _dbContext.User.Add(user);
         
-        return _dbContext.SaveAsync();
+        return _dbContext.SaveChangesAsync();
     }
 
     public Task<User> GetUserByEmail(string email)
