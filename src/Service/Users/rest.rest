@@ -2,7 +2,9 @@
 @email = jack.doe@mail.com
 @password = SuperPassword123!
 
-###
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphY2suZG9lQG1haWwuY29tIiwidW5pcXVlX25hbWUiOiIxIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsIm5iZiI6MTY4NjQyMzA0OCwiZXhwIjoxNjg2NDUxODQ4LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo1MDA2IiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwNiJ9.ZMRzhEC7b9pZIYDiJXmvo6Ny5iu0GwXq3tXf-mvixxI
+
+### Create user
 POST {{url}}/SignUp
 Content-Type: application/json
 
@@ -16,3 +18,12 @@ Content-Type: application/json
 }
 
 ###
+
+POST {{url}}/SignIn
+Content-Type: application/json
+
+{
+    "email": "{{email}}",
+    "password": "{{password}}"
+
+}

@@ -6,6 +6,7 @@ namespace Users.Core.ValueObjects;
 public sealed record EmailAddress
 {
     public string Value { get; }
+    private EmailAddress(){}
 
     public EmailAddress(string value)
     {
