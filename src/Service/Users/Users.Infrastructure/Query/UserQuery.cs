@@ -14,4 +14,30 @@ public class UserQuery
     user.User.Select(x=> new UserDto(x.Id, x.Email.Value, x.FirstName.Value, x.LastName.Value, x.DateOfBirth.Value, x.CreatedAt.Value, x.Role.Name));
 }
 
-public record UserDto(int Id, string Email, string FirstName, string LastName, DateTime DateOfBirth, DateTime CreatedAt, string Role);
+public class UserDto
+{
+    public UserDto()
+    {
+        
+    }
+
+    public UserDto(int id, string email, string firstName, string lastName, DateTime dateOfBirth, DateTime createdAt, string role)
+    {
+        Id = id;
+        Email = email;
+        FirstName = firstName;
+        LastName = lastName;
+        DateOfBirth = dateOfBirth;
+        CreatedAt = createdAt;
+        Role = role;
+    }
+
+    public int Id { get; init; }
+    public string Email { get; init; }
+    public string FirstName { get; init; }
+    public string LastName { get; init; }
+    public DateTime DateOfBirth { get; init; }
+    public DateTime CreatedAt { get; init; }
+    public string Role { get; init; }
+    
+}
