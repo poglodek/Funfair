@@ -17,10 +17,22 @@ builder
     .Services.AddAuth(builder.Configuration);
 
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy( builder =>
+    {
+        builder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowAnyOrigin()
+            .Build();
+    });
+});
+
 var app = builder.Build();
 
 app.UseSwagger();
-
+app.UseCors();
 app.UseInfrastructure();
 
 app.MapGet("/", () => "Hello World!");
@@ -40,7 +52,7 @@ app.MapPost("/SignIn", async ([FromServices] IMediator mediator, [FromBody] Sign
     
     return Results.Ok(token);
 });
-app.UseHttpsRedirection();
+
 
 
 app.UseSwaggerUI();
