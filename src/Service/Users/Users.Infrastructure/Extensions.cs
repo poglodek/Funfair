@@ -22,7 +22,9 @@ public static class Extensions
          .AddMsSql<UserDbContext>()
          .AddGraphQl<UserQuery>()
             .Services.AddScoped<IUserRepository,UserRepository>()
-               .AddScoped<IPasswordHasher<User>,PasswordHasher<User>>();
+               .AddScoped<IPasswordHasher<User>,PasswordHasher<User>>()
+         .AddScoped<Middleware>();
+      
       
 
       return builder;
@@ -30,6 +32,8 @@ public static class Extensions
 
    public static WebApplication UseInfrastructure(this WebApplication app)
    {
+      app.UseMiddleware<Middleware>();
+      
       app.UseGraphQl();
       var scope = app.Services.CreateScope();
       var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
