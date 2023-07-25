@@ -35,7 +35,6 @@ app.UseSwagger();
 app.UseCors();
 app.UseInfrastructure();
 
-app.MapGet("/", () => "Hello World!");
 
 app.MapPost("/SignUp", async ([FromServices] IMediator mediator, [FromBody] AddUser user) =>
 {

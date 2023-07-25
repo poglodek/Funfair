@@ -21,9 +21,10 @@ public static class Extensions
          .AddAppByKeyVault("users")
          .AddMsSql<UserDbContext>()
          .AddGraphQl<UserQuery>()
-            .Services.AddScoped<IUserRepository,UserRepository>()
-               .AddScoped<IPasswordHasher<User>,PasswordHasher<User>>()
-         .AddScoped<Middleware>();
+         .Services
+            .AddScoped<IUserRepository,UserRepository>()
+            .AddScoped<IPasswordHasher<User>,PasswordHasher<User>>()
+            .AddScoped<Middleware>();
       
       
 
