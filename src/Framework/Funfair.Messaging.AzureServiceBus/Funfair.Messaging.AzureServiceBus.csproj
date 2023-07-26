@@ -28,5 +28,9 @@
         <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\7.0.9\Microsoft.AspNetCore.dll</HintPath>
       </Reference>
     </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Funfair.DAL.MsSql\Funfair.DAL.MsSql.csproj" />
+    </ItemGroup>
 
 </Project>
