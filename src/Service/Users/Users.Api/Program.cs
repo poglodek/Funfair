@@ -1,5 +1,6 @@
 using System.Reflection;
 using Funfair.Auth;
+using Funfair.KeyVault;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Users.App;
@@ -12,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder
+    .AddKeyVault()
     .AddApp()
     .AddInfrastructure()
     .Services.AddAuth(builder.Configuration);

@@ -11,26 +11,40 @@ namespace Funfair.KeyVault;
 
 public static class Extensions
 {
-    public static WebApplicationBuilder AddAppByKeyVault(this WebApplicationBuilder builder,string name)
+    
+    public static WebApplicationBuilder AddKeyVault(this WebApplicationBuilder builder)
     {
-        var options = builder.Configuration.GetSection("KeyVault").Get<Options>();
+        var options = builder.Configuration.GetSection("KeyVault").Get<KeyVaultOptions>();
 
         if (!options.Enabled)
         {
             return builder;
         }
+
+        if (options.Keys is null || options.Keys.Length == 0)
+        {
+            throw new ArgumentNullException("Keys not found in configuration for 'KeyVault'");
+        }
         
         var client = new SecretClient(new Uri(options.Url),  new DefaultAzureCredential());
         
-        var secret =  client.GetSecret($"app-{name}");
-
-        if (!secret.HasValue)
+        
+        foreach (var key in options.Keys)
         {
-            throw new Exception($"Secret not found for 'app-{name}'");
+            var secret =  client.GetSecret(key);
+
+            if (!secret.HasValue)
+            {
+                throw new Exception($"Secret not found for '{key}' in 'KeyVault'");
+            }
+
+            var name = secret.Value.Properties.Name.Replace("-", ":");
+            
+            builder.Configuration[name] = secret.Value.Value;
         }
-        
-        builder.Configuration.AddJsonStream(new MemoryStream(Encoding.UTF8.GetBytes(secret.Value.Value)));
-        
+
         return builder;
     }
+    
+    
 }

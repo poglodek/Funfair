@@ -16,30 +16,32 @@ namespace Users.Infrastructure;
 public static class Extensions
 {
    public static WebApplicationBuilder AddInfrastructure(this WebApplicationBuilder builder)
-   {
-      builder
-         .AddAppByKeyVault("users")
+   {     
+       builder
          .AddMsSql<UserDbContext>()
          .AddGraphQl<UserQuery>()
          .Services
-            .AddScoped<IUserRepository,UserRepository>()
-            .AddScoped<IPasswordHasher<User>,PasswordHasher<User>>()
-            .AddScoped<Middleware>();
+         .AddScoped<IUserRepository, UserRepository>()
+         .AddScoped<IPasswordHasher<User>, PasswordHasher<User>>()
+         .AddScoped<Middleware>();
+
+       return builder;
+   }
       
       
 
-      return builder;
-   }
+   
+   
 
    public static WebApplication UseInfrastructure(this WebApplication app)
    {
       app.UseMiddleware<Middleware>();
       
       app.UseGraphQl();
-      var scope = app.Services.CreateScope();
-      var db = scope.ServiceProvider.GetRequiredService<UserDbContext>();
-      db.Database.Migrate();
       
+      var scope = app.Services.CreateScope();
+      scope.ServiceProvider.GetRequiredService<UserDbContext>().Database.Migrate();
+
       return app;
    }
    
