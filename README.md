@@ -20,7 +20,7 @@ The project relies on several Azure components, including:
 - Database: Ms Sql
 - Messaging: Azure service bus
 - Secrets: Key vault
-- Containerization: Docker
+- Containerization: k8s - AKS
 - Cloud provider: Azure
 
 ## Configuration
