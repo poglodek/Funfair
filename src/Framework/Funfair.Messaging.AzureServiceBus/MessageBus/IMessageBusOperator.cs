@@ -4,5 +4,5 @@ namespace Funfair.Messaging.AzureServiceBus.MessageBus;
 
 public interface IMessageBusOperator
 {
-    public Task Send(Outbox outbox);
+    public Task Publish(Outbox outbox);
 }

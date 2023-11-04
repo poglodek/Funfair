@@ -80,6 +80,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funfair.App.Tests", "src\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funfair.Core.Tests", "src\Tests\Funfair.Core.Tests\Funfair.Core.Tests.csproj", "{53E66C52-2FE7-4185-8625-CE0C41DE6F2C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funfair.Logging", "src\Framework\Funfair.Logging\Funfair.Logging.csproj", "{BC7093A1-5ABF-4C5C-B527-2B0B2E70B21C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +127,7 @@ Global
 		{F3E4D908-3A44-41A7-ADB5-51668784CB87} = {D110B0B0-A01D-418B-A806-04E54B352796}
 		{90B8AC9E-A172-4C17-93E5-DAAFD1773D19} = {D2B8ED61-844B-46FE-B7AE-415AC2F774D2}
 		{53E66C52-2FE7-4185-8625-CE0C41DE6F2C} = {D2B8ED61-844B-46FE-B7AE-415AC2F774D2}
+		{BC7093A1-5ABF-4C5C-B527-2B0B2E70B21C} = {D110B0B0-A01D-418B-A806-04E54B352796}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C74801FC-E1A7-444C-88D8-BE86E35A58C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -231,5 +234,9 @@ Global
 		{53E66C52-2FE7-4185-8625-CE0C41DE6F2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53E66C52-2FE7-4185-8625-CE0C41DE6F2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53E66C52-2FE7-4185-8625-CE0C41DE6F2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC7093A1-5ABF-4C5C-B527-2B0B2E70B21C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC7093A1-5ABF-4C5C-B527-2B0B2E70B21C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC7093A1-5ABF-4C5C-B527-2B0B2E70B21C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC7093A1-5ABF-4C5C-B527-2B0B2E70B21C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -4,7 +4,7 @@ namespace Funfair.Messaging.AzureServiceBus.MessageBus;
 
 public class MessageBusOperator : IMessageBusOperator
 {
-    public Task Send(Outbox outbox)
+    public Task Publish(Outbox outbox)
     {
         //TODO: Implement
         return Task.CompletedTask;

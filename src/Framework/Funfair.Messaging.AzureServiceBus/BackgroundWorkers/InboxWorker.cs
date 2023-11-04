@@ -10,8 +10,7 @@ namespace Funfair.Messaging.AzureServiceBus.BackgroundWorkers;
 public class InboxWorker : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
-    private readonly PeriodicTimer _periodicTimer;
-    
+
     private OutboxDbContext _dbContext;
     private ILogger<InboxWorker> _logger;
     private IMessageBusOperator _messageBusOperator;
@@ -20,11 +19,11 @@ public class InboxWorker : BackgroundService
     public InboxWorker(IServiceScopeFactory scopeFactory)
     {
         _scopeFactory = scopeFactory;
-        _periodicTimer = new PeriodicTimer(TimeSpan.FromSeconds(5));
     }
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        using var periodicTimer = new PeriodicTimer(TimeSpan.FromSeconds(5));
         var serviceProvider = _scopeFactory.CreateAsyncScope().ServiceProvider;
         
         _logger = serviceProvider.GetRequiredService<ILogger<InboxWorker>>();
@@ -32,7 +31,7 @@ public class InboxWorker : BackgroundService
         
         while (!stoppingToken.IsCancellationRequested)
         {
-            await _periodicTimer.WaitForNextTickAsync(stoppingToken);
+            await periodicTimer.WaitForNextTickAsync(stoppingToken);
             
             _dbContext = serviceProvider.GetRequiredService<OutboxDbContext>();
             
@@ -46,7 +45,7 @@ public class InboxWorker : BackgroundService
                 
                 try
                 {
-                    await _messageBusOperator.Send(outbox);
+                    await _messageBusOperator.Publish(outbox);
                     
                     outbox.SentDate = DateTime.Now;
                 }

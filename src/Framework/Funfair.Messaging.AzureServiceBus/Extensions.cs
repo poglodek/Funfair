@@ -30,9 +30,7 @@ public static class Extensions
      {
          
          var scope = app.Services.CreateScope();
-         var db = scope.ServiceProvider.GetRequiredService<OutboxDbContext>();
-         db.Database.Migrate();
-         
+         scope.ServiceProvider.GetRequiredService<OutboxDbContext>().Database.Migrate();
          
          return app;
      }

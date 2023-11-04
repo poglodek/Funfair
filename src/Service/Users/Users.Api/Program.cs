@@ -38,6 +38,15 @@ app.UseCors();
 app.UseInfrastructure();
 
 
+app.MapGet("/", (ILogger<Program> logger) =>
+{
+
+    logger.LogError("ERROR TEST!");
+    
+    return Results.Ok($"Users' working! - {DateTime.UtcNow}");
+});
+
+
 app.MapPost("/SignUp", async ([FromServices] IMediator mediator, [FromBody] AddUser user) =>
 {
 

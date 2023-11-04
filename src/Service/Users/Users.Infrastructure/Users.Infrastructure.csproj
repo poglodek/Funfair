@@ -20,6 +20,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\Framework\Funfair.DAL.MsSql\Funfair.DAL.MsSql.csproj" />
       <ProjectReference Include="..\..\..\Framework\Funfair.KeyVault\Funfair.KeyVault.csproj" />
+      <ProjectReference Include="..\..\..\Framework\Funfair.Logging\Funfair.Logging.csproj" />
       <ProjectReference Include="..\Users.App\Users.App.csproj" />
       <ProjectReference Include="..\Users.Core\Users.Core.csproj" />
     </ItemGroup>
