@@ -25,7 +25,8 @@ internal class EventProcessor : IEventProcessor
         {
             Message = JsonSerializer.Serialize(@event),
             MessageType = @event.GetType().Name,
-            CreatedDate = DateTime.Now
+            CreatedDate = DateTime.Now,
+            MessageId = Guid.NewGuid()
         };
         
         _dbContext.Outboxes.Add(outbox);

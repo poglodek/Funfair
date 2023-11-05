@@ -18,8 +18,9 @@ public static class Extensions
              .AddScoped<IAssembliesService, AssembliesService>()
              .AddScoped<IEventProcessor, EventProcessor>()
              .AddScoped<IMessageBusOperator, MessageBusOperator>()
-             .AddHostedService<InboxWorker>()
-             .AddHostedService<OutboxWorker>();
+             .AddSingleton<IAzureBus, AzureBus>()
+             .AddHostedService<OutboxWorker>()
+             .AddHostedService<InboxWorker>();
 
          builder.AddMsSql<OutboxDbContext>();
 

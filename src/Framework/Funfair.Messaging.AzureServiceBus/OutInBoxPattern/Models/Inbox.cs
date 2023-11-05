@@ -13,5 +13,6 @@ public class Inbox
     [Column(TypeName = "varchar(MAX)")]
     [MaxLength]
     public string Message { get; set; } = null!;
+    public Guid MessageId { get; init; }
     public string ErrorMessage { get; set; } = string.Empty;
 }
