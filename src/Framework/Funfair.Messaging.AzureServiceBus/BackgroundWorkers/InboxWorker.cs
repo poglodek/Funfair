@@ -2,6 +2,7 @@
 using Funfair.Messaging.AzureServiceBus.Models;
 using Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
 using Funfair.Messaging.AzureServiceBus.Services;
+using Funfair.Messaging.AzureServiceBus.Services.Implementation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,7 +35,7 @@ public class InboxWorker : BackgroundService
         _logger = serviceProvider.GetRequiredService<ILogger<InboxWorker>>();
         _mediator = serviceProvider.GetRequiredService<IMediator>();
 
-        _types = serviceProvider.GetService<IAssembliesService>()!
+        _types = new AssembliesService()
             .ReturnTypes()
             .Where(t => typeof(INotification).IsAssignableFrom(t)
                         && t.GetCustomAttributes(typeof(MessageAttribute), true).Length > 0);

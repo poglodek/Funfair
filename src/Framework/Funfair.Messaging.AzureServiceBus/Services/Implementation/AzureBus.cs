@@ -1,29 +1,40 @@
 ﻿using System.Collections.Concurrent;
 using Azure.Identity;
 using Azure.Messaging.ServiceBus;
+using Funfair.Messaging.AzureServiceBus.Models;
 using Funfair.Messaging.AzureServiceBus.Options;
 using Microsoft.Extensions.Configuration;
 
-namespace Funfair.Messaging.AzureServiceBus.Services;
+namespace Funfair.Messaging.AzureServiceBus.Services.Implementation;
 
-public class AzureBus : IAzureBus, IAsyncDisposable
+internal class AzureBus : IAzureBus, IAsyncDisposable
 {
-    private readonly ServiceBusClient _busClient;
     private readonly ConcurrentDictionary<string, ServiceBusSender> _busSenders = new();
-
+    private readonly MessageBusOptions _options;
+    private ServiceBusClient _busClient;
+    
     public AzureBus(IConfiguration configuration)
     {
-        var options = configuration.GetSection("AzureMessageBus").Get<MessageBusOptions>();
+        
+        _options = configuration.GetSection("AzureMessageBus").Get<MessageBusOptions>();
 
-        if (options is null || string.IsNullOrEmpty(options.ConnectionString))
+        if (_options is null || string.IsNullOrEmpty(_options.ConnectionString))
         {
-            throw new ArgumentNullException($"{nameof(options.ConnectionString)} is null");
+            throw new ArgumentNullException($"{nameof(_options.ConnectionString)} is null");
         }
-
-        _busClient = new ServiceBusClient(options.ConnectionString, new DefaultAzureCredential());
-   
+        
     }
-    
+
+    public ServiceBusProcessor CreateProcessor(string exchange)
+    {
+        return _busClient.CreateProcessor(exchange);
+    }
+
+    public void CreateBus()
+    {
+        _busClient = new ServiceBusClient(_options.ConnectionString, new DefaultAzureCredential());
+    }
+
     private ServiceBusSender GetSender(string topic)
     {
         if (_busSenders.TryGetValue(topic, out var sender))
@@ -53,12 +64,7 @@ public class AzureBus : IAzureBus, IAsyncDisposable
 
     public void Dispose()
     {
-        foreach (var sender in _busSenders.Values)
-        { 
-            sender.DisposeAsync().GetAwaiter().GetResult();
-        }
-        
-        _busClient.DisposeAsync().GetAwaiter().GetResult();
+        DisposeAsync().GetAwaiter().GetResult();
     }
 
     public async ValueTask DisposeAsync()

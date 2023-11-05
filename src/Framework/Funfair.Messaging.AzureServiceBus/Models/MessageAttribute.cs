@@ -2,6 +2,7 @@
 
 namespace Funfair.Messaging.AzureServiceBus.Models;
 
+[AttributeUsage(AttributeTargets.Class)]
 public sealed class MessageAttribute : Attribute
 {
     public string Exchange { get; }

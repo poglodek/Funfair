@@ -6,4 +6,6 @@ public interface IAzureBus
 {
     ValueTask<ServiceBusMessageBatch> CreateBatchAsync(string topic);
     Task SendAsync(string topic, ServiceBusMessageBatch batch);
+    ServiceBusProcessor CreateProcessor(string exchange);
+    void CreateBus();
 }

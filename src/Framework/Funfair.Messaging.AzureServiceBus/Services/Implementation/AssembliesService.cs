@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 
-namespace Funfair.Messaging.AzureServiceBus.Services;
+namespace Funfair.Messaging.AzureServiceBus.Services.Implementation;
 
-public class AssembliesService : IAssembliesService
+internal class AssembliesService : IAssembliesService
 {
     public IEnumerable<Type> ReturnTypes()
     {

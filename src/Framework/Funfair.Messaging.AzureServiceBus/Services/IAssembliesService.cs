@@ -2,7 +2,7 @@
 
 namespace Funfair.Messaging.AzureServiceBus.Services;
 
-public interface IAssembliesService
+internal interface IAssembliesService
 {
     IEnumerable<Type> ReturnTypes();
     IEnumerable<Assembly> ReturnAssemblies();
