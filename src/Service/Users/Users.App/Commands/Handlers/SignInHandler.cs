@@ -7,7 +7,7 @@ using Users.Core.Repositories;
 
 namespace Users.App.Commands.Handlers;
 
-public class SignInHandler : IRequestHandler<SignIn,JWTokenDto>
+public class SignInHandler : IRequestHandler<SignInCommand,JWTokenDto>
 {
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHasher<User> _hasher;
@@ -20,7 +20,7 @@ public class SignInHandler : IRequestHandler<SignIn,JWTokenDto>
         _tokenManager = tokenManager;
     }
     
-    public async Task<JWTokenDto> Handle(SignIn request, CancellationToken cancellationToken)
+    public async Task<JWTokenDto> Handle(SignInCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetUserByEmail(request.Email,request.Password);
 
@@ -29,6 +29,6 @@ public class SignInHandler : IRequestHandler<SignIn,JWTokenDto>
             throw new UserNotFoundException(request.Email);
         }
 
-        return _tokenManager.CreateToken(user.Id, user.Email.Value, user.Role.Name, user.Role.Claims);
+        return _tokenManager.CreateToken(user.Id.Value, user.Email.Value, user.Role.Name, user.Role.Claims);
     }
 }

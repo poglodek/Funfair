@@ -13,7 +13,7 @@ namespace Funfair.App.Tests;
 public class SignInTest
 {
     
-    private Task<JWTokenDto> Act(SignIn command)
+    private Task<JWTokenDto> Act(SignInCommand command)
     {
         var handler = new SignInHandler(_userRepository,_hasher,_tokenManager);
         return handler.Handle(command, CancellationToken.None);
@@ -24,15 +24,18 @@ public class SignInTest
     {
         var mail = "jack@doe.com";
         var password = "SuperFanyPassword";
-        var command = new SignIn(mail,password);
+        var command = new SignInCommand(mail,password);
+        var guid = Guid.NewGuid();
+        
 
         _userRepository.GetUserByEmail(mail, password).Returns(ReturnValidUserAsync());
-        _tokenManager.CreateToken(Arg.Any<int>(), mail, Arg.Any<string>(), Arg.Any<IDictionary<string, string>>())
+        _tokenManager.CreateToken(Arg.Any<Guid>(), mail, Arg.Any<string>(), Arg.Any<IDictionary<string, string>>())
             .Returns(new JWTokenDto
             {
                 Role = Role.Default,
                 JWT = "testJWT",
-                ExpiresInHours = 8
+                ExpiresInHours = 8,
+                UserId =guid
             });
         
         
@@ -40,7 +43,7 @@ public class SignInTest
 
         act.ShouldNotBeNull();
         act.Role.ShouldBe(Role.Default);
-        act.UserId.ShouldBe(ReturnUser().Id);
+        act.UserId.ShouldBe(guid);
         act.JWT.ShouldBe("testJWT");
         act.ExpiresInHours.ShouldBe(8);
     }
@@ -50,7 +53,7 @@ public class SignInTest
     {
         var mail = "jack@doe.com";
         var password = "SuperFanyPassword";
-        var command = new SignIn(mail,password);
+        var command = new SignInCommand(mail,password);
 
         var ex = await Record.ExceptionAsync(async () => await Act(command));
 
@@ -68,7 +71,7 @@ public class SignInTest
         return Task.FromResult(user);
     }
     
-    private User ReturnUser() => new User("John", "Doe", new DateTime(1980, 1, 1), DateTime.Now, "jack@doe.com", "SuperFanyPassword", new Role());
+    private User ReturnUser() => User.CreateInstance("John", "Doe", new DateTime(1980, 1, 1), DateTime.Now, "jack@doe.com", "SuperFanyPassword", new Role());
     
     
     

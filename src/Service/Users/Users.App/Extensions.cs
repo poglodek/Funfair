@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using Funfair.Messaging.AzureServiceBus;
+using Funfair.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,11 +9,10 @@ public static class Extensions
 {
    public static WebApplicationBuilder AddApp(this WebApplicationBuilder builder)
    {
-      builder.Services.AddMediatR(cfg=>cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
-
+      builder.Services.AddMediatR(cfg =>  cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+      
+      builder.AddDomain();
       return builder;
    }
 
-
-   
 }

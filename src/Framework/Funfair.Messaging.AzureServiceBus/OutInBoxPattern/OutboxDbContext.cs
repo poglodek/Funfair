@@ -1,9 +1,10 @@
 ﻿using Funfair.Messaging.AzureServiceBus.OutInBoxPattern.Models;
+using Funfair.Shared.Core.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
 
-public class OutboxDbContext : DbContext
+public class OutboxDbContext : DbContext, IUnitOfWork,IChangeTrack
 {
     public DbSet<Inbox> Inboxes { get; set; }
     public DbSet<Outbox> Outboxes { get; set; }

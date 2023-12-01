@@ -1,6 +1,6 @@
-﻿namespace Users.Core.Exceptions;
+﻿namespace Funfair.Shared.Exception;
 
-public abstract class CoreException : Exception
+public abstract class CoreException : System.Exception
 {
     public abstract string ErrorMessage { get; }
     

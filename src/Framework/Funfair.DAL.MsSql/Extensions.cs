@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Funfair.Shared.Core.Repository;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +8,7 @@ namespace Funfair.DAL.MsSql;
 
 public static class Extensions
 {
-    public static WebApplicationBuilder AddMsSql<T>(this WebApplicationBuilder builder) where T : DbContext
+    public static WebApplicationBuilder AddMsSql<T>(this WebApplicationBuilder builder) where T : DbContext, IUnitOfWork,IChangeTrack
     {
         var options = builder.Configuration.GetSection("DatabaseConnectionString").Get<Options>();
 
@@ -19,7 +20,12 @@ public static class Extensions
         builder.Services.AddDbContext<T>(x =>
         {
             x.UseSqlServer(options.ConnectionString, y => y.EnableRetryOnFailure());
+            x.UseLoggerFactory(null); 
+            x.EnableSensitiveDataLogging(false);
         });
+
+        builder.Services.AddScoped<IUnitOfWork>(sp=> sp.GetRequiredService<T>());
+        builder.Services.AddScoped<IChangeTrack>(sp=> sp.GetRequiredService<T>());
         
         return builder;
     }
@@ -34,7 +40,7 @@ public static class Extensions
     public static WebApplication UseGraphQl(this WebApplication app)
     {
         app.MapControllers();
-        app.MapGraphQL("/graphql");
+        app.MapGraphQL(path: "/graphql");
         
         return app;
     }

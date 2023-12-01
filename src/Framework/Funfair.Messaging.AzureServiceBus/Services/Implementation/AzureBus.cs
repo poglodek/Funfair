@@ -16,7 +16,9 @@ internal class AzureBus : IAzureBus, IAsyncDisposable
     public AzureBus(IConfiguration configuration)
     {
         
-        _options = configuration.GetSection("AzureMessageBus").Get<MessageBusOptions>();
+        _options = configuration.GetSection("AzureMessageBus")
+                                .Get<MessageBusOptions>();
+        
 
         if (_options is null || string.IsNullOrEmpty(_options.ConnectionString))
         {
@@ -32,7 +34,12 @@ internal class AzureBus : IAzureBus, IAsyncDisposable
 
     public void CreateBus()
     {
-        _busClient = new ServiceBusClient(_options.ConnectionString, new DefaultAzureCredential());
+        if (!_options.Enabled)
+        {
+            return;
+        }
+        
+        _busClient = new ServiceBusClient(_options.ConnectionString);
     }
 
     private ServiceBusSender GetSender(string topic)

@@ -38,16 +38,10 @@ app.UseCors();
 app.UseInfrastructure();
 
 
-app.MapGet("/", (ILogger<Program> logger) =>
-{
-
-    logger.LogError("ERROR TEST!");
-    
-    return Results.Ok($"Users' working! - {DateTime.UtcNow}");
-});
+app.MapGet("/", () => Results.Ok($"Users' working! - {DateTime.UtcNow}"));
 
 
-app.MapPost("/SignUp", async ([FromServices] IMediator mediator, [FromBody] AddUser user) =>
+app.MapPost("/SignUp", async ([FromServices] IMediator mediator, [FromBody] AddUserCommand user) =>
 {
 
     await mediator.Send(user);
@@ -55,7 +49,7 @@ app.MapPost("/SignUp", async ([FromServices] IMediator mediator, [FromBody] AddU
     return Results.Ok();
 });
 
-app.MapPost("/SignIn", async ([FromServices] IMediator mediator, [FromBody] SignIn login) =>
+app.MapPost("/SignIn", async ([FromServices] IMediator mediator, [FromBody] SignInCommand login) =>
 {
 
     var token = await mediator.Send(login);

@@ -1,4 +1,6 @@
-﻿using Funfair.Messaging.AzureServiceBus.MessageBus;
+﻿using System.Collections.ObjectModel;
+using Funfair.Messaging.AzureServiceBus.Events;
+using Funfair.Messaging.AzureServiceBus.MessageBus;
 using Funfair.Messaging.AzureServiceBus.Models;
 using Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
 using Funfair.Messaging.AzureServiceBus.Services;
@@ -20,7 +22,7 @@ public class InboxWorker : BackgroundService
     private OutboxDbContext _dbContext;
     private ILogger<InboxWorker> _logger;
     private IMediator _mediator;
-    private IEnumerable<Type> _types;
+    private IReadOnlyCollection<Type> _types;
     
     public InboxWorker(IServiceScopeFactory scopeFactory)
     {
@@ -30,16 +32,18 @@ public class InboxWorker : BackgroundService
     
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var serviceProvider = _scopeFactory.CreateAsyncScope().ServiceProvider;
+        await using var scopeServiceProvider = _scopeFactory.CreateAsyncScope();
+        var serviceProvider = scopeServiceProvider.ServiceProvider;
         
         _logger = serviceProvider.GetRequiredService<ILogger<InboxWorker>>();
         _mediator = serviceProvider.GetRequiredService<IMediator>();
 
-        _types = new AssembliesService()
-            .ReturnTypes()
-            .Where(t => typeof(INotification).IsAssignableFrom(t)
-                        && t.GetCustomAttributes(typeof(MessageAttribute), true).Length > 0);
-        
+        _types = GetTypes();
+
+        if (!_types.Any())
+        {
+            return;
+        }
         
         while (!stoppingToken.IsCancellationRequested)
         {
@@ -95,5 +99,15 @@ public class InboxWorker : BackgroundService
             
             await _dbContext.SaveChangesAsync(stoppingToken);
         }
+    }
+
+    private static ReadOnlyCollection<Type> GetTypes()
+    {
+        return new AssembliesService()
+            .ReturnTypes()
+            .Where(t => typeof(IIntegrationEvent).IsAssignableFrom(t)
+                        && t.GetCustomAttributes(typeof(MessageAttribute), true).Length > 0)
+            .ToList()
+            .AsReadOnly();
     }
 }

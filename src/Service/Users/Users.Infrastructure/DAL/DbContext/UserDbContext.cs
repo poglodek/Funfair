@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Funfair.Shared.Core.Repository;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Users.Core.Entities;
 
 namespace Users.Infrastructure.DAL.DbContext;
 
-public class UserDbContext : Microsoft.EntityFrameworkCore.DbContext
+public class UserDbContext : Microsoft.EntityFrameworkCore.DbContext, IUnitOfWork,IChangeTrack
 {
     public DbSet<User> User { get; private set; }
 
@@ -14,9 +16,9 @@ public class UserDbContext : Microsoft.EntityFrameworkCore.DbContext
     
     public UserDbContext(DbContextOptions<UserDbContext> options): base(options)
     {
-        
+               
     }
-
+    
     
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)

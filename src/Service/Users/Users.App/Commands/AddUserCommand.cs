@@ -2,7 +2,7 @@
 
 namespace Users.App.Commands;
 
-public class AddUser : IRequest<Unit>
+public class AddUserCommand : IRequest<Unit>
 {
     public string FirstName { get; init; }
     public string LastName { get; init; }
@@ -10,7 +10,7 @@ public class AddUser : IRequest<Unit>
     public string Email { get; init; }
     public string Password { get; init; }
 
-    public AddUser(string firstName, string lastName, DateTime dateOfBirth, string email, string password)
+    public AddUserCommand(string firstName, string lastName, DateTime dateOfBirth, string email, string password)
     {
         FirstName = firstName;
         LastName = lastName;

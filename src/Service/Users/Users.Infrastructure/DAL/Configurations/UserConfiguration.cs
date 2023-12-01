@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Funfair.Shared.Domain;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Users.Core.Entities;
 using Users.Core.ValueObjects;
@@ -9,10 +10,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.ToTable("U_Users");
         
         builder.HasKey(x => x.Id);
-
+        
+        builder.Property(x => x.Id)
+            .HasConversion(c => c.Value, c => new Id(c))
+            .IsRequired();
+        
         builder.Property(x => x.Email)
             .HasConversion(c => c.Value, c => new EmailAddress(c))
             .IsRequired();

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Funfair.Shared.Exception;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Users.App.Exceptions;
 using Users.Core.Exceptions;

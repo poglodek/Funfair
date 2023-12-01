@@ -1,4 +1,6 @@
-﻿namespace Users.Core.Exceptions;
+﻿using Funfair.Shared.Exception;
+
+namespace Users.Core.Exceptions;
 
 public class InvalidDateException : CoreException
 {

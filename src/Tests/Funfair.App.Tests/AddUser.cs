@@ -11,7 +11,7 @@ namespace Funfair.App.Tests;
 
 public class AddUser
 {
-    private Unit Act(Users.App.Commands.AddUser command)
+    private Unit Act(Users.App.Commands.AddUserCommand command)
     {
         var addUserHandler = new AddUserHandler(_userRepository);
         
@@ -52,12 +52,12 @@ public class AddUser
         return Task.FromResult(user);
     }
 
-    private User ReturnUser() => new User("John", "Doe", new DateTime(1980, 1, 1), DateTime.Now, _email, "strongPassword123", new Role());
+    private User ReturnUser() => User.CreateInstance("John", "Doe", new DateTime(1980, 1, 1), DateTime.Now, _email, "strongPassword123", new Role());
 
     private readonly string _email = "jack@doe.com";
     
-    private  Users.App.Commands.AddUser ReturnValidUserCommand(string mail) =>
-        new Users.App.Commands.AddUser("John", "Doe", new DateTime(1980, 1, 1),mail,
+    private  Users.App.Commands.AddUserCommand ReturnValidUserCommand(string mail) =>
+        new Users.App.Commands.AddUserCommand("John", "Doe", new DateTime(1980, 1, 1),mail,
             "strongPassword123");
 
 

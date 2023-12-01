@@ -2,5 +2,6 @@
 
 public class MessageBusOptions
 {
-    public string ConnectionString { get; set; }
+    public string ConnectionString { get; init; }
+    public bool Enabled { get; init; }
 }

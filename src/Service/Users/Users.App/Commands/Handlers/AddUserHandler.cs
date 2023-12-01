@@ -5,7 +5,7 @@ using Users.Core.Repositories;
 
 namespace Users.App.Commands.Handlers;
 
-public class AddUserHandler : IRequestHandler<AddUser,Unit>
+public class AddUserHandler : IRequestHandler<AddUserCommand,Unit>
 {
     private readonly IUserRepository _userRepository;
 
@@ -14,7 +14,7 @@ public class AddUserHandler : IRequestHandler<AddUser,Unit>
         _userRepository = userRepository;
     }
     
-    public async Task<Unit> Handle(AddUser request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(AddUserCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetUserByEmail(request.Email);
         
@@ -23,9 +23,9 @@ public class AddUserHandler : IRequestHandler<AddUser,Unit>
             throw new UserExistsException(request.Email);
         }
         
-        var newUser = new User(request.FirstName, request.LastName, request.DateOfBirth, DateTime.Now, request.Email, request.Password,new Role());
+        var newUser = User.CreateInstance(request.FirstName, request.LastName, request.DateOfBirth, DateTime.Now, request.Email, request.Password,new Role());
         
-        await _userRepository.AddUser(newUser);
+        _userRepository.AddUser(newUser);
 
         return Unit.Value;
     }

@@ -1,5 +1,6 @@
-﻿using Funfair.Messaging.AzureServiceBus.Events;
+﻿using Funfair.Messaging.AzureServiceBus.Models;
+using Funfair.Shared.Events;
 
 namespace Users.Core.Events;
 
-public record SignedUp(int Id) : IEvent;
+public record SignedUp(Guid Id, string Email, string FirstName,string LastName) : IDomainEvent;

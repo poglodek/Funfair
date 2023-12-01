@@ -9,7 +9,7 @@ public class InvalidMessageSize : System.Exception
 
     public static void ThrowIfFalse(bool con,int id)
     {
-        if (con)
+        if (!con)
         {
             throw new InvalidMessageSize($"Invalid size of message of id - {id}");
         }
