@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using Funfair.Shared.Events;
+using Funfair.Shared.Core.Events;
 
 namespace Funfair.Shared.Domain;
 

@@ -64,6 +64,7 @@ internal class AzureProcessor : IAzureProcessor, IDisposable, IAsyncDisposable
         
         var inbox = new Inbox
         {
+            Id = Guid.NewGuid(),
             MessageId = Guid.Parse(arg.Message.MessageId),
             DateReceived = DateTime.Now,
             MessageType = arg.Message.Subject,

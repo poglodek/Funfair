@@ -5,16 +5,13 @@ namespace Funfair.Messaging.AzureServiceBus.OutInBoxPattern.Models;
 
 public class Outbox
 {
-    [Key]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime? SentDate { get; set; }
     public string MessageType { get; set; } = null!;
     
-    [Column(TypeName = "varchar(MAX)")]
-    [MaxLength]
     public string Message { get; set; } = null!;
     public Guid MessageId { get; init; }
-    public string ErrorMessage { get; set; } = string.Empty;
+    public string? ErrorMessage { get; set; } = string.Empty;
     
 }

@@ -30,7 +30,8 @@
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\Funfair.DAL.MsSql\Funfair.DAL.MsSql.csproj" />
+      <ProjectReference Include="..\Funfair.Dal.CosmosDb\Funfair.Dal.CosmosDb\Funfair.Dal.CosmosDb.csproj" />
+      <ProjectReference Include="..\Funfair.Shared\Funfair.Shared.csproj" />
     </ItemGroup>
 
 </Project>

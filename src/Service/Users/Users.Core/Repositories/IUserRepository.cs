@@ -6,7 +6,7 @@ namespace Users.Core.Repositories;
 
 public interface IUserRepository 
 {
-    void AddUser(User user);
+    Task<User> AddUser(User user);
     Task<User> GetUserByEmail(EmailAddress email);
-    Task<User> GetUserByEmail(string requestMail, string requestPassword);
+    Task<User> SignIn(string requestMail, string requestPassword);
 }

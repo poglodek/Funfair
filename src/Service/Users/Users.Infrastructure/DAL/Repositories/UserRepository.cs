@@ -1,40 +1,45 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
-using Users.Core.Entities;
 using Users.Core.Repositories;
 using Users.Core.ValueObjects;
-using Users.Infrastructure.DAL.DbContext;
+using Users.Infrastructure.Exceptions;
+using User = Users.Core.Entities.User;
 
 namespace Users.Infrastructure.DAL.Repositories;
 
-public class UserRepository : IUserRepository
+internal class UserRepository : IUserRepository
 {
-    private readonly UserDbContext _dbContext;
+    private readonly Container _container;
     private readonly IPasswordHasher<User> _hasher;
     private readonly ILogger<UserRepository> _logger;
 
-    public UserRepository(UserDbContext dbContext, IPasswordHasher<User> hasher, ILogger<UserRepository> logger)
+    public UserRepository(Container container, IPasswordHasher<User> hasher, ILogger<UserRepository> logger)
     {
-        _dbContext = dbContext;
+        _container = container;
         _hasher = hasher;
         _logger = logger;
     }
 
-    public void AddUser(User user)
+    public async Task<User> AddUser(User user)
     {
         user.SetPassword(_hasher, user.Password.Value);
-
-        _dbContext.User.Add(user);
+        
+        var response = await _container.CreateItemAsync(user, new PartitionKey(user.Email.Value));
+        
+        CannotAddUserException.ThrowIfStatusCodeNotCreated(response.StatusCode);
+        
+        return response.Resource;
     }
 
-    public Task<User> GetUserByEmail(EmailAddress email)
+    public async Task<User> GetUserByEmail(EmailAddress email)
     {
-        return _dbContext.User.FirstOrDefaultAsync(u => u.Email == email);
+        var result = await _container.ReadItemAsync<User>(email.Value, new PartitionKey(email.Value));
+
+        return result.Resource;
     }
 
-    public async Task<User> GetUserByEmail(string requestMail, string requestPassword)
+    public async Task<User> SignIn(string requestMail, string requestPassword)
     {
         var user = await GetUserByEmail(requestMail);
 

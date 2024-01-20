@@ -28,7 +28,7 @@ public class SignInTest
         var guid = Guid.NewGuid();
         
 
-        _userRepository.GetUserByEmail(mail, password).Returns(ReturnValidUserAsync());
+        _userRepository.SignIn(mail, password).Returns(ReturnValidUserAsync());
         _tokenManager.CreateToken(Arg.Any<Guid>(), mail, Arg.Any<string>(), Arg.Any<IDictionary<string, string>>())
             .Returns(new JWTokenDto
             {

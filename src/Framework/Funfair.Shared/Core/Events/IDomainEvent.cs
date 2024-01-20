@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Funfair.Shared.Events;
+namespace Funfair.Shared.Core.Events;
 
 public interface IDomainEvent : INotification
 {

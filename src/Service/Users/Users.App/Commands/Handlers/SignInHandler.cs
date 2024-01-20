@@ -22,7 +22,7 @@ public class SignInHandler : IRequestHandler<SignInCommand,JWTokenDto>
     
     public async Task<JWTokenDto> Handle(SignInCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetUserByEmail(request.Email,request.Password);
+        var user = await _userRepository.SignIn(request.Email,request.Password);
 
         if (user is null)
         {

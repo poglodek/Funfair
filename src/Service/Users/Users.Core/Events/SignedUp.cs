@@ -1,5 +1,5 @@
 ﻿using Funfair.Messaging.AzureServiceBus.Models;
-using Funfair.Shared.Events;
+using Funfair.Shared.Core.Events;
 
 namespace Users.Core.Events;
 

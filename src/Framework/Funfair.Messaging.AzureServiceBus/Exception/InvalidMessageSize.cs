@@ -7,7 +7,7 @@ public class InvalidMessageSize : System.Exception
         
     }
 
-    public static void ThrowIfFalse(bool con,int id)
+    public static void ThrowIfFalse(bool con,Guid id)
     {
         if (!con)
         {

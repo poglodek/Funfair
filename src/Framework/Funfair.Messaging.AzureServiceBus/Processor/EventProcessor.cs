@@ -2,7 +2,7 @@
 using Funfair.Messaging.AzureServiceBus.Events;
 using Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
 using Funfair.Messaging.AzureServiceBus.OutInBoxPattern.Models;
-using Funfair.Shared.Events;
+using Funfair.Shared.Core.Events;
 using Microsoft.Extensions.Logging;
 
 namespace Funfair.Messaging.AzureServiceBus.Processor;
@@ -38,7 +38,8 @@ internal class EventProcessor : IEventProcessor
             Message = JsonSerializer.Serialize(@event),
             MessageType = @event.GetType().Name,
             CreatedDate = DateTime.Now,
-            MessageId = Guid.NewGuid()
+            MessageId = Guid.NewGuid(),
+            Id = Guid.NewGuid()
         };
 
         _dbContext.Outboxes.Add(outbox);

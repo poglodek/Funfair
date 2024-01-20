@@ -1,15 +1,14 @@
-﻿using Funfair.DAL.MsSql;
+﻿using Funfair.Dal.CosmosDb;
+using Funfair.Dal.CosmosDb.Options;
 using Funfair.Logging;
 using Funfair.Messaging.AzureServiceBus;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Users.Core.Entities;
 using Users.Core.Repositories;
-using Users.Infrastructure.DAL.DbContext;
 using Users.Infrastructure.DAL.Repositories;
-using Users.Infrastructure.Query;
 
 namespace Users.Infrastructure;
 
@@ -17,15 +16,17 @@ public static class Extensions
 {
     public static WebApplicationBuilder AddInfrastructure(this WebApplicationBuilder builder)
     {
+        var cosmosContainerOptions = builder.Configuration.GetSection("CosmosDb").Get<ContainerOptions>();
+        
+        
         builder
           .AddAzureLogAnalytics()
           .AddMessageBus()
-          .AddMsSql<UserDbContext>()
-          .AddGraphQl<UserQuery>()
+          .AddCosmosDb(cosmosContainerOptions)
           .Services
-          .AddScoped<IUserRepository, UserRepository>()
-          .AddScoped<IPasswordHasher<User>, PasswordHasher<User>>()
-          .AddScoped<Middleware>();
+            .AddScoped<IUserRepository, UserRepository>()
+            .AddScoped<IPasswordHasher<User>, PasswordHasher<User>>()
+            .AddScoped<Middleware>();
 
         return builder;
     }
@@ -38,13 +39,8 @@ public static class Extensions
     public static WebApplication UseInfrastructure(this WebApplication app)
     {
         app.UseMiddleware<Middleware>();
-
-        app.UseGraphQl();
         app.UseMessageBus();
-
-        using var scope = app.Services.CreateScope();
-        scope.ServiceProvider.GetRequiredService<UserDbContext>().Database.Migrate();
-
+        
         return app;
     }
 

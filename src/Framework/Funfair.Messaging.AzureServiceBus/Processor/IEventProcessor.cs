@@ -1,5 +1,6 @@
 ﻿using Funfair.Messaging.AzureServiceBus.Events;
-using Funfair.Shared.Events;
+using Funfair.Shared.Core.Events;
+
 
 namespace Funfair.Messaging.AzureServiceBus.Processor;
 
