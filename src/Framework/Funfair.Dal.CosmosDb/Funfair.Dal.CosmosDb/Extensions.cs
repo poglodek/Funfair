@@ -8,23 +8,22 @@ namespace Funfair.Dal.CosmosDb;
 
 public static class Extensions
 {
-    public static WebApplicationBuilder AddCosmosDb(this WebApplicationBuilder builder, ContainerOptions containerOptions)
+    public static WebApplicationBuilder AddCosmosDb<T>(this WebApplicationBuilder builder, ContainerOptions containerOptions) where T : ContainerContext
     {
         
         var options = builder.Configuration.GetSection("CosmosDb").Get<CosmosOptions>();
         
         ArgumentNullException.ThrowIfNull(options, "CosmosDb options not found in configuration");
+  
+        var client = InitializeCosmosClientInstance(options);
+        var database = CreateDatabaseAsync(client, options).GetAwaiter().GetResult();
+        var container = CreateContainerAsync(database, containerOptions).GetAwaiter().GetResult();
 
         builder.Services
             .AddSingleton(options)
-            .AddSingleton<CosmosClient>(_ => InitializeCosmosClientInstance(options))
-            .AddSingleton<Database>(sp =>
-                CreateDatabaseAsync(sp.GetRequiredService<CosmosClient>(), sp.GetRequiredService<CosmosOptions>())
-                    .GetAwaiter().GetResult())
-            .AddSingleton<Container>(sp =>
-                CreateContainerAsync(sp.GetRequiredService<Database>(), containerOptions)
-                    .GetAwaiter().GetResult());
-
+            .AddSingleton(client)
+            .AddSingleton(database)
+            .AddSingleton(sp => (T)Activator.CreateInstance(typeof(T), container)!);
 
         return builder;
     }
@@ -38,15 +37,16 @@ public static class Extensions
         
         return new CosmosClient(account, key);
     }
-    
-    public static async Task<Database> CreateDatabaseAsync(CosmosClient client, CosmosOptions options)
+
+    private static async Task<Database> CreateDatabaseAsync(CosmosClient client, CosmosOptions options)
     {
         var response = await client.CreateDatabaseIfNotExistsAsync(options.DatabaseId);
 
         return response.Database;
 
     }
-    public static async Task<Container> CreateContainerAsync(Database database, ContainerOptions options)
+
+    private static async Task<Container> CreateContainerAsync(Database database, ContainerOptions options)
     {
         var result = await  database.CreateContainerIfNotExistsAsync(options.ContainerId, options.PartitionKey);
         

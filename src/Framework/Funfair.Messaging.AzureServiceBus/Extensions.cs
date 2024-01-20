@@ -2,8 +2,10 @@
 using Funfair.Dal.CosmosDb.Options;
 using Funfair.Messaging.AzureServiceBus.BackgroundWorkers;
 using Funfair.Messaging.AzureServiceBus.MessageBus;
+using Funfair.Messaging.AzureServiceBus.Options;
 using Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
 using Funfair.Messaging.AzureServiceBus.Processor;
+using Funfair.Messaging.AzureServiceBus.Query;
 using Funfair.Messaging.AzureServiceBus.Services;
 using Funfair.Messaging.AzureServiceBus.Services.Implementation;
 using Microsoft.AspNetCore.Builder;
@@ -17,17 +19,28 @@ public static class Extensions
 {
      public static WebApplicationBuilder AddMessageBus(this WebApplicationBuilder builder)
      {
-         var options = builder.Configuration.GetSection("AzureMessageBus").Get<ContainerOptions>();
+         var messageBusOptions = builder.Configuration.GetSection("AzureMessageBus").Get<MessageBusOptions>();
          
          builder
-             .AddCosmosDb(options)
-             .Services
-             .AddScoped<IEventProcessor, EventProcessor>()
-             .AddScoped<IMessageBusOperator, MessageBusOperator>()
-             .AddSingleton<IAzureBus, AzureBus>()
-             .AddSingleton<IAzureProcessor,AzureProcessor>()
-             .AddHostedService<OutboxWorker>()
-             .AddHostedService<InboxWorker>();
+             .AddCosmosDb<OutBoxContainer>(new ContainerOptions
+             {
+                 ContainerId = messageBusOptions.ContainerIdOutbox,
+                 PartitionKey = "/id",
+             })
+             .AddCosmosDb<InBoxContainer>(new ContainerOptions
+             {
+                 ContainerId = messageBusOptions.ContainerIdInbox,
+                 PartitionKey = "/id",
+             })
+                .Services
+                    .AddScoped<IEventProcessor, EventProcessor>()
+                    .AddScoped<IMessageBusOperator, MessageBusOperator>()
+                    .AddSingleton<IAzureBus, AzureBus>()
+                    .AddSingleton<IAzureProcessor,AzureProcessor>()
+                    .AddSingleton<IOutboxQuery,OutboxQuery>()
+                    .AddSingleton<IInboxQuery,InboxQuery>()
+                    .AddHostedService<OutboxWorker>()
+                    .AddHostedService<InboxWorker>();
          
          return builder;
      }

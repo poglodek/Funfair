@@ -1,20 +1,22 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Text.Json;
 using Funfair.Messaging.AzureServiceBus.Events;
 using Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
 using Funfair.Messaging.AzureServiceBus.OutInBoxPattern.Models;
 using Funfair.Shared.Core.Events;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 
 namespace Funfair.Messaging.AzureServiceBus.Processor;
 
 internal class EventProcessor : IEventProcessor
 {
-    private readonly OutboxDbContext _dbContext;
+    private readonly OutBoxContainer _outBoxContainer;
     private readonly ILogger<EventProcessor> _logger;
 
-    public EventProcessor(OutboxDbContext dbContext, ILogger<EventProcessor> logger)
+    public EventProcessor(OutBoxContainer outBoxContainer, ILogger<EventProcessor> logger)
     {
-        _dbContext = dbContext;
+        _outBoxContainer = outBoxContainer;
         _logger = logger;
     }
 
@@ -29,7 +31,7 @@ internal class EventProcessor : IEventProcessor
         return ProcessEventAsync(@event, token);
     }
     
-    private Task ProcessEventAsync(object @event, CancellationToken token)
+    private async Task ProcessEventAsync(object @event, CancellationToken token)
     {
         _logger.LogDebug($"Saving event to outbox: {@event.GetType().Name}");
 
@@ -42,10 +44,15 @@ internal class EventProcessor : IEventProcessor
             Id = Guid.NewGuid()
         };
 
-        _dbContext.Outboxes.Add(outbox);
+        
+        var result = await  _outBoxContainer.Container.CreateItemAsync(outbox, new PartitionKey(outbox.MessageType),
+            cancellationToken: token);
 
-        _logger.LogDebug($"Saved event to outbox: {@event.GetType().Name}");
-
-        return _dbContext.SaveChangesAsync(token);
+        if (result.StatusCode == HttpStatusCode.Created)
+        {
+            _logger.LogDebug($"Saved event to outbox: {@event.GetType().Name}");
+        }
+            
+        
     }
 }

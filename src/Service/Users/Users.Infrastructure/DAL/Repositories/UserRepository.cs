@@ -3,6 +3,7 @@ using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 using Users.Core.Repositories;
 using Users.Core.ValueObjects;
+using Users.Infrastructure.DAL.Container;
 using Users.Infrastructure.Exceptions;
 using User = Users.Core.Entities.User;
 
@@ -10,13 +11,13 @@ namespace Users.Infrastructure.DAL.Repositories;
 
 internal class UserRepository : IUserRepository
 {
-    private readonly Container _container;
+    private readonly Microsoft.Azure.Cosmos.Container _container;
     private readonly IPasswordHasher<User> _hasher;
     private readonly ILogger<UserRepository> _logger;
 
-    public UserRepository(Container container, IPasswordHasher<User> hasher, ILogger<UserRepository> logger)
+    public UserRepository(UserContainer container, IPasswordHasher<User> hasher, ILogger<UserRepository> logger)
     {
-        _container = container;
+        _container = container.Container;
         _hasher = hasher;
         _logger = logger;
     }

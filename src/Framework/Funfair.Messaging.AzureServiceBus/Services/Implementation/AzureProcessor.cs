@@ -3,6 +3,7 @@ using Azure.Messaging.ServiceBus;
 using Funfair.Messaging.AzureServiceBus.Models;
 using Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
 using Funfair.Messaging.AzureServiceBus.OutInBoxPattern.Models;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -60,7 +61,7 @@ internal class AzureProcessor : IAzureProcessor, IDisposable, IAsyncDisposable
     {
         _logger.LogInformation($"Got new message {arg.Message.Subject} with id - {arg.Message.MessageId}");
         
-        using var outboxDbContext = _serviceProvider.CreateAsyncScope().ServiceProvider.GetRequiredService<OutboxDbContext>();
+        var outboxContainer = _serviceProvider.CreateAsyncScope().ServiceProvider.GetRequiredService<OutBoxContainer>();
         
         var inbox = new Inbox
         {
@@ -70,10 +71,8 @@ internal class AzureProcessor : IAzureProcessor, IDisposable, IAsyncDisposable
             MessageType = arg.Message.Subject,
             Message = arg.Message.Body.ToString()
         };
-
-        outboxDbContext.Inboxes.Add(inbox);
         
-        return outboxDbContext.SaveChangesAsync();
+        return outboxContainer.Container.CreateItemAsync(inbox, new PartitionKey(inbox.MessageId.ToString()));
     }
 
 

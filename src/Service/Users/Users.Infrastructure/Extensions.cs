@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Users.Core.Entities;
 using Users.Core.Repositories;
+using Users.Infrastructure.DAL.Container;
 using Users.Infrastructure.DAL.Repositories;
 
 namespace Users.Infrastructure;
@@ -22,7 +23,7 @@ public static class Extensions
         builder
           .AddAzureLogAnalytics()
           .AddMessageBus()
-          .AddCosmosDb(cosmosContainerOptions)
+          .AddCosmosDb<UserContainer>(cosmosContainerOptions)
           .Services
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IPasswordHasher<User>, PasswordHasher<User>>()
