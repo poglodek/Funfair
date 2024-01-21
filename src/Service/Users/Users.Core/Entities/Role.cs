@@ -1,10 +1,15 @@
-﻿namespace Users.Core.Entities;
+﻿using Newtonsoft.Json;
+
+namespace Users.Core.Entities;
 
 public class Role
 {
+    [JsonProperty("name")]
     public string Name { get; set; } = string.Empty;
+    
+    [JsonProperty("claims")]
     public IDictionary<string,string> Claims { get; set; } = new Dictionary<string, string>();
-    public IEnumerable<User> Users { get; set; } = new List<User>();
+    
 
     public Role()
     {

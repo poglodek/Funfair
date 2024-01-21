@@ -22,18 +22,16 @@ internal class UserRepository : IUserRepository
         _logger = logger;
     }
 
-    public async Task<User> AddUser(User user)
+    public void AddUser(User user, TransactionalBatch? batch = null)
     {
+        batch ??= _container.CreateTransactionalBatch(new PartitionKey(user.Email.Value));
+        
         user.SetPassword(_hasher, user.Password.Value);
         
-        var response = await _container.CreateItemAsync(user, new PartitionKey(user.Email.Value));
-        
-        CannotAddUserException.ThrowIfStatusCodeNotCreated(response.StatusCode);
-        
-        return response.Resource;
+        batch.CreateItem(user);
     }
 
-    public async Task<User> GetUserByEmail(EmailAddress email)
+    public async Task<User?> GetUserByEmail(EmailAddress email)
     {
         var result = await _container.ReadItemAsync<User>(email.Value, new PartitionKey(email.Value));
 

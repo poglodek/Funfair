@@ -11,7 +11,6 @@ public static class Extensions
    {
       builder.Services.AddMediatR(cfg =>  cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
       
-      builder.AddDomain();
       return builder;
    }
 

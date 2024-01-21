@@ -1,12 +1,13 @@
 ﻿using Funfair.Shared.Core.Repository;
-using Users.Core.Entities;
+using Microsoft.Azure.Cosmos;
 using Users.Core.ValueObjects;
+using User = Users.Core.Entities.User;
 
 namespace Users.Core.Repositories;
 
 public interface IUserRepository 
 {
-    Task<User> AddUser(User user);
-    Task<User> GetUserByEmail(EmailAddress email);
+    void AddUser(User user, TransactionalBatch? batch = null);
+    Task<User?> GetUserByEmail(EmailAddress email);
     Task<User> SignIn(string requestMail, string requestPassword);
 }

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Funfair.Messaging.AzureServiceBus.BackgroundWorkers;
 
-public class OutboxWorker : BackgroundService
+internal class OutboxWorker : BackgroundService
 {
     private readonly ILogger<OutboxWorker> _logger;
     private readonly IMessageBusOperator _messageBusOperator;

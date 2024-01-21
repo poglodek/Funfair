@@ -1,7 +1,10 @@
-﻿namespace Funfair.Shared.Domain;
+﻿using Newtonsoft.Json;
+
+namespace Funfair.Shared.Domain;
 
 public sealed record Id
 {
+    [JsonProperty("value")]
     public Guid Value { get; private set; }
 
     private Id() { }

@@ -6,6 +6,7 @@ public class Inbox
 {
     [JsonProperty("id")]
     public Guid Id { get; set; }
+    [JsonProperty("dateReceived")]
     public DateTime DateReceived { get; set; }
     
     [JsonProperty("dateProcessed")]

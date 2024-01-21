@@ -11,6 +11,8 @@ public class Outbox
     
     [JsonProperty("createdDate")]
     public DateTime CreatedDate { get; set; }
+    
+    [JsonProperty("sentDate")]
     public DateTime? SentDate { get; set; }
     public string MessageType { get; set; } = null!;
     

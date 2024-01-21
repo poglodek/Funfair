@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 
 namespace Funfair.Messaging.AzureServiceBus.BackgroundWorkers;
 
-public class InboxWorker : BackgroundService
+internal class InboxWorker : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly PeriodicTimer _periodicTimer;
@@ -95,7 +95,7 @@ public class InboxWorker : BackgroundService
                 }
                 finally
                 {
-                    inBoxContainer.Container.UpsertItemAsync(inbox, new PartitionKey(inbox.Id.ToString()), cancellationToken: stoppingToken);
+                    await inBoxContainer.Container.UpsertItemAsync(inbox, new PartitionKey(inbox.Id.ToString()), cancellationToken: stoppingToken);
                 }
                 
                 _logger.LogDebug($"Processed outbox message: {inbox.MessageType}");

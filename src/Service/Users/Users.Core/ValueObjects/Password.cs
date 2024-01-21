@@ -1,9 +1,11 @@
-﻿using Users.Core.Exceptions;
+﻿using Newtonsoft.Json;
+using Users.Core.Exceptions;
 
 namespace Users.Core.ValueObjects;
 
 public record Password
 {
+    [JsonProperty("value")]
     public string Value { get; }
 
     public Password(string value)

@@ -1,8 +1,11 @@
-﻿using MediatR;
+﻿using Funfair.Shared.App.Command;
+using Funfair.Shared.Core.Events;
+using MediatR;
+using Microsoft.Azure.Cosmos;
 
 namespace Users.App.Commands;
 
-public class AddUserCommand : IRequest<Unit>
+public class AddUserCommand : IRequestTransactionalCommand<Unit>
 {
     public string FirstName { get; init; }
     public string LastName { get; init; }
@@ -18,4 +21,7 @@ public class AddUserCommand : IRequest<Unit>
         Email = email;
         Password = password;    
     }
+
+    public TransactionalBatch TransactionalBatch { get; set; }
+    
 }

@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices.JavaScript;
+﻿using Funfair.Messaging.AzureServiceBus.Processor;
 using MediatR;
 using NSubstitute;
 using Shouldly;
@@ -13,7 +13,7 @@ public class AddUser
 {
     private Unit Act(Users.App.Commands.AddUserCommand command)
     {
-        var addUserHandler = new AddUserHandler(_userRepository);
+        var addUserHandler = new AddUserHandler(_userRepository,_eventProcessor);
         
         return addUserHandler.Handle(command, CancellationToken.None).GetAwaiter().GetResult();
     }
@@ -24,7 +24,7 @@ public class AddUser
         // Arrange
         var command = ReturnValidUserCommand(_email);
 
-        _userRepository.GetUserByEmail(_email).Returns(ReturnValidUserAsync());
+         _userRepository.GetUserByEmail(_email)!.Returns(ReturnValidUserAsync());
         
         // Act
         Record.Exception(()=>Act(command)).ShouldBeOfType<UserExistsException>();
@@ -38,7 +38,7 @@ public class AddUser
         var command = ReturnValidUserCommand(_email);
 
         // Act
-        var act = Act(command);
+        Act(command);
         
         _userRepository.Received(1).AddUser(Arg.Any<User>());
         
@@ -62,5 +62,6 @@ public class AddUser
 
 
     private readonly IUserRepository _userRepository = Substitute.For<IUserRepository>();
+    private readonly IEventProcessor _eventProcessor = Substitute.For<IEventProcessor>();
 
 }

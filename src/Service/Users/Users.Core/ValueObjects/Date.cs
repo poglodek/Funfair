@@ -1,4 +1,5 @@
 ﻿
+using Newtonsoft.Json;
 using Users.Core.Exceptions;
 
 namespace Users.Core.ValueObjects;
@@ -14,6 +15,7 @@ public record Date
         Value = value;
     }
 
+    [JsonProperty("value")]
     public DateTime Value { get; }
     public static implicit operator Date(DateTime date) => new (date);
 };

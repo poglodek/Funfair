@@ -2,6 +2,7 @@
 using Funfair.Dal.CosmosDb.Options;
 using Funfair.Logging;
 using Funfair.Messaging.AzureServiceBus;
+using Funfair.Shared;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +25,7 @@ public static class Extensions
           .AddAzureLogAnalytics()
           .AddMessageBus()
           .AddCosmosDb<UserContainer>(cosmosContainerOptions)
+          .AddPipelineBehavior<UserContainer>()
           .Services
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IPasswordHasher<User>, PasswordHasher<User>>()
