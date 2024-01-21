@@ -18,7 +18,7 @@ internal class AzureBus : IAzureBus, IAsyncDisposable
                                 .Get<MessageBusOptions>();
         
 
-        if (_options is null || string.IsNullOrEmpty(_options.ConnectionString))
+        if (_options is null ||( string.IsNullOrEmpty(_options.ConnectionString) && _options.Enabled))
         {
             throw new ArgumentNullException($"{nameof(_options.ConnectionString)} is null");
         }
@@ -78,7 +78,10 @@ internal class AzureBus : IAzureBus, IAsyncDisposable
         {
             await sender.DisposeAsync();
         }
-        
-        await _busClient.DisposeAsync();
+
+        if (_busClient is not null)
+        {
+            await _busClient.DisposeAsync();
+        }
     }
 }

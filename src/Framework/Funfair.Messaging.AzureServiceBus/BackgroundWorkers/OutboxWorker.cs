@@ -11,14 +11,12 @@ namespace Funfair.Messaging.AzureServiceBus.BackgroundWorkers;
 internal class OutboxWorker : BackgroundService
 {
     private readonly ILogger<OutboxWorker> _logger;
-    private readonly IMessageBusOperator _messageBusOperator;
     private readonly IServiceScopeFactory _scopeFactory;
 
 
-    public OutboxWorker(ILogger<OutboxWorker> logger, IMessageBusOperator busOperator, IServiceScopeFactory scopeFactory)
+    public OutboxWorker(ILogger<OutboxWorker> logger, IServiceScopeFactory scopeFactory)
     {
         _logger = logger;
-        _messageBusOperator = busOperator;
         _scopeFactory = scopeFactory;
     }
     
@@ -34,8 +32,10 @@ internal class OutboxWorker : BackgroundService
             await periodicTimer.WaitForNextTickAsync(stoppingToken);
             
             var outboxQuery = scope.ServiceProvider.GetRequiredService<IOutboxQuery>();
+            var outBoxContainer = scope.ServiceProvider.GetRequiredService<InOutBoxContainer>();
+            var messageBusOperator = scope.ServiceProvider.GetRequiredService<IMessageBusOperator>();
             
-            var outBoxContainer = scope.ServiceProvider.GetRequiredService<OutBoxContainer>();
+            
             var outboxes = await outboxQuery.GetUnprocessedInboxesAsync(stoppingToken);
 
             foreach (var outbox in outboxes)
@@ -44,7 +44,7 @@ internal class OutboxWorker : BackgroundService
 
                 try
                 {
-                    await _messageBusOperator.Publish(outbox);
+                    await messageBusOperator.Publish(outbox);
 
                     outbox.SentDate = DateTime.Now;
                 }
@@ -55,7 +55,7 @@ internal class OutboxWorker : BackgroundService
                 }
                 finally
                 {
-                    outBoxContainer.Container.UpsertItemAsync(outbox, new PartitionKey(outbox.Id.ToString()), cancellationToken: stoppingToken);
+                    await outBoxContainer.Container.UpsertItemAsync(outbox, new PartitionKey(outbox.MessageType), cancellationToken: stoppingToken);
                 }
                 
                 _logger.LogDebug($"Processed outbox message: {outbox.MessageType}");

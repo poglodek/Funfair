@@ -21,15 +21,10 @@ public static class Extensions
          var messageBusOptions = builder.Configuration.GetSection("AzureMessageBus").Get<MessageBusOptions>();
          
          builder
-             .AddCosmosDb<OutBoxContainer>(new ContainerOptions
+             .AddCosmosDb<InOutBoxContainer>(new ContainerOptions
              {
-                 ContainerId = messageBusOptions.ContainerIdOutbox,
-                 PartitionKey = "/id",
-             })
-             .AddCosmosDb<InBoxContainer>(new ContainerOptions
-             {
-                 ContainerId = messageBusOptions.ContainerIdInbox,
-                 PartitionKey = "/id",
+                 ContainerId = "inOutBox",
+                 PartitionKey = "/messageType",
              })
                 .Services
                     .AddScoped<IEventProcessor, EventProcessor>()

@@ -3,9 +3,9 @@ using Microsoft.Azure.Cosmos;
 
 namespace Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
 
-public class InBoxContainer : ContainerContext
+public class InOutBoxContainer : ContainerContext
 {
-    public InBoxContainer(Container container) : base(container)
+    public InOutBoxContainer(Container container) : base(container)
     {
     }
 }

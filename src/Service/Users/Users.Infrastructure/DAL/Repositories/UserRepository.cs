@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Cosmos.Linq;
 using Microsoft.Extensions.Logging;
 using Users.Core.Repositories;
 using Users.Core.ValueObjects;
 using Users.Infrastructure.DAL.Container;
-using Users.Infrastructure.Exceptions;
 using User = Users.Core.Entities.User;
 
 namespace Users.Infrastructure.DAL.Repositories;
@@ -21,21 +22,30 @@ internal class UserRepository : IUserRepository
         _hasher = hasher;
         _logger = logger;
     }
-
-    public void AddUser(User user, TransactionalBatch? batch = null)
+//TODO: fix this
+    public Task AddUser(User user)
     {
-        batch ??= _container.CreateTransactionalBatch(new PartitionKey(user.Email.Value));
+       // user.SetPassword(_hasher, user.Password.Value);
+       
+       var json = JsonSerializer.Serialize(user);
         
-        user.SetPassword(_hasher, user.Password.Value);
-        
-        batch.CreateItem(user);
+        return _container.CreateItemAsync(json,new PartitionKey(user.PartitionKey));
     }
 
     public async Task<User?> GetUserByEmail(EmailAddress email)
     {
-        var result = await _container.ReadItemAsync<User>(email.Value, new PartitionKey(email.Value));
+        var iterator = _container.GetItemLinqQueryable<User>()
+            .ToFeedIterator();
 
-        return result.Resource;
+        if (iterator.HasMoreResults)
+        {
+            foreach (var user in await iterator.ReadNextAsync())
+            {
+                return user;
+            }
+        }
+        
+        return null;
     }
 
     public async Task<User> SignIn(string requestMail, string requestPassword)

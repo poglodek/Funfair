@@ -1,4 +1,5 @@
-﻿using Funfair.Messaging.AzureServiceBus.OutInBoxPattern.Models;
+﻿using Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
+using Funfair.Messaging.AzureServiceBus.OutInBoxPattern.Models;
 using Microsoft.Azure.Cosmos;
 
 namespace Funfair.Messaging.AzureServiceBus.Query;
@@ -12,9 +13,9 @@ public class InboxQuery : IInboxQuery
 {
     private readonly Container _container;
 
-    public InboxQuery(Container container)
+    public InboxQuery(InOutBoxContainer container)
     {
-        _container = container;
+        _container = container.Container;
     }
     
     public async Task<List<Inbox>> GetUnprocessedInboxesAsync(CancellationToken cancellationToken)

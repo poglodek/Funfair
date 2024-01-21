@@ -61,7 +61,7 @@ internal class AzureProcessor : IAzureProcessor, IDisposable, IAsyncDisposable
     {
         _logger.LogInformation($"Got new message {arg.Message.Subject} with id - {arg.Message.MessageId}");
         
-        var outboxContainer = _serviceProvider.CreateAsyncScope().ServiceProvider.GetRequiredService<OutBoxContainer>();
+        var outboxContainer = _serviceProvider.CreateAsyncScope().ServiceProvider.GetRequiredService<InOutBoxContainer>();
         
         var inbox = new Inbox
         {

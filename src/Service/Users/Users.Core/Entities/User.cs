@@ -17,8 +17,6 @@ public class User : DomainBase
     [JsonProperty("dateOfBirth")]
     public Date DateOfBirth { get; private set; }
     
-    [JsonProperty("createdAt")]
-    public Date CreatedAt { get; private set; }
     
     [JsonProperty("email")]
     public EmailAddress Email { get; private set; }
@@ -28,6 +26,12 @@ public class User : DomainBase
     
     [JsonProperty("role")]
     public Role Role { get; private set; }
+    
+    [JsonProperty("createdAt")]
+    public Date CreatedAt { get; private set; }
+    
+    [JsonProperty("partitionKey")]
+    public string PartitionKey => $"{CreatedAt.Value:yyyy-MM}";
 
     private User()
     {

@@ -6,6 +6,9 @@ namespace Funfair.Messaging.AzureServiceBus.OutInBoxPattern.Models;
 
 public class Outbox
 {
+    [JsonProperty("type")]
+    public static string Type => "Outbox";
+    
     [JsonProperty("id")]
     public Guid Id { get; set; }
     

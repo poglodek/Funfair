@@ -29,9 +29,9 @@ public class AddUserHandler : IRequestHandler<AddUserCommand,Unit>
         
         var newUser = User.CreateInstance(request.FirstName, request.LastName, request.DateOfBirth, DateTime.Now, request.Email, request.Password,new Role());
         
-        _userRepository.AddUser(newUser,request.TransactionalBatch);
+        await _userRepository.AddUser(newUser);
 
-        await _processor.ProcessAsync(user!, cancellationToken);
+     //   await _processor.ProcessAsync(newUser!, cancellationToken);
         
         return Unit.Value;
     }

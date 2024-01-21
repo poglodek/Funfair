@@ -23,7 +23,7 @@ public static class Extensions
             .AddSingleton(options)
             .AddSingleton(client)
             .AddSingleton(database)
-            .AddSingleton(sp => (T)Activator.CreateInstance(typeof(T), container)!);
+            .AddSingleton<T>(_ => (T)Activator.CreateInstance(typeof(T), container)!);
 
         return builder;
     }

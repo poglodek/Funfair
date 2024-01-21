@@ -46,7 +46,7 @@ internal class InboxWorker : BackgroundService
         {
             await _periodicTimer.WaitForNextTickAsync(stoppingToken);
             
-            var inBoxContainer = serviceProvider.GetRequiredService<InBoxContainer>();
+            var inBoxContainer = serviceProvider.GetRequiredService<InOutBoxContainer>();
             var inboxQuery = serviceProvider.GetRequiredService<IInboxQuery>();
             
             using var scope = serviceProvider.CreateScope();

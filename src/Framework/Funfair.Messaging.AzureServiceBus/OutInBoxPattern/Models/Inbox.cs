@@ -4,6 +4,9 @@ namespace Funfair.Messaging.AzureServiceBus.OutInBoxPattern.Models;
 
 public class Inbox
 {
+    [JsonProperty("type")]
+    public static string Type => "Inbox";
+    
     [JsonProperty("id")]
     public Guid Id { get; set; }
     [JsonProperty("dateReceived")]
@@ -11,8 +14,12 @@ public class Inbox
     
     [JsonProperty("dateProcessed")]
     public DateTime? DateProcessed { get; set; }
+    
+    
+    [JsonProperty("messageType")]
     public string MessageType { get; set; } = null!;
     public string Message { get; set; } = null!;
+    
     public Guid MessageId { get; init; }
     
     [JsonProperty("errorMessage")]

@@ -10,9 +10,9 @@ namespace Funfair.Messaging.AzureServiceBus.Processor;
 
 internal class EventProcessor : IEventProcessor
 {
-    private readonly OutBoxContainer _outBoxContainer;
+    private readonly InOutBoxContainer _outBoxContainer;
 
-    public EventProcessor(OutBoxContainer outBoxContainer)
+    public EventProcessor(InOutBoxContainer outBoxContainer)
     {
         _outBoxContainer = outBoxContainer;
     }
