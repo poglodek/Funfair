@@ -1,14 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using Funfair.Messaging.AzureServiceBus.Events;
-using Funfair.Messaging.AzureServiceBus.MessageBus;
 using Funfair.Messaging.AzureServiceBus.Models;
 using Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
 using Funfair.Messaging.AzureServiceBus.Query;
-using Funfair.Messaging.AzureServiceBus.Services;
 using Funfair.Messaging.AzureServiceBus.Services.Implementation;
 using MediatR;
 using Microsoft.Azure.Cosmos;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

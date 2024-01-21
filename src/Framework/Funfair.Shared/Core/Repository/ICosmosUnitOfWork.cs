@@ -1,5 +1,4 @@
 ﻿using Microsoft.Azure.Cosmos;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Funfair.Shared.Core.Repository;
 

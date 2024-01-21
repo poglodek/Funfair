@@ -1,7 +1,5 @@
 ﻿using System.Collections.Concurrent;
-using Azure.Identity;
 using Azure.Messaging.ServiceBus;
-using Funfair.Messaging.AzureServiceBus.Models;
 using Funfair.Messaging.AzureServiceBus.Options;
 using Microsoft.Extensions.Configuration;
 

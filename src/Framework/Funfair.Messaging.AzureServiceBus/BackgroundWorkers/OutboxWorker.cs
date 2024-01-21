@@ -2,7 +2,6 @@
 using Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
 using Funfair.Messaging.AzureServiceBus.Query;
 using Microsoft.Azure.Cosmos;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

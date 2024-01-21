@@ -9,7 +9,6 @@ using Funfair.Messaging.AzureServiceBus.Query;
 using Funfair.Messaging.AzureServiceBus.Services;
 using Funfair.Messaging.AzureServiceBus.Services.Implementation;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
