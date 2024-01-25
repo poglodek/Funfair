@@ -48,7 +48,7 @@ internal class EventProcessor : IEventProcessor
             Id = Guid.NewGuid()
         };
 
-        return _outBoxContainer.Container.CreateItemAsync(outbox, new PartitionKey(outbox.MessageType),
+        return _outBoxContainer.Container.CreateItemAsync(outbox,
             cancellationToken: token);
     }
 }

@@ -16,8 +16,7 @@ public class User : DomainBase
     
     [JsonProperty("dateOfBirth")]
     public Date DateOfBirth { get; private set; }
-    
-    
+
     [JsonProperty("email")]
     public EmailAddress Email { get; private set; }
     

@@ -1,8 +1,8 @@
-﻿using System.Text.Json;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Users.Core.Repositories;
 using Users.Core.ValueObjects;
 using Users.Infrastructure.DAL.Container;
@@ -22,24 +22,23 @@ internal class UserRepository : IUserRepository
         _hasher = hasher;
         _logger = logger;
     }
-//TODO: fix this
-    public Task AddUser(User user)
+    
+    public Task AddUser(User user, CancellationToken cancellationToken)
     {
-       // user.SetPassword(_hasher, user.Password.Value);
-       
-       var json = JsonSerializer.Serialize(user);
-        
-        return _container.CreateItemAsync(json,new PartitionKey(user.PartitionKey));
+        user.SetPassword(_hasher, user.Password.Value);
+        return _container.CreateItemAsync(user, cancellationToken: cancellationToken);
     }
+    
 
-    public async Task<User?> GetUserByEmail(EmailAddress email)
+    public async Task<User?> GetUserByEmail(EmailAddress email, CancellationToken cancellationToken)
     {
         var iterator = _container.GetItemLinqQueryable<User>()
+            .Where(x=>x.Email.Value == email.Value)
             .ToFeedIterator();
 
         if (iterator.HasMoreResults)
         {
-            foreach (var user in await iterator.ReadNextAsync())
+            foreach (var user in await iterator.ReadNextAsync(cancellationToken))
             {
                 return user;
             }
@@ -48,9 +47,9 @@ internal class UserRepository : IUserRepository
         return null;
     }
 
-    public async Task<User> SignIn(string requestMail, string requestPassword)
+    public async Task<User> SignIn(string requestMail, string requestPassword, CancellationToken cancellationToken)
     {
-        var user = await GetUserByEmail(requestMail);
+        var user = await GetUserByEmail(requestMail,cancellationToken);
 
         if (user is null)
         {

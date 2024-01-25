@@ -7,7 +7,9 @@ namespace Funfair.Shared.Domain;
 public abstract class DomainBase
 {
     [JsonProperty("id")]
+    [JsonConverter(typeof(IdJsonConverter))]
     public Id Id { get; protected set; }
+    
     
     [JsonIgnore]
     private readonly List<IDomainEvent> _domainEvents = new();

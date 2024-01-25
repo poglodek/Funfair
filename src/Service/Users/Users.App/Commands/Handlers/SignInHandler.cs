@@ -22,13 +22,15 @@ public class SignInHandler : IRequestHandler<SignInCommand,JWTokenDto>
     
     public async Task<JWTokenDto> Handle(SignInCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.SignIn(request.Email,request.Password);
+        var user = await _userRepository.SignIn(request.Email,request.Password,cancellationToken);
 
+        await Task.Delay(Random.Shared.Next(500,1000), cancellationToken).WaitAsync(cancellationToken);
+        
         if (user is null)
         {
             throw new UserNotFoundException(request.Email);
         }
 
-        return _tokenManager.CreateToken(user.Id.Value, user.Email.Value, user.Role.Name, user.Role.Claims);
+        return _tokenManager.CreateToken(user.Id, user.Email.Value, user.Role.Name, user.Role.Claims);
     }
 }

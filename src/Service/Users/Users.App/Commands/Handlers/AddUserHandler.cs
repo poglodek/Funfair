@@ -20,7 +20,7 @@ public class AddUserHandler : IRequestHandler<AddUserCommand,Unit>
     
     public async Task<Unit> Handle(AddUserCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetUserByEmail(request.Email);
+        var user = await _userRepository.GetUserByEmail(request.Email,cancellationToken);
         
         if (user is not null)
         {
@@ -29,9 +29,9 @@ public class AddUserHandler : IRequestHandler<AddUserCommand,Unit>
         
         var newUser = User.CreateInstance(request.FirstName, request.LastName, request.DateOfBirth, DateTime.Now, request.Email, request.Password,new Role());
         
-        await _userRepository.AddUser(newUser);
+        await _userRepository.AddUser(newUser, cancellationToken);
 
-     //   await _processor.ProcessAsync(newUser!, cancellationToken);
+        await _processor.ProcessAsync(newUser!, cancellationToken);
         
         return Unit.Value;
     }
