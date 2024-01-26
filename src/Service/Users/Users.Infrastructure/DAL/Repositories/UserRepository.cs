@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Users.Core.Repositories;
 using Users.Core.ValueObjects;
 using Users.Infrastructure.DAL.Container;

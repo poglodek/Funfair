@@ -24,7 +24,7 @@ public class AddUser
         // Arrange
         var command = ReturnValidUserCommand(_email);
 
-         _userRepository.GetUserByEmail(_email)!.Returns(ReturnValidUserAsync());
+         _userRepository.GetUserByEmail(_email,CancellationToken.None)!.Returns(ReturnValidUserAsync());
         
         // Act
         Record.Exception(()=>Act(command)).ShouldBeOfType<UserExistsException>();
@@ -40,7 +40,7 @@ public class AddUser
         // Act
         Act(command);
         
-        _userRepository.Received(1).AddUser(Arg.Any<User>());
+        _userRepository.Received(1).AddUser(Arg.Any<User>(),CancellationToken.None);
         
 
     }
