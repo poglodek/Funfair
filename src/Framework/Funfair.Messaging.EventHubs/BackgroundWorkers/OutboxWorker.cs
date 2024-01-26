@@ -1,12 +1,12 @@
-﻿using Funfair.Messaging.AzureServiceBus.MessageBus;
-using Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
-using Funfair.Messaging.AzureServiceBus.Query;
+﻿using Funfair.Messaging.EventHubs.OutInBoxPattern;
+using Funfair.Messaging.EventHubs.Query;
+using Funfair.Messaging.EventHubs.Services;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Funfair.Messaging.AzureServiceBus.BackgroundWorkers;
+namespace Funfair.Messaging.EventHubs.BackgroundWorkers;
 
 internal class OutboxWorker : BackgroundService
 {
@@ -33,7 +33,7 @@ internal class OutboxWorker : BackgroundService
             
             var outboxQuery = scope.ServiceProvider.GetRequiredService<IOutboxQuery>();
             var outBoxContainer = scope.ServiceProvider.GetRequiredService<InOutBoxContainer>();
-            var messageBusOperator = scope.ServiceProvider.GetRequiredService<IMessageBusOperator>();
+            var eventHubSender = scope.ServiceProvider.GetRequiredService<IEventHubSender>();
             
             
             var outboxes = await outboxQuery.GetUnprocessedInboxesAsync(stoppingToken);
@@ -44,7 +44,7 @@ internal class OutboxWorker : BackgroundService
 
                 try
                 {
-                    await messageBusOperator.Publish(outbox);
+                    await eventHubSender.SendMessagesAsync(outbox,stoppingToken);
 
                     outbox.SentDate = DateTime.Now;
                 }

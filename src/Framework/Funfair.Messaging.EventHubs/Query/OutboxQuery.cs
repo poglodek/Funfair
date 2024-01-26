@@ -1,8 +1,8 @@
-﻿using Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
-using Funfair.Messaging.AzureServiceBus.OutInBoxPattern.Models;
+﻿using Funfair.Messaging.EventHubs.OutInBoxPattern;
+using Funfair.Messaging.EventHubs.OutInBoxPattern.Models;
 using Microsoft.Azure.Cosmos;
 
-namespace Funfair.Messaging.AzureServiceBus.Query;
+namespace Funfair.Messaging.EventHubs.Query;
 
 internal interface IOutboxQuery
 {

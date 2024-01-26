@@ -1,12 +1,10 @@
 ﻿using System.Text.Json;
-using Funfair.Messaging.AzureServiceBus.Events;
-using Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
-using Funfair.Messaging.AzureServiceBus.OutInBoxPattern.Models;
+using Funfair.Messaging.EventHubs.OutInBoxPattern;
+using Funfair.Messaging.EventHubs.OutInBoxPattern.Models;
 using Funfair.Shared.Core.Events;
 using Funfair.Shared.Domain;
-using Microsoft.Azure.Cosmos;
 
-namespace Funfair.Messaging.AzureServiceBus.Processor;
+namespace Funfair.Messaging.EventHubs.Processor;
 
 internal class EventProcessor : IEventProcessor
 {
@@ -16,12 +14,6 @@ internal class EventProcessor : IEventProcessor
     {
         _outBoxContainer = outBoxContainer;
     }
-
-    public Task ProcessAsync(IIntegrationEvent @event,CancellationToken token = default)
-    {
-        return ProcessEventAsync(@event, token);
-    }
-    
 
     public Task ProcessAsync(IDomainEvent @event, CancellationToken token = default)
     {

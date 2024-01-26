@@ -1,11 +1,6 @@
-﻿using Funfair.Dal.CosmosDb;
-using Funfair.Dal.CosmosDb.Options;
-using Funfair.Messaging.AzureServiceBus.BackgroundWorkers;
-using Funfair.Messaging.AzureServiceBus.MessageBus;
+﻿using Funfair.Messaging.AzureServiceBus.MessageBus;
 using Funfair.Messaging.AzureServiceBus.Options;
-using Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
 using Funfair.Messaging.AzureServiceBus.Processor;
-using Funfair.Messaging.AzureServiceBus.Query;
 using Funfair.Messaging.AzureServiceBus.Services;
 using Funfair.Messaging.AzureServiceBus.Services.Implementation;
 using Microsoft.AspNetCore.Builder;
@@ -21,20 +16,11 @@ public static class Extensions
          var messageBusOptions = builder.Configuration.GetSection("AzureMessageBus").Get<MessageBusOptions>();
          
          builder
-             .AddCosmosDb<InOutBoxContainer>(new ContainerOptions
-             {
-                 ContainerId = "inOutBox",
-                 PartitionKey = "/messageType",
-             })
-                .Services
-                    .AddScoped<IEventProcessor, EventProcessor>()
-                    .AddScoped<IMessageBusOperator, MessageBusOperator>()
+             .Services
+                    .AddScoped<IMessageProcessor, MessageProcessor>()
+                    .AddTransient<IMessageBusOperator, MessageBusOperator>()
                     .AddSingleton<IAzureBus, AzureBus>()
-                    .AddSingleton<IAzureProcessor,AzureProcessor>()
-                    .AddSingleton<IOutboxQuery,OutboxQuery>()
-                    .AddSingleton<IInboxQuery,InboxQuery>()
-                    .AddHostedService<OutboxWorker>()
-                    .AddHostedService<InboxWorker>();
+                    .AddSingleton<IAzureProcessor,AzureProcessor>();
          
          return builder;
      }

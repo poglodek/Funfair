@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Funfair.Messaging.AzureServiceBus.OutInBoxPattern.Models;
+namespace Funfair.Messaging.EventHubs.OutInBoxPattern.Models;
 
 public class Inbox
 {

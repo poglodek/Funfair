@@ -2,7 +2,7 @@
 
 namespace Funfair.Messaging.AzureServiceBus.Events;
 
-public interface IIntegrationEvent : INotification
+public interface IMessageEvent : INotification
 {
     
 }

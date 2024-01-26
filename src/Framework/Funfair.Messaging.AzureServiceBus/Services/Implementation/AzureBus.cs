@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using Azure.Messaging.ServiceBus;
+﻿using Azure.Messaging.ServiceBus;
 using Funfair.Messaging.AzureServiceBus.Options;
 using Microsoft.Extensions.Configuration;
 
@@ -7,7 +6,6 @@ namespace Funfair.Messaging.AzureServiceBus.Services.Implementation;
 
 internal class AzureBus : IAzureBus, IAsyncDisposable
 {
-    private readonly ConcurrentDictionary<string, ServiceBusSender> _busSenders = new();
     private readonly MessageBusOptions _options;
     private ServiceBusClient _busClient;
     
@@ -39,33 +37,7 @@ internal class AzureBus : IAzureBus, IAsyncDisposable
         
         _busClient = new ServiceBusClient(_options.ConnectionString);
     }
-
-    private ServiceBusSender GetSender(string topic)
-    {
-        if (_busSenders.TryGetValue(topic, out var sender))
-        {
-            return sender;
-        }
-
-        sender = _busClient.CreateSender(topic);
-
-        _busSenders.TryAdd(topic, sender);
-
-        return sender;
-    }
-
-    public ValueTask<ServiceBusMessageBatch> CreateBatchAsync(string topic)
-    {
-        return GetSender(topic).CreateMessageBatchAsync();
-    }
-
-    public async Task SendAsync(string topic,ServiceBusMessageBatch batch)
-    {
-        await GetSender(topic).SendMessagesAsync(batch);
-        
-        batch.Dispose();
-        
-    }
+    
 
     public void Dispose()
     {
@@ -74,11 +46,6 @@ internal class AzureBus : IAzureBus, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        foreach (var sender in _busSenders.Values)
-        {
-            await sender.DisposeAsync();
-        }
-
         if (_busClient is not null)
         {
             await _busClient.DisposeAsync();

@@ -1,9 +1,9 @@
 ﻿using System.Collections.ObjectModel;
-using Funfair.Messaging.AzureServiceBus.Events;
-using Funfair.Messaging.AzureServiceBus.Models;
-using Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
-using Funfair.Messaging.AzureServiceBus.Query;
-using Funfair.Messaging.AzureServiceBus.Services.Implementation;
+using Funfair.Messaging.EventHubs.Events;
+using Funfair.Messaging.EventHubs.Models;
+using Funfair.Messaging.EventHubs.OutInBoxPattern;
+using Funfair.Messaging.EventHubs.Query;
+using Funfair.Messaging.EventHubs.Services.Implementation;
 using MediatR;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace Funfair.Messaging.AzureServiceBus.BackgroundWorkers;
+namespace Funfair.Messaging.EventHubs.BackgroundWorkers;
 
 internal class InboxWorker : BackgroundService
 {
@@ -107,7 +107,7 @@ internal class InboxWorker : BackgroundService
         return new AssembliesService()
             .ReturnTypes()
             .Where(t => typeof(IIntegrationEvent).IsAssignableFrom(t)
-                        && t.GetCustomAttributes(typeof(MessageAttribute), true).Length > 0)
+                        && t.GetCustomAttributes(typeof(EventAttribute), true).Length > 0)
             .ToList()
             .AsReadOnly();
     }

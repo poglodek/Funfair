@@ -2,16 +2,16 @@
 
 public class InvalidMessageSize : System.Exception
 {
-    public InvalidMessageSize(string msg) : base(msg) 
+    private InvalidMessageSize(string msg) : base(msg) 
     {
         
     }
 
-    public static void ThrowIfFalse(bool con,Guid id)
+    public static void ThrowIfFalse(bool con)
     {
         if (!con)
         {
-            throw new InvalidMessageSize($"Invalid size of message of id - {id}");
+            throw new InvalidMessageSize($"Invalid size of message");
         }
     }
 }

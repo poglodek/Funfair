@@ -1,7 +1,7 @@
 ﻿using Funfair.Dal.CosmosDb;
 using Microsoft.Azure.Cosmos;
 
-namespace Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
+namespace Funfair.Messaging.EventHubs.OutInBoxPattern;
 
 public class InOutBoxContainer : ContainerContext
 {

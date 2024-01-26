@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace Funfair.Messaging.AzureServiceBus.OutInBoxPattern.Models;
+namespace Funfair.Messaging.EventHubs.OutInBoxPattern.Models;
 
 public class Outbox
 {

@@ -1,4 +1,5 @@
 ﻿using Funfair.Messaging.AzureServiceBus.Processor;
+using Funfair.Messaging.EventHubs.Processor;
 using MediatR;
 using Users.App.Exceptions;
 using Users.Core.Entities;

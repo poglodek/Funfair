@@ -1,4 +1,4 @@
-﻿namespace Funfair.Messaging.AzureServiceBus.Query;
+﻿namespace Funfair.Messaging.EventHubs.Query;
 
 public class Queries
 {

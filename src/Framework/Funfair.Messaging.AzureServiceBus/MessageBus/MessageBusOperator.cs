@@ -1,8 +1,7 @@
 ﻿using System.Text;
 using Azure.Messaging.ServiceBus;
-using Funfair.Messaging.AzureServiceBus.BackgroundWorkers;
 using Funfair.Messaging.AzureServiceBus.Exception;
-using Funfair.Messaging.AzureServiceBus.OutInBoxPattern;
+using Funfair.Messaging.AzureServiceBus.Options;
 using Funfair.Messaging.AzureServiceBus.OutInBoxPattern.Models;
 using Funfair.Messaging.AzureServiceBus.Services;
 
@@ -10,30 +9,31 @@ namespace Funfair.Messaging.AzureServiceBus.MessageBus;
 
 public class MessageBusOperator : IMessageBusOperator
 {
-    private readonly IAzureBus _azureBus;
+    private readonly MessageBusOptions _options;
 
-    public MessageBusOperator(IAzureBus azureBus)
+    public MessageBusOperator(MessageBusOptions options)
     {
-        _azureBus = azureBus;
+        _options = options;
     }
-    public async Task Publish(Outbox outbox)
+    public async Task Publish(MessageServiceBus messageServiceBus, CancellationToken cancellationToken)
     {
-        var batch = await _azureBus.CreateBatchAsync(outbox.MessageType);
+        var client = new ServiceBusClient(_options.ConnectionString);
+        var busClient = client.CreateSender(messageServiceBus.MessageType);
+
+        using var batch = await busClient.CreateMessageBatchAsync(cancellationToken);
 
         var canBeAdded = batch.TryAddMessage(new ServiceBusMessage
         {
-            MessageId = outbox.MessageId.ToString(),
-            Body = new BinaryData(Encoding.UTF8.GetBytes(outbox.Message)),
+            MessageId = messageServiceBus.MessageId.ToString(),
+            Body = new BinaryData(Encoding.UTF8.GetBytes(messageServiceBus.Message)),
             ContentType = "application/json",
-            Subject = outbox.MessageType
+            Subject = messageServiceBus.MessageType
             
         });
         
-        InvalidMessageSize.ThrowIfFalse(canBeAdded,outbox.Id);
-
-        await _azureBus.SendAsync(outbox.MessageType,batch);
+        InvalidMessageSize.ThrowIfFalse(canBeAdded);
         
-        
+        await busClient.SendMessagesAsync(batch,cancellationToken);
     }
     
 }

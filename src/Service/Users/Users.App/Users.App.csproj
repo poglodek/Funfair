@@ -13,6 +13,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Framework\Funfair.Auth\Funfair.Auth.csproj" />
+      <ProjectReference Include="..\..\..\Framework\Funfair.Messaging.EventHubs\Funfair.Messaging.EventHubs.csproj" />
       <ProjectReference Include="..\Users.Core\Users.Core.csproj" />
     </ItemGroup>
 
