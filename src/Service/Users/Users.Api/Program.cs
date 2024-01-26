@@ -1,6 +1,6 @@
-using System.Reflection;
 using Funfair.Auth;
 using Funfair.KeyVault;
+using Funfair.Messaging.EventHubs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Users.App;
@@ -16,6 +16,7 @@ builder
     .AddKeyVault()
     .AddApp()
     .AddInfrastructure()
+    .AddEventHubs()
     .Services.AddAuth(builder.Configuration);
 
 

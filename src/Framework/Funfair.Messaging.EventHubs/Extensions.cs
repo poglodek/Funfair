@@ -15,7 +15,7 @@ namespace Funfair.Messaging.EventHubs;
 
 public static class Extensions
 {
-     public static WebApplicationBuilder AddMessageBus(this WebApplicationBuilder builder)
+     public static WebApplicationBuilder AddEventHubs(this WebApplicationBuilder builder)
      {
          var hubsOptions = builder.Configuration.GetSection("EventHubsOptions").Get<EventHubsOptions>();
          

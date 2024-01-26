@@ -13,8 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Framework\Funfair.Dal.CosmosDb\Funfair.Dal.CosmosDb\Funfair.Dal.CosmosDb.csproj" />
-      <ProjectReference Include="..\..\..\Framework\Funfair.KeyVault\Funfair.KeyVault.csproj" />
       <ProjectReference Include="..\..\..\Framework\Funfair.Logging\Funfair.Logging.csproj" />
       <ProjectReference Include="..\Users.App\Users.App.csproj" />
       <ProjectReference Include="..\Users.Core\Users.Core.csproj" />
