@@ -1,8 +1,8 @@
-﻿using Flights.Core.Entities;
-using Flights.Core.Exceptions;
-using Flights.Core.ValueObjects;
+﻿using Planes.Core.Entities;
+using Planes.Core.Exceptions;
+using Planes.Core.ValueObjects;
 
-namespace Flights.Core.Builder;
+namespace Planes.Core.Builder;
 
 public sealed class PlaneBuilder
 {
@@ -27,6 +27,11 @@ public sealed class PlaneBuilder
     public PlaneBuilder WithSeats(int row,int seatsInRow, SeatClass seats)
     {
         InvalidSeatsInRowException.IfMoreThan(AlphabetSeat.Length, seatsInRow);
+        
+        if(row == 0 || seatsInRow == 0)
+        {
+            throw new InvalidSeatsInRowException("Row and seatsInRow cannot be 0");
+        }
         
         for (var i = 0; i < row; i++)
         {

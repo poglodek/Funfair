@@ -1,6 +1,6 @@
 ﻿using Funfair.Shared.Exception;
 
-namespace Flights.Core.Exceptions;
+namespace Planes.Core.Exceptions;
 
 public class InvalidPlaneNameException(string value) : CoreException(value)
 {

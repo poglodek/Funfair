@@ -1,4 +1,4 @@
-﻿namespace Flights.Core.ValueObjects;
+﻿namespace Planes.Core.ValueObjects;
 
 public sealed record SeatClass(string Value)
 {

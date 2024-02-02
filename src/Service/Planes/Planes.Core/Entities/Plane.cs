@@ -1,9 +1,9 @@
-﻿using Flights.Core.Events;
-using Flights.Core.Exceptions;
-using Flights.Core.ValueObjects;
-using Funfair.Shared.Domain;
+﻿using Funfair.Shared.Domain;
+using Planes.Core.Events;
+using Planes.Core.Exceptions;
+using Planes.Core.ValueObjects;
 
-namespace Flights.Core.Entities;
+namespace Planes.Core.Entities;
 
 public sealed class Plane : DomainBase
 {
@@ -19,7 +19,7 @@ public sealed class Plane : DomainBase
 
     private Plane(Id id, Model model, ProductionYear year, IEnumerable<Seat> seats)
     {
-        if (Id.Value == Guid.Empty)
+        if (id.Value == Guid.Empty)
         {
             throw new InvalidIdException(id);
         }
@@ -34,6 +34,11 @@ public sealed class Plane : DomainBase
             throw new InvalidSeatsException("Seats cannot be empty");
         }
 
+        if (year.Year < 2000)
+        {
+            throw new InvalidProductionYearException(year.Year);
+        }
+        
         Id = id;
         Model = model;
         ProductionYear = year;

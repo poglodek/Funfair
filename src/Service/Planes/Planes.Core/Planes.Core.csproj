@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Framework\Funfair.Shared\Funfair.Shared.csproj" />
+    </ItemGroup>
+
 </Project>

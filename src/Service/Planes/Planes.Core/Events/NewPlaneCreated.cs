@@ -1,7 +1,7 @@
-﻿using Flights.Core.ValueObjects;
-using Funfair.Shared.Core.Events;
+﻿using Funfair.Shared.Core.Events;
 using Funfair.Shared.Domain;
+using Planes.Core.ValueObjects;
 
-namespace Flights.Core.Events;
+namespace Planes.Core.Events;
 
 public record NewPlaneCreated(Id PlaneId, Model PlaneModel, IReadOnlyCollection<Seat> PlaneSeats) : IDomainEvent;
