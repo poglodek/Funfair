@@ -89,6 +89,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funfair.Dal.CosmosDb", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funfair.Messaging.EventHubs", "src\Framework\Funfair.Messaging.EventHubs\Funfair.Messaging.EventHubs.csproj", "{F0E7D81C-485E-448C-8EDA-B6BA639E9B2D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Functions", "Functions", "{524E23E8-1FEF-4863-BD12-861820ECCABD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -258,6 +260,7 @@ Global
 		{AE8F9328-9C25-4BD4-8E9F-6009A95D9BE1} = {D110B0B0-A01D-418B-A806-04E54B352796}
 		{B34119E2-DAF4-44C8-8C43-07B991F68B4E} = {D110B0B0-A01D-418B-A806-04E54B352796}
 		{F0E7D81C-485E-448C-8EDA-B6BA639E9B2D} = {D110B0B0-A01D-418B-A806-04E54B352796}
+		{524E23E8-1FEF-4863-BD12-861820ECCABD} = {0D8E5BFC-92B5-48C0-92A4-D910689D1653}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C103615-2B4C-4283-9520-8F74C96DC454}

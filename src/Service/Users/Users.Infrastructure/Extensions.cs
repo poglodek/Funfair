@@ -33,11 +33,7 @@ public static class Extensions
 
         return builder;
     }
-
-
-
-
-
+    
 
     public static WebApplication UseInfrastructure(this WebApplication app)
     {
