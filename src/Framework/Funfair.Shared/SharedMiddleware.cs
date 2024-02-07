@@ -2,12 +2,10 @@
 using Funfair.Shared.Exception;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Users.App.Exceptions;
-using Users.Core.Exceptions;
 
-namespace Users.Infrastructure;
+namespace Funfair.Shared;
 
-public class Middleware(ILogger<Middleware> logger) : IMiddleware
+public class SharedMiddleware(ILogger<SharedMiddleware> logger) : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
@@ -27,7 +25,7 @@ public class Middleware(ILogger<Middleware> logger) : IMiddleware
             context.Response.StatusCode = 400;
             await context.Response.WriteAsync(ex.ErrorMessage);
         }
-        catch (Exception ex)
+        catch (System.Exception ex)
         {
             logger.LogError(ex.Message);
             context.Response.StatusCode = 500;

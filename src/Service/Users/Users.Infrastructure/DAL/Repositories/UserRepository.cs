@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Funfair.Dal.CosmosDb.Linq;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.Cosmos.Linq;
 using Microsoft.Extensions.Logging;
 using Users.Core.Repositories;
@@ -28,21 +29,13 @@ internal class UserRepository : IUserRepository
     }
     
 
-    public async Task<User?> GetUserByEmail(EmailAddress email, CancellationToken cancellationToken)
+    public Task<User?> GetUserByEmail(EmailAddress email, CancellationToken cancellationToken)
     {
-        var iterator = _container.GetItemLinqQueryable<User>()
+        return _container.GetItemLinqQueryable<User>()
             .Where(x=>x.Email.Value == email.Value)
-            .ToFeedIterator();
+            .ToFeedIterator()
+            .FirstOrDefaultAsync(cancellationToken);
 
-        if (iterator.HasMoreResults)
-        {
-            foreach (var user in await iterator.ReadNextAsync(cancellationToken))
-            {
-                return user;
-            }
-        }
-        
-        return null;
     }
 
     public async Task<User> SignIn(string requestMail, string requestPassword, CancellationToken cancellationToken)

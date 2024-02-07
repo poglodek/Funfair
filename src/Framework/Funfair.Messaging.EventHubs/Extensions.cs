@@ -37,7 +37,7 @@ public static class Extensions
          return builder;
      }
 
-     public static WebApplication UseMessageBus(this WebApplication app)
+     public static WebApplication UseEventBus(this WebApplication app)
      {
          var scope = app.Services.CreateScope();
 

@@ -43,7 +43,7 @@ public class CreatePlaneCommandTest
             new Seats(5, 4, "Business")
         });
         
-        _userRepository.GetByModelAsync("Boeing 737").Returns(ReturnPlane());
+        _userRepository.GetByModelAsync("Boeing 737", default).Returns(ReturnPlane());
         
         var exception = await Record.ExceptionAsync(()=>Act(command));
         

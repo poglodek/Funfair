@@ -10,7 +10,7 @@ public class CreatePlaneCommandHandler(IPlaneRepository planeRepository) : IRequ
 {
     public async Task<PlaneIdDto> Handle(CreatePlaneCommand request, CancellationToken cancellationToken)
     {
-        var existingPlane = await planeRepository.GetByModelAsync(request.Model);
+        var existingPlane = await planeRepository.GetByModelAsync(request.Model, cancellationToken);
 
         if (existingPlane is not null)
         {
@@ -32,7 +32,7 @@ public class CreatePlaneCommandHandler(IPlaneRepository planeRepository) : IRequ
 
         var plane = builder.Build();
         
-        await planeRepository.AddAsync(plane);
+        await planeRepository.AddAsync(plane, cancellationToken);
 
         return new PlaneIdDto(plane.Id);
     }

@@ -7,8 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Dal\Container\" />
-      <Folder Include="Dal\Repositories\" />
+      <ProjectReference Include="..\..\..\Framework\Funfair.Dal.CosmosDb\Funfair.Dal.CosmosDb\Funfair.Dal.CosmosDb.csproj" />
+      <ProjectReference Include="..\..\..\Framework\Funfair.Logging\Funfair.Logging.csproj" />
+      <ProjectReference Include="..\..\..\Framework\Funfair.Messaging.AzureServiceBus\Funfair.Messaging.AzureServiceBus.csproj" />
+      <ProjectReference Include="..\..\..\Framework\Funfair.Messaging.EventHubs\Funfair.Messaging.EventHubs.csproj" />
+      <ProjectReference Include="..\Planes.App\Planes.App.csproj" />
     </ItemGroup>
 
 </Project>
