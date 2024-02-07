@@ -1,10 +1,8 @@
-﻿namespace Users.App.Exceptions;
+﻿using Funfair.Shared.App;
 
-public class UserExistsException : AppException
+namespace Users.App.Exceptions;
+
+public class UserExistsException(string value) : AppException($"User with email {value} exists")
 {
-    public UserExistsException(string value) : base($"User with email {value} exists")
-    {
-    }
-
     public override string ErrorMessage => "user_exists";
 }

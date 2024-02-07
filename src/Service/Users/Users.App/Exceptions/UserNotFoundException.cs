@@ -1,10 +1,8 @@
-﻿namespace Users.App.Exceptions;
+﻿using Funfair.Shared.App;
 
-public class UserNotFoundException : AppException
+namespace Users.App.Exceptions;
+
+public class UserNotFoundException(string value) : AppException($"User with mail {value} not exists")
 {
-    public UserNotFoundException(string value) : base($"User with mail {value} not exists")
-    {
-    }
-
     public override string ErrorMessage => "user_not_found";
 }

@@ -6,4 +6,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Dal\Container\" />
+      <Folder Include="Dal\Repositories\" />
+    </ItemGroup>
+
 </Project>

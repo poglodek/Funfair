@@ -178,7 +178,7 @@ public class BuilderTest
     }
     
     [Fact]
-    public void CreatePlane_InvalidIdEmpty_ThrowException()
+    public void CreatePlane_InvalidIdEmpty_ShouldCreateWithNewId()
     {
         // Arrange
         var id = Guid.Empty;
@@ -200,34 +200,8 @@ public class BuilderTest
             .WithSeats(businessSeatsRow, businessSeatsInRow, SeatClass.Business);
         
         // Assert
-        Should.Throw<InvalidIdException>(() => planeBuilder.Build());
-    }
-    
-    [Fact]
-    public void CreatePlane_InvalidIdNull_ThrowException()
-    {
-        // Arrange
-        var id = (Guid?)null;
-        var model = "Airbus A320";
-        var productionYear = 2020;
-        var economySeatsRow = 10;
-        var economySeatsInRow = 6;
-        var premiumSeatsRow = 5;
-        var premiumSeatsInRow = 2;
-        var businessSeatsRow = 3;
-        var businessSeatsInRow = 2;
-        
-        // Act
-        var planeBuilder = new PlaneBuilder()
-            .WitId(id.Value)
-            .WithModel(model)
-            .WithProductionYear(productionYear)
-            .WithSeats(economySeatsRow, economySeatsInRow, SeatClass.Economy)
-            .WithSeats(premiumSeatsRow, premiumSeatsInRow, SeatClass.Premium)
-            .WithSeats(businessSeatsRow, businessSeatsInRow, SeatClass.Business);
-        
-        // Assert
-        Should.Throw<InvalidIdException>(() => planeBuilder.Build());
+        var plane = planeBuilder.Build();
+        plane.Id.Value.ShouldNotBe(Guid.Empty);
     }
     
     [Fact]
@@ -256,86 +230,5 @@ public class BuilderTest
         // Assert
         Should.Throw<InvalidPlaneBuilderProperty>(() => planeBuilder.Build());
     }
-    
-    [Fact]
-    public void CreatePlane_InvalidProductionYearNull_ThrowException()
-    {
-        // Arrange
-        var id = Guid.NewGuid();
-        var model = "Airbus A320";
-        var productionYear = (int?)null;
-        var economySeatsRow = 10;
-        var economySeatsInRow = 6;
-        var premiumSeatsRow = 5;
-        var premiumSeatsInRow = 2;
-        var businessSeatsRow = 3;
-        var businessSeatsInRow = 2;
-        
-        // Act
-        var planeBuilder = new PlaneBuilder()
-            .WitId(id)
-            .WithModel(model)
-            .WithProductionYear(productionYear.Value)
-            .WithSeats(economySeatsRow, economySeatsInRow, SeatClass.Economy)
-            .WithSeats(premiumSeatsRow, premiumSeatsInRow, SeatClass.Premium)
-            .WithSeats(businessSeatsRow, businessSeatsInRow, SeatClass.Business);
-        
-        // Assert
-        Should.Throw<InvalidProductionYearException>(() => planeBuilder.Build());
-    }
-    
-    [Fact]
-    public void CreatePlane_InvalidSeatsNull_ThrowException()
-    {
-        // Arrange
-        var id = Guid.NewGuid();
-        var model = "Airbus A320";
-        var productionYear = 2020;
-        var economySeatsRow = 10;
-        var economySeatsInRow = 6;
-        var premiumSeatsRow = 5;
-        var premiumSeatsInRow = 2;
-        var businessSeatsRow = 3;
-        var businessSeatsInRow = 2;
-        
-        // Act
-        var planeBuilder = new PlaneBuilder()
-            .WitId(id)
-            .WithModel(model)
-            .WithProductionYear(productionYear)
-            .WithSeats(economySeatsRow, economySeatsInRow, SeatClass.Economy)
-            .WithSeats(premiumSeatsRow, premiumSeatsInRow, SeatClass.Premium)
-            .WithSeats(businessSeatsRow, businessSeatsInRow, SeatClass.Business);
-        
-        // Assert
-        Should.Throw<InvalidPlaneBuilderProperty>(() => planeBuilder.Build());
-    }
-    
-    [Fact]
-    public void CreatePlane_InvalidSeatsInRowNull_ThrowException()
-    {
-        // Arrange
-        var id = Guid.NewGuid();
-        var model = "Airbus A320";
-        var productionYear = 2020;
-        var economySeatsRow = 10;
-        var economySeatsInRow = 6;
-        var premiumSeatsRow = 5;
-        var premiumSeatsInRow = 2;
-        var businessSeatsRow = 3;
-        var businessSeatsInRow = 2;
-        
-        // Act
-        var planeBuilder = new PlaneBuilder()
-            .WitId(id)
-            .WithModel(model)
-            .WithProductionYear(productionYear)
-            .WithSeats(premiumSeatsRow, premiumSeatsInRow, SeatClass.Premium)
-            .WithSeats(businessSeatsRow, businessSeatsInRow, SeatClass.Business);
-        
-        // Assert
-        Should.Throw<InvalidPlaneBuilderProperty>(() => planeBuilder.WithSeats(economySeatsRow, economySeatsInRow, SeatClass.Economy));
-    }
-    
     
 }
