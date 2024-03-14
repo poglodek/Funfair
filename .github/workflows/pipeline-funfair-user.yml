@@ -1,9 +1,9 @@
-name: CI/CD Pipeline Funfair
+name: CI/CD Pipeline Funfair User
 
 on:
   push:
-    branches:
-      - master
+    paths:
+      - 'src/Service/Users/**'
 
 jobs:
   build-and-push:
@@ -17,7 +17,7 @@ jobs:
           dotnet-version: '8.0'
 
       - name: Build Solution
-        run: dotnet build src/Service/Planes/Planes.Api/Planes.Api.csproj --configuration Release
+        run: dotnet build src/Service/Users/Users.Api/Users.Api.csproj --configuration Release
 
       - name: Test Solution Funfair.App.Plane
         run: dotnet test src/Tests/Funfair.App.Plane/Funfair.App.Plane.Tests.csproj
@@ -26,7 +26,7 @@ jobs:
         run: dotnet test src/Tests/Funfair.Core.Plane/Funfair.Core.Plane.Tests.csproj
 
       - name: Build Docker image
-        run: docker build -t funfair.azurecr.io/planes-api:${{ github.sha }} src/Service/Planes/Planes.Api/.
+        run: docker build -t funfair.azurecr.io/Users-api:${{ github.sha }} src/Service/Users/Users.Api/.
       
       - name: Login to Azure Container Registry
         uses: azure/docker-login@v1
@@ -36,7 +36,7 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
 
       - name: Push Docker image to ACR
-        run: docker push funfair.azurecr.io/planes-api:${{ github.sha }}
+        run: docker push funfair.azurecr.io/users-api:${{ github.sha }}
 
       - name: Set up Kubectl
         uses: azure/setup-kubectl@v1
@@ -55,4 +55,4 @@ jobs:
 
       - name: Deploy to AKS
         run: |
-          kubectl set image deployment/planes-api planes-api=funfair.azurecr.io/planes-api:${{ github.sha }} --record
+          kubectl set image deployment/users-api users-api=funfair.azurecr.io/users-api:${{ github.sha }} --record
