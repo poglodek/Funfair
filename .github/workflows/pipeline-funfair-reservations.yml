@@ -1,0 +1,58 @@
+name: CI/CD Pipeline Funfair Reservations
+
+on:
+  push:
+    paths:
+      - 'src/Service/Reservations/**'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0'
+
+      - name: Build Solution
+        run: dotnet build src/Service/Reservations/Reservations.Api/Reservations.Api.csproj --configuration Release
+
+      - name: Test Solution Funfair.App.Plane
+        run: dotnet test src/Tests/Funfair.App.Plane/Funfair.App.Plane.Tests.csproj
+
+      - name: Test Solution Funfair.Core.Plane
+        run: dotnet test src/Tests/Funfair.Core.Plane/Funfair.Core.Plane.Tests.csproj
+
+      - name: Build Docker image
+        run: docker build -t funfair.azurecr.io/Reservations-api:${{ github.sha }} src/Service/Reservations/Reservations.Api/.
+      
+      - name: Login to Azure Container Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: funfair.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Push Docker image to ACR
+        run: docker push funfair.azurecr.io/reservations-api:${{ github.sha }}
+
+      - name: Set up Kubectl
+        uses: azure/setup-kubectl@v1
+      
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set Kubernetes context
+        uses: Azure/aks-set-context@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          cluster-name: your-cluster-name
+          resource-group: your-resource-group
+
+      - name: Deploy to AKS
+        run: |
+          kubectl set image deployment/reservations-api reservations-api=funfair.azurecr.io/reservations-api:${{ github.sha }} --record
