@@ -1,7 +1,10 @@
 using Funfair.Auth;
 using Funfair.KeyVault;
 using Funfair.Messaging.EventHubs;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Planes.App;
+using Planes.App.Commands;
 using Planes.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,5 +30,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseInfrastructure();
+
+app.MapPost("/", async ([FromServices] IMediator mediator, [FromBody] CreatePlaneCommand planeCommand) =>
+{
+    await mediator.Send(planeCommand);
+    return Results.Ok();
+});
 
 await app.RunAsync();
