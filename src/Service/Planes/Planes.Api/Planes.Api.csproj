@@ -16,6 +16,7 @@
       <ProjectReference Include="..\..\..\Framework\Funfair.KeyVault\Funfair.KeyVault.csproj" />
       <ProjectReference Include="..\..\..\Framework\Funfair.Messaging.EventHubs\Funfair.Messaging.EventHubs.csproj" />
       <ProjectReference Include="..\Planes.App\Planes.App.csproj" />
+      <ProjectReference Include="..\Planes.Infrastructure\Planes.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

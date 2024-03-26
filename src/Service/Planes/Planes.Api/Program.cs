@@ -2,6 +2,7 @@ using Funfair.Auth;
 using Funfair.KeyVault;
 using Funfair.Messaging.EventHubs;
 using Planes.App;
+using Planes.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder
     .AddKeyVault()
     .AddEventHubs()
     .AddApp()
+    .AddInfrastructure()
     .Services.AddAuth(builder.Configuration);
 
 if (app.Environment.IsDevelopment())
@@ -24,5 +26,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseInfrastructure();
 
 await app.RunAsync();
