@@ -17,7 +17,7 @@ public class UserReservation  : DomainBase
 
     private UserReservation(Id id,User user, Seat seat, DateTime purchased, Price price)
     {
-        Id = id;
+        Id = id ?? Guid.NewGuid();
         User = user;
         Seat = seat;
         Purchased = purchased;
@@ -28,7 +28,7 @@ public class UserReservation  : DomainBase
     {
         var flightReservation = new UserReservation(id, user, seat, purchased, price);
         
-        flightReservation.RaiseEvent(new NewUserReservationEvent(id,user.Id,seat.Id));
+        flightReservation.RaiseEvent(new NewUserReservationCreatedEvent(id,user.Id,seat.Id));
 
         return flightReservation;
     }
