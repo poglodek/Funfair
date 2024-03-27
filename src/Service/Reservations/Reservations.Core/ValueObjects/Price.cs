@@ -1,3 +1,3 @@
 namespace Reservations.Core.ValueObjects;
 
-public record Price(decimal Value, string Currency);
+public record Price(double Value, string Currency);
