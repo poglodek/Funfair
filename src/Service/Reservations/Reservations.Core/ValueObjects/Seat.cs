@@ -1,3 +1,4 @@
 namespace Reservations.Core.ValueObjects;
 
-public record Seat(Guid Id, string Class);
+public record SeatId(Guid Id);
+public record Seat(SeatId Id,string RowNumber, string Number, string SeatClass);

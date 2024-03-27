@@ -37,7 +37,7 @@ public sealed class PlaneBuilder
         {
             for (var j = 0; j < seatsInRow; j++)
             {
-                _seats.Add(new Seat(i,$"{i}{AlphabetSeat[j]}", seats));
+                _seats.Add(new Seat(Guid.NewGuid(),i,$"{i}{AlphabetSeat[j]}", seats));
             }
         }
         

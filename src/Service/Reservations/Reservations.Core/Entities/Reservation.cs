@@ -22,6 +22,7 @@ public class Reservation : DomainBase
 
     private Reservation(Id id,Airport airport, FlightDate flightDate, Worker createdBy, DateTime createdAt)
     {
+        Id = id;
         Airport = airport;
         FlightDate = flightDate;
         CreatedBy = createdBy;

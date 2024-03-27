@@ -64,9 +64,9 @@ public class CreatePlaneCommandTest
     
     private Planes.Core.Entities.Plane ReturnPlane() =>  Planes.Core.Entities.Plane.Create(Guid.NewGuid(),"Boeing 737", 2010, new List<Seat>
     {
-        new Seat(4, "A", SeatClass.Business),
-        new Seat(4, "B", SeatClass.Business),
-        new Seat(4, "C", SeatClass.Business),
+        new Seat(Guid.NewGuid(),4, "A", SeatClass.Business),
+        new Seat(Guid.NewGuid(),4, "B", SeatClass.Business),
+        new Seat(Guid.NewGuid(),4, "C", SeatClass.Business),
     });
 
 }

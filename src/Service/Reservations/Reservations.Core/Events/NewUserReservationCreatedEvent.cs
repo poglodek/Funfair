@@ -1,4 +1,5 @@
 using Funfair.Shared.Core.Events;
+using Funfair.Shared.Domain;
 
 namespace Reservations.Core.Events;
 
