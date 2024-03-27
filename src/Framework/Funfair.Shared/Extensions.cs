@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Funfair.Shared.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +13,8 @@ public static class Extensions
         {
             cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly());
         });
+
+        builder.Services.AddTransient<IClock, ClockNow>();
         
         return builder;
     }
