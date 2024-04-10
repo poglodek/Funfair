@@ -6,17 +6,17 @@ using Reservations.Core.ValueObjects;
 
 namespace Reservations.Core.Entities;
 
-public class Reservation : DomainBase
+public class Reservation : AggregateRoot
 {
     private readonly HashSet<UserReservation> _userReservations = new();
 
     public ReadOnlyCollection<UserReservation> UserReservations
         => _userReservations.ToList().AsReadOnly();
 
-    public Airport Airport { get; private set; }
-    public FlightDate FlightDate { get; private set; }
-    public Worker CreatedBy { get; private set; }
-    public DateTime CreatedAt { get; private set; }
+    public Airport Airport { get; init; }
+    public FlightDate FlightDate { get; init; }
+    public Worker CreatedBy { get; init; }
+    public DateTime CreatedAt { get; init; }
 
     private Reservation() { }
 
@@ -49,9 +49,11 @@ public class Reservation : DomainBase
         }
 
         _userReservations.Add(userReservation);
+        
+        RaiseEvent(new UserReservationAssignedReservationEvents(Id,userReservation.Id));
     }
 
-    public void CancelReservation(UserReservation userReservation)
+    public void CancelUserReservation(UserReservation userReservation)
     {
         var reservation = _userReservations.FirstOrDefault(x => x.Id == userReservation.Id);
         if (reservation is null)
@@ -60,5 +62,7 @@ public class Reservation : DomainBase
         }
 
         _userReservations.RemoveWhere(x => x.Id == userReservation.Id);
+        
+        RaiseEvent(new UserReservationRemovedFromReservationEvents(Id,userReservation.Id));
     }
 }

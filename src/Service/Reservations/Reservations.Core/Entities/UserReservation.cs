@@ -10,7 +10,7 @@ public class UserReservation  : DomainBase
 {
     public User User { get; private set; }
     public SeatId SeatId { get; private set; }
-    public DateTime Purchased { get; private set; }
+    public DateTimeOffset Purchased { get; private set; }
     public Price Price { get; private set; }
 
     private UserReservation() { }
