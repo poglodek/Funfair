@@ -1,6 +1,7 @@
 using Funfair.Shared.Core;
 using Funfair.Shared.Domain;
 using Reservations.Core.Events;
+using Reservations.Core.Exceptions;
 using Reservations.Core.ValueObjects;
 
 namespace Reservations.Core.Entities;
@@ -13,6 +14,7 @@ public class ReservationDraft : DomainBase
     public DateTimeOffset CreatedAt { get; private set; }
     public DateTimeOffset UpdatedAt { get; private set; }
     public Plane Plane { get; private set; }
+    private Reservation? _reservation;
     
     private ReservationDraft() { }
 
@@ -73,5 +75,15 @@ public class ReservationDraft : DomainBase
         Update(clock);
     }
 
-    public Reservation Confirm(Worker createdBy, IClock clock) => Reservation.Create(Guid.NewGuid(),Journey,FlightDate,createdBy,Plane, clock);
+    public Reservation Confirm(Worker createdBy, IClock clock)
+    {
+        if (_reservation is not null)
+        {
+            throw new ReservationAlreadyExists(Id);
+        }
+        
+        _reservation =  Reservation.Create(Guid.NewGuid(), Journey, FlightDate, createdBy, Plane, clock);
+
+        return _reservation;
+    }
 }

@@ -24,12 +24,12 @@ public class Reservation : AggregateRoot
 
     private Reservation(Id id,Journey journey, FlightDate flightDate, Worker createdBy, DateTimeOffset createdAt, Plane plane)
     {
-        Id = id;
-        Journey = journey;
-        FlightDate = flightDate;
-        CreatedBy = createdBy;
+        Id = id ?? throw new ArgumentCoreNullException(nameof(id));
+        Journey = journey ?? throw new ArgumentCoreNullException(nameof(journey));
+        FlightDate = flightDate ?? throw new ArgumentCoreNullException(nameof(flightDate));
+        CreatedBy = createdBy ?? throw new ArgumentCoreNullException(nameof(createdBy));
         CreatedAt = createdAt;
-        Plane = plane;
+        Plane = plane ?? throw new ArgumentCoreNullException(nameof(plane));
     }
 
     public static Reservation Create(Id id, Journey journey, FlightDate flightDate, Worker createdBy, Plane plane,
