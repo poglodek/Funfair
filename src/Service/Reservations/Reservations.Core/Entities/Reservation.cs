@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using Funfair.Shared.Core;
 using Funfair.Shared.Domain;
 using Reservations.Core.Events;
 using Reservations.Core.Exceptions;
@@ -13,28 +14,29 @@ public class Reservation : AggregateRoot
     public ReadOnlyCollection<UserReservation> UserReservations
         => _userReservations.ToList().AsReadOnly();
 
-    public Airport Airport { get; init; }
+    public Journey Journey { get; private set; }
     public FlightDate FlightDate { get; init; }
     public Worker CreatedBy { get; init; }
-    public DateTime CreatedAt { get; init; }
+    public Plane Plane { get; init; }
+    public DateTimeOffset CreatedAt { get; init; }
 
     private Reservation() { }
 
-    private Reservation(Id id,Airport airport, FlightDate flightDate, Worker createdBy, DateTime createdAt)
+    private Reservation(Id id,Journey journey, FlightDate flightDate, Worker createdBy, DateTimeOffset createdAt)
     {
         Id = id;
-        Airport = airport;
+        Journey = journey;
         FlightDate = flightDate;
         CreatedBy = createdBy;
         CreatedAt = createdAt;
     }
 
-    public static Reservation Create(Id id, Airport airport, FlightDate flightDate, Worker createdBy,
-        DateTime createdAt)
+    public static Reservation Create(Id id, Journey journey, FlightDate flightDate, Worker createdBy, Plane plane,
+        IClock clock)
     {
-        var reservation = new Reservation(id, airport, flightDate, createdBy, createdAt);
+        var reservation = new Reservation(id, journey, flightDate, createdBy, clock.CurrentDateTime);
         
-        reservation.RaiseEvent(new NewReservationCreatedEvent(id,airport,flightDate,createdBy));
+        reservation.RaiseEvent(new NewReservationCreatedEvent(id));
 
         return reservation;
     }
