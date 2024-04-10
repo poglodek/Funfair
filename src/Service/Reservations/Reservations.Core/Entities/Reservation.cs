@@ -19,6 +19,8 @@ public class Reservation : AggregateRoot
     public Worker CreatedBy { get; init; }
     public Plane Plane { get; init; }
     public DateTimeOffset CreatedAt { get; init; }
+    
+    private const int MaxTimeBeforeFlightToEditReservation = -12;
 
     private Reservation() { }
 
@@ -42,8 +44,10 @@ public class Reservation : AggregateRoot
         return reservation;
     }
 
-    public void AddUserReservation(UserReservation userReservation)
+    public void AddUserReservation(UserReservation userReservation, IClock clock)
     {
+        EnsureReservationCanBeEdited(clock);
+        
         if (_userReservations.Any(x => x.Id == userReservation.Id)
             || _userReservations.Any(x => x.User.Id == userReservation.User.Id))
         {
@@ -56,8 +60,10 @@ public class Reservation : AggregateRoot
         RaiseEvent(new UserReservationAssignedReservationEvents(Id,userReservation.Id));
     }
 
-    public void CancelUserReservation(UserReservation userReservation)
-    {
+    public void CancelUserReservation(UserReservation userReservation, IClock clock)
+    { 
+        EnsureReservationCanBeEdited(clock);
+        
         var reservation = _userReservations.FirstOrDefault(x => x.Id == userReservation.Id);
         if (reservation is null)
         {
@@ -67,5 +73,14 @@ public class Reservation : AggregateRoot
         _userReservations.RemoveWhere(x => x.Id == userReservation.Id);
         
         RaiseEvent(new UserReservationRemovedFromReservationEvents(Id,userReservation.Id));
+    }
+    
+     
+    private void EnsureReservationCanBeEdited(IClock clock)
+    {
+        if(clock.CurrentDateTime > FlightDate.Departure.AddHours(MaxTimeBeforeFlightToEditReservation))
+        {
+            throw new UserReservationCantBeEdited($"User reservation can't be added to reservation {Id.Value} because the flight date is in the past");
+        }
     }
 }

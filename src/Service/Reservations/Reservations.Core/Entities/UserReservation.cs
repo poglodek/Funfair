@@ -1,6 +1,7 @@
 using Funfair.Shared.Core;
 using Funfair.Shared.Domain;
 using Reservations.Core.Events;
+using Reservations.Core.Exceptions;
 using Reservations.Core.ValueObjects;
 
 

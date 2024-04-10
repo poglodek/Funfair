@@ -1,6 +1,6 @@
 using Funfair.Shared.Exception;
 
-namespace Reservations.Core.Events;
+namespace Reservations.Core.Exceptions;
 
 public class InvalidReservationArgument(string value) : CoreException(value)
 {

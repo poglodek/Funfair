@@ -1,6 +1,7 @@
 using Funfair.Shared.Domain;
 using Reservations.Core.Entities;
 using Reservations.Core.Events;
+using Reservations.Core.Exceptions;
 using Reservations.Core.ValueObjects;
 using Shouldly;
 using Test.Shared;
