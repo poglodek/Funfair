@@ -12,25 +12,27 @@ public class ReservationDraft : DomainBase
     public Worker CreatedBy { get; private set; }
     public DateTimeOffset CreatedAt { get; private set; }
     public DateTimeOffset UpdatedAt { get; private set; }
+    public Plane Plane { get; private set; }
     
     private ReservationDraft() { }
 
-    private ReservationDraft(Id id,Journey journey, FlightDate flightDate, Worker createdBy, DateTimeOffset createdAt)
+    private ReservationDraft(Id id,Journey journey, FlightDate flightDate, Worker createdBy, DateTimeOffset createdAt, Plane plane)
     {
         Id = id;
         Journey = journey;
         FlightDate = flightDate;
         CreatedBy = createdBy;
         CreatedAt = createdAt;
+        Plane = plane;
         UpdatedAt = createdAt;
     }
 
     private void Update(IClock clock) => UpdatedAt = clock.CurrentDateTime;
     
     public static ReservationDraft Create(Id id, Journey journey, FlightDate flightDate, Worker createdBy,
-        DateTime createdAt)
+        IClock clock, Plane plane)
     {
-        var reservationDraft = new ReservationDraft(id, journey, flightDate, createdBy, createdAt);
+        var reservationDraft = new ReservationDraft(id, journey, flightDate, createdBy, clock.CurrentDateTime, plane );
         
         reservationDraft.RaiseEvent(new NewReservationDraftCreatedEvent(id));
 
@@ -56,4 +58,20 @@ public class ReservationDraft : DomainBase
         
         Update(clock);
     }
+
+    public void UpdatePlane(Plane plane, IClock clock)
+    {
+        Plane = plane;
+        
+        Update(clock);
+    }
+
+    public void UpdateDates(FlightDate flightDate, IClock clock)
+    {
+        FlightDate = flightDate;
+        
+        Update(clock);
+    }
+
+    public Reservation Confirm(Worker createdBy, IClock clock) => Reservation.Create(Guid.NewGuid(),Journey,FlightDate,createdBy,Plane, clock);
 }

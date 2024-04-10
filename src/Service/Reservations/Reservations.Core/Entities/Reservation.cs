@@ -22,19 +22,20 @@ public class Reservation : AggregateRoot
 
     private Reservation() { }
 
-    private Reservation(Id id,Journey journey, FlightDate flightDate, Worker createdBy, DateTimeOffset createdAt)
+    private Reservation(Id id,Journey journey, FlightDate flightDate, Worker createdBy, DateTimeOffset createdAt, Plane plane)
     {
         Id = id;
         Journey = journey;
         FlightDate = flightDate;
         CreatedBy = createdBy;
         CreatedAt = createdAt;
+        Plane = plane;
     }
 
     public static Reservation Create(Id id, Journey journey, FlightDate flightDate, Worker createdBy, Plane plane,
         IClock clock)
     {
-        var reservation = new Reservation(id, journey, flightDate, createdBy, clock.CurrentDateTime);
+        var reservation = new Reservation(id, journey, flightDate, createdBy, clock.CurrentDateTime, plane);
         
         reservation.RaiseEvent(new NewReservationCreatedEvent(id));
 
