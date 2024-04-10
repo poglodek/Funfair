@@ -18,7 +18,10 @@ public abstract class DomainBase
     public ReadOnlyCollection<IDomainEvent> DomainEvents 
         => new List<IDomainEvent>(_domainEvents).AsReadOnly();
 
-
+    public void ClearEvents()
+    {
+        _domainEvents.Clear();
+    }
 
     protected void RaiseEvent(IDomainEvent domainEvent)
     {
