@@ -2,6 +2,7 @@ using Funfair.Shared.Core;
 using Funfair.Shared.Domain;
 using Reservations.Core.Events;
 using Reservations.Core.Exceptions;
+using Reservations.Core.Specification;
 using Reservations.Core.ValueObjects;
 
 namespace Reservations.Core.Entities;
@@ -83,6 +84,12 @@ public class ReservationDraft : DomainBase
         }
         
         _reservation =  Reservation.Create(Guid.NewGuid(), Journey, FlightDate, createdBy, Plane, clock);
+        
+        if (!new SpecificationDue(clock).Check(_reservation))
+        {
+            throw new ReservationWillBeOverDue(Id);
+        }
+
 
         return _reservation;
     }

@@ -3,6 +3,7 @@ using Funfair.Shared.Core;
 using Funfair.Shared.Domain;
 using Reservations.Core.Events;
 using Reservations.Core.Exceptions;
+using Reservations.Core.Specification;
 using Reservations.Core.ValueObjects;
 
 namespace Reservations.Core.Entities;
@@ -19,9 +20,9 @@ public class Reservation : AggregateRoot
     public Worker CreatedBy { get; init; }
     public Plane Plane { get; init; }
     public DateTimeOffset CreatedAt { get; init; }
-    
-    private const int MaxTimeBeforeFlightToEditReservation = -12;
 
+
+    /// <inheritdoc />
     private Reservation() { }
 
     private Reservation(Id id,Journey journey, FlightDate flightDate, Worker createdBy, DateTimeOffset createdAt, Plane plane)
@@ -46,7 +47,10 @@ public class Reservation : AggregateRoot
 
     public void AddUserReservation(UserReservation userReservation, IClock clock)
     {
-        EnsureReservationCanBeEdited(clock);
+        if (!new SpecificationDue(clock).Check(this))
+        {
+            throw new UserReservationCantBeEdited($"User reservation can't be added to reservation {Id.Value} because the flight date is in the past");
+        }
         
         if (_userReservations.Any(x => x.Id == userReservation.Id)
             || _userReservations.Any(x => x.User.Id == userReservation.User.Id))
@@ -61,8 +65,11 @@ public class Reservation : AggregateRoot
     }
 
     public void CancelUserReservation(UserReservation userReservation, IClock clock)
-    { 
-        EnsureReservationCanBeEdited(clock);
+    {
+        if (!new SpecificationDue(clock).Check(this))
+        {
+            throw new UserReservationCantBeEdited($"User reservation can't be added to reservation {Id.Value} because the flight date is in the past");
+        }
         
         var reservation = _userReservations.FirstOrDefault(x => x.Id == userReservation.Id);
         if (reservation is null)
@@ -75,12 +82,5 @@ public class Reservation : AggregateRoot
         RaiseEvent(new UserReservationRemovedFromReservationEvents(Id,userReservation.Id));
     }
     
-     
-    private void EnsureReservationCanBeEdited(IClock clock)
-    {
-        if(clock.CurrentDateTime > FlightDate.Departure.AddHours(MaxTimeBeforeFlightToEditReservation))
-        {
-            throw new UserReservationCantBeEdited($"User reservation can't be added to reservation {Id.Value} because the flight date is in the past");
-        }
-    }
+
 }
