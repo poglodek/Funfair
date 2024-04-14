@@ -1,7 +1,6 @@
 using Funfair.Shared.Core;
 using Funfair.Shared.Domain;
 using Reservations.Core.Events;
-using Reservations.Core.Exceptions;
 using Reservations.Core.Specification;
 using Reservations.Core.ValueObjects;
 
@@ -13,7 +12,6 @@ public class ReservationDraft : DomainBase
     public FlightDate FlightDate { get; private set; }
     public Worker CreatedBy { get; private set; }
     public Plane Plane { get; private set; }
-    private Reservation? _reservation;
     
     private ReservationDraft() { }
 
@@ -66,19 +64,14 @@ public class ReservationDraft : DomainBase
 
     public Reservation Confirm(Worker createdBy, IClock clock)
     {
-        if (_reservation is not null)
-        {
-            throw new ReservationAlreadyExists(Id);
-        }
+        var reservation = Reservation.Create(Id, Journey, FlightDate, createdBy, Plane);
         
-        _reservation =  Reservation.Create(Guid.NewGuid(), Journey, FlightDate, createdBy, Plane, clock);
-        
-        if (!new SpecificationDue(clock).Check(_reservation))
+        if (!new SpecificationDue(clock).Check(reservation))
         {
             throw new ReservationWillBeOverDue(Id);
         }
 
 
-        return _reservation;
+        return reservation;
     }
 }

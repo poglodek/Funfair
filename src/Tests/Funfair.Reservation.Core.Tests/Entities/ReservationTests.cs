@@ -17,7 +17,7 @@ public class ReservationTests
     private readonly FlightDate _flightDate;
     private readonly Worker _createdBy;
     private readonly Plane _plane;
-    private readonly IClock _mockClock = new ClockTest();
+    private readonly IClock _mockClock = new ClockTest("2022-01-01T00:00:00Z");
 
     public ReservationTests()
     {
@@ -33,14 +33,13 @@ public class ReservationTests
     [Fact]
     public void CreateReservation_AllValid_ShouldReturn()
     {
-        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane,_mockClock);
+        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane);
 
         reservation.ShouldNotBeNull();
         reservation.Id.ShouldBe(_id);
         reservation.Journey.ShouldBe(_journey);
         reservation.FlightDate.ShouldBe(_flightDate);
         reservation.CreatedBy.ShouldBe(_createdBy);
-        reservation.CreatedAt.ShouldBe(_mockClock.CurrentDateTime);
         reservation.Plane.ShouldBe(_plane);
         reservation.DomainEvents.Count.ShouldBe(1);
     }
@@ -48,7 +47,7 @@ public class ReservationTests
     [Fact]
     public void AddUserReservation_AllValid_ShouldReturn()
     {
-        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane,_mockClock);
+        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane);
         var user = new User(Guid.NewGuid());
         var seatId = new SeatId(Guid.NewGuid());
         var userReservation = UserReservation.Create(Guid.NewGuid(), user, seatId, new Price(12.3, "USD"), _mockClock);
@@ -65,7 +64,7 @@ public class ReservationTests
     [Fact]
     public void AddUserReservation_UserReservationAlreadyExists_ShouldThrowAnException()
     {
-        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane,_mockClock);
+        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane);
         var user = new User(Guid.NewGuid());
         var seatId = new SeatId(Guid.NewGuid());
         var userReservation = UserReservation.Create(Guid.NewGuid(), user, seatId, new Price(12.3, "USD"), _mockClock);
@@ -80,7 +79,7 @@ public class ReservationTests
     [Fact]
     public void CancelUserReservation_AllValid_ShouldReturn()
     {
-        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane,_mockClock);
+        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane);
         var user = new User(Guid.NewGuid());
         var seatId = new SeatId(Guid.NewGuid());
         var userReservation = UserReservation.Create(Guid.NewGuid(), user, seatId, new Price(12.3, "USD"), _mockClock);
@@ -97,7 +96,7 @@ public class ReservationTests
     [Fact]
     public void CancelUserReservation_ReservationCannotBeEdited_ShouldThrowAnException()
     {
-        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane,_mockClock);
+        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane);
         var user = new User(Guid.NewGuid());
         var seatId = new SeatId(Guid.NewGuid());
         var userReservation = UserReservation.Create(Guid.NewGuid(), user, seatId, new Price(12.3, "USD"), _mockClock);
@@ -114,7 +113,7 @@ public class ReservationTests
     [Fact]
     public void CancelUserReservation_UserReservationDoesntExists_ShouldThrowAnException()
     {
-        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane,_mockClock);
+        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane);
         var user = new User(Guid.NewGuid());
         var seatId = new SeatId(Guid.NewGuid());
         var userReservation = UserReservation.Create(Guid.NewGuid(), user, seatId, new Price(12.3, "USD"), _mockClock);

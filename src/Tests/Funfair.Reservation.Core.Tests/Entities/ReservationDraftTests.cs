@@ -11,7 +11,7 @@ using Assert = Xunit.Assert;
 
 public class ReservationDraftTests
 {
-    private readonly IClock _mockClock = new ClockTest();
+    private readonly IClock _mockClock = new ClockTest("2022-01-01T00:00:00Z");
     private readonly Id _id;
     private readonly Journey _journey;
     private readonly FlightDate _flightDate;
@@ -95,12 +95,4 @@ public class ReservationDraftTests
         ;
     }
 
-    [Fact]
-    public void Confirm_ShouldThrowException_WhenReservationAlreadyExists()
-    {
-        var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy,  _plane);
-        reservationDraft.Confirm(_createdBy, _mockClock);
-
-        Assert.Throws<ReservationAlreadyExists>(() => reservationDraft.Confirm(_createdBy, _mockClock));
-    }
 }

@@ -19,25 +19,22 @@ public class Reservation : AggregateRoot
     public FlightDate FlightDate { get; init; }
     public Worker CreatedBy { get; init; }
     public Plane Plane { get; init; }
-    public DateTimeOffset CreatedAt { get; init; }
     
     
     private Reservation() { }
 
-    private Reservation(Id id,Journey journey, FlightDate flightDate, Worker createdBy, DateTimeOffset createdAt, Plane plane)
+    private Reservation(Id id,Journey journey, FlightDate flightDate, Worker createdBy, Plane plane)
     {
         Id = id ?? throw new ArgumentCoreNullException(nameof(id));
         Journey = journey ?? throw new ArgumentCoreNullException(nameof(journey));
         FlightDate = flightDate ?? throw new ArgumentCoreNullException(nameof(flightDate));
         CreatedBy = createdBy ?? throw new ArgumentCoreNullException(nameof(createdBy));
-        CreatedAt = createdAt;
         Plane = plane ?? throw new ArgumentCoreNullException(nameof(plane));
     }
 
-    public static Reservation Create(Id id, Journey journey, FlightDate flightDate, Worker createdBy, Plane plane,
-        IClock clock)
+    public static Reservation Create(Id id, Journey journey, FlightDate flightDate, Worker createdBy, Plane plane)
     {
-        var reservation = new Reservation(id, journey, flightDate, createdBy, clock.CurrentDateTime, plane);
+        var reservation = new Reservation(id, journey, flightDate, createdBy, plane);
         
         reservation.RaiseEvent(new NewReservationCreatedEvent(id));
 
