@@ -1,21 +1,17 @@
 using System.Net;
+using Funfair.Dal.CosmosDb.Linq;
 using Funfair.Dal.CosmosDb.Model;
 using Funfair.Shared.Core;
 using Funfair.Shared.Domain;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Cosmos.Linq;
 
 namespace Funfair.Dal.CosmosDb.Repository;
 
-internal class RepositoryBase<TContainer> : IRepositoryBase<TContainer> where TContainer : ContainerContext
+internal class RepositoryBase<TContainer>(TContainer containerContext, IClock clock) : IRepositoryBase<TContainer>
+    where TContainer : ContainerContext
 {
-    private readonly IClock _clock;
-    private readonly Container _containerContext;
-
-    public RepositoryBase(TContainer containerContext, IClock clock)
-    {
-        _clock = clock;
-        _containerContext = containerContext.Container;
-    }
+    private readonly Container _containerContext = containerContext.Container;
 
     public async Task<bool> CreateItemAsync<TItem>(TItem item,
         PartitionKey? partitionKey = null, ItemRequestOptions requestOptions = null,
@@ -24,8 +20,8 @@ internal class RepositoryBase<TContainer> : IRepositoryBase<TContainer> where TC
         
         var dbModel = new DatabaseModel<TItem>
         {
-            Updated = _clock.CurrentDateTime,
-            Created = _clock.CurrentDateTime,
+            Updated = clock.CurrentDateTime,
+            Created = clock.CurrentDateTime,
             Object = item,
             Version = Guid.NewGuid(),
             Id = item.Id.Value
@@ -33,7 +29,8 @@ internal class RepositoryBase<TContainer> : IRepositoryBase<TContainer> where TC
         };
 
         var result = await _containerContext.CreateItemAsync(dbModel, partitionKey, requestOptions, cancellationToken);
-        return result.StatusCode is HttpStatusCode.OK or HttpStatusCode.Created;
+        
+        return result.StatusCode is HttpStatusCode.OK or HttpStatusCode.Created or HttpStatusCode.Accepted;
     }
 
     public IQueryable<TItem> GetItemLinqQueryable<TItem>(bool allowSynchronousQueryExecution = false,
@@ -44,9 +41,11 @@ internal class RepositoryBase<TContainer> : IRepositoryBase<TContainer> where TC
             .Select(x => x.Object);
     }
 
-    public Task<TItem> GetBytId<TItem>(Id id, CancellationToken cancellationToken) where TItem : class, IDomainBase
+    public Task<TItem?> GetBytId<TItem>(Id id, CancellationToken cancellationToken) where TItem : class, IDomainBase
     {
-        return _containerContext.ReadItemAsync<DatabaseModel<TItem>>(id.Value.ToString(), new PartitionKey(id.Value.ToString()), cancellationToken: cancellationToken)
-            .ContinueWith(x => x.Result.Resource.Object, cancellationToken);
+        return _containerContext.GetItemLinqQueryable<DatabaseModel<TItem>>().Where(x => x.Id == id.Value)
+            .Select(x => x.Object)
+            .ToFeedIterator()
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }
