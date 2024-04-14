@@ -5,6 +5,7 @@ namespace Funfair.Shared.Domain;
 
 public interface IDomainBase
 {
+    Id Id { get;  }
     public ReadOnlyCollection<IDomainEvent> DomainEvents { get; }
     void ClearEvents();
 }

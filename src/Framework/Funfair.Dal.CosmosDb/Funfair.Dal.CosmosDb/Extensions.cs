@@ -1,4 +1,5 @@
 ﻿using Funfair.Dal.CosmosDb.Options;
+using Funfair.Dal.CosmosDb.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +24,8 @@ public static class Extensions
             .AddSingleton(options)
             .AddSingleton(client)
             .AddSingleton(database)
-            .AddSingleton<T>(_ => (T)Activator.CreateInstance(typeof(T), container)!);
+            .AddSingleton<T>(_ => (T)Activator.CreateInstance(typeof(T), container)!)
+            .AddSingleton<IRepositoryBase<T>,RepositoryBase<T>>();
 
         return builder;
     }

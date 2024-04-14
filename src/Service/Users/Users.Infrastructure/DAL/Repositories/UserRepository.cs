@@ -1,4 +1,5 @@
 ﻿using Funfair.Dal.CosmosDb.Linq;
+using Funfair.Dal.CosmosDb.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Azure.Cosmos.Linq;
 using Microsoft.Extensions.Logging;
@@ -11,13 +12,13 @@ namespace Users.Infrastructure.DAL.Repositories;
 
 internal class UserRepository : IUserRepository
 {
-    private readonly Microsoft.Azure.Cosmos.Container _container;
+    private readonly IRepositoryBase<UserContainer> _container;
     private readonly IPasswordHasher<User> _hasher;
     private readonly ILogger<UserRepository> _logger;
 
-    public UserRepository(UserContainer container, IPasswordHasher<User> hasher, ILogger<UserRepository> logger)
+    public UserRepository(IRepositoryBase<UserContainer> container, IPasswordHasher<User> hasher, ILogger<UserRepository> logger)
     {
-        _container = container.Container;
+        _container = container;
         _hasher = hasher;
         _logger = logger;
     }

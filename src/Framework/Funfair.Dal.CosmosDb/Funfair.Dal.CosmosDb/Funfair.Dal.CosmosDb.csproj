@@ -14,5 +14,10 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
         <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="7.0.0" />
     </ItemGroup>
+    
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Funfair.Shared\Funfair.Shared.csproj" />
+    </ItemGroup>
 
 </Project>
