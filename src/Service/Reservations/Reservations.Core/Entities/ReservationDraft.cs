@@ -64,7 +64,7 @@ public class ReservationDraft : DomainBase
 
     public Reservation Confirm(Worker createdBy, IClock clock)
     {
-        var reservation = Reservation.Create(Id, Journey, FlightDate, createdBy, Plane);
+        var reservation = Reservation.Create(this);
         
         if (!new SpecificationDue(clock).Check(reservation))
         {

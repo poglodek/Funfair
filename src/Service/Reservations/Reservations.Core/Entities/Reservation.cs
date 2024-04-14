@@ -32,11 +32,11 @@ public class Reservation : AggregateRoot
         Plane = plane ?? throw new ArgumentCoreNullException(nameof(plane));
     }
 
-    public static Reservation Create(Id id, Journey journey, FlightDate flightDate, Worker createdBy, Plane plane)
+    public static Reservation Create(ReservationDraft draft)
     {
-        var reservation = new Reservation(id, journey, flightDate, createdBy, plane);
+        var reservation = new Reservation(draft.Id, draft.Journey, draft.FlightDate, draft.CreatedBy, draft.Plane);
         
-        reservation.RaiseEvent(new NewReservationCreatedEvent(id));
+        reservation.RaiseEvent(new NewReservationCreatedEvent(reservation.Id));
 
         return reservation;
     }

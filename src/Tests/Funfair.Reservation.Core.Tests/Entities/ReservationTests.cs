@@ -33,7 +33,9 @@ public class ReservationTests
     [Fact]
     public void CreateReservation_AllValid_ShouldReturn()
     {
-        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane);
+        //fix this
+        var draft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy, _plane);
+        var reservation = Reservations.Core.Entities.Reservation.Create(draft);
 
         reservation.ShouldNotBeNull();
         reservation.Id.ShouldBe(_id);
@@ -47,7 +49,8 @@ public class ReservationTests
     [Fact]
     public void AddUserReservation_AllValid_ShouldReturn()
     {
-        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane);
+        var draft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy, _plane);
+        var reservation = Reservations.Core.Entities.Reservation.Create(draft);
         var user = new User(Guid.NewGuid());
         var seatId = new SeatId(Guid.NewGuid());
         var userReservation = UserReservation.Create(Guid.NewGuid(), user, seatId, new Price(12.3, "USD"), _mockClock);
@@ -64,7 +67,8 @@ public class ReservationTests
     [Fact]
     public void AddUserReservation_UserReservationAlreadyExists_ShouldThrowAnException()
     {
-        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane);
+        var draft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy, _plane);
+        var reservation = Reservations.Core.Entities.Reservation.Create(draft);
         var user = new User(Guid.NewGuid());
         var seatId = new SeatId(Guid.NewGuid());
         var userReservation = UserReservation.Create(Guid.NewGuid(), user, seatId, new Price(12.3, "USD"), _mockClock);
@@ -79,7 +83,8 @@ public class ReservationTests
     [Fact]
     public void CancelUserReservation_AllValid_ShouldReturn()
     {
-        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane);
+        var draft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy, _plane);
+        var reservation = Reservations.Core.Entities.Reservation.Create(draft);
         var user = new User(Guid.NewGuid());
         var seatId = new SeatId(Guid.NewGuid());
         var userReservation = UserReservation.Create(Guid.NewGuid(), user, seatId, new Price(12.3, "USD"), _mockClock);
@@ -96,7 +101,8 @@ public class ReservationTests
     [Fact]
     public void CancelUserReservation_ReservationCannotBeEdited_ShouldThrowAnException()
     {
-        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane);
+        var draft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy, _plane);
+        var reservation = Reservations.Core.Entities.Reservation.Create(draft);
         var user = new User(Guid.NewGuid());
         var seatId = new SeatId(Guid.NewGuid());
         var userReservation = UserReservation.Create(Guid.NewGuid(), user, seatId, new Price(12.3, "USD"), _mockClock);
@@ -113,7 +119,8 @@ public class ReservationTests
     [Fact]
     public void CancelUserReservation_UserReservationDoesntExists_ShouldThrowAnException()
     {
-        var reservation = Reservations.Core.Entities.Reservation.Create(_id, _journey, _flightDate, _createdBy, _plane);
+        var draft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy, _plane);
+        var reservation = Reservations.Core.Entities.Reservation.Create(draft);
         var user = new User(Guid.NewGuid());
         var seatId = new SeatId(Guid.NewGuid());
         var userReservation = UserReservation.Create(Guid.NewGuid(), user, seatId, new Price(12.3, "USD"), _mockClock);
