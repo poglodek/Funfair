@@ -8,5 +8,7 @@ public interface IRepositoryBase<TContainer> where TContainer : ContainerContext
 {
     Task<bool> CreateItemAsync<TItem>(TItem item, PartitionKey? partitionKey = null,
         ItemRequestOptions requestOptions = null, CancellationToken cancellationToken = default) where TItem : class, IDomainBase;
-    IOrderedQueryable<TItem> GetItemLinqQueryable<TItem>(bool allowSynchronousQueryExecution = false, string continuationToken = null,  QueryRequestOptions requestOptions = null,  CosmosLinqSerializerOptions linqSerializerOptions = null);
+    IQueryable<TItem> GetItemLinqQueryable<TItem>(bool allowSynchronousQueryExecution = false, string continuationToken = null,  QueryRequestOptions requestOptions = null,  CosmosLinqSerializerOptions linqSerializerOptions = null);
+    
+    Task<TItem> GetBytId<TItem>(Id id, CancellationToken cancellationToken) where TItem : class, IDomainBase;
 }

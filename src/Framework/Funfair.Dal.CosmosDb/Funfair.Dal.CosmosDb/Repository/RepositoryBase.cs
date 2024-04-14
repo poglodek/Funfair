@@ -36,10 +36,17 @@ internal class RepositoryBase<TContainer> : IRepositoryBase<TContainer> where TC
         return result.StatusCode is HttpStatusCode.OK or HttpStatusCode.Created;
     }
 
-    public IOrderedQueryable<TItem> GetItemLinqQueryable<TItem>(bool allowSynchronousQueryExecution = false,
+    public IQueryable<TItem> GetItemLinqQueryable<TItem>(bool allowSynchronousQueryExecution = false,
         string continuationToken = null, QueryRequestOptions requestOptions = null,
         CosmosLinqSerializerOptions linqSerializerOptions = null)
     {
-        throw new NotImplementedException();
+        return _containerContext.GetItemLinqQueryable<DatabaseModel<TItem>>(allowSynchronousQueryExecution, continuationToken, requestOptions, linqSerializerOptions)
+            .Select(x => x.Object);
+    }
+
+    public Task<TItem> GetBytId<TItem>(Id id, CancellationToken cancellationToken) where TItem : class, IDomainBase
+    {
+        return _containerContext.ReadItemAsync<DatabaseModel<TItem>>(id.Value.ToString(), new PartitionKey(id.Value.ToString()), cancellationToken: cancellationToken)
+            .ContinueWith(x => x.Result.Resource.Object, cancellationToken);
     }
 }
