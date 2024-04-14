@@ -53,7 +53,7 @@ public class ReservationTests
         var seatId = new SeatId(Guid.NewGuid());
         var userReservation = UserReservation.Create(Guid.NewGuid(), user, seatId, new Price(12.3, "USD"), _mockClock);
 
-        reservation.ClearEvents();
+        ((IDomainBase)reservation).ClearEvents();
         
         reservation.AddUserReservation(userReservation, _mockClock);
 
@@ -86,7 +86,7 @@ public class ReservationTests
         var userReservation = UserReservation.Create(Guid.NewGuid(), user, seatId, new Price(12.3, "USD"), _mockClock);
 
         reservation.AddUserReservation(userReservation, _mockClock);
-        reservation.ClearEvents();
+        ((IDomainBase)reservation).ClearEvents();
         
         reservation.CancelUserReservation(userReservation, _mockClock);
 
@@ -103,7 +103,7 @@ public class ReservationTests
         var userReservation = UserReservation.Create(Guid.NewGuid(), user, seatId, new Price(12.3, "USD"), _mockClock);
 
         reservation.AddUserReservation(userReservation, _mockClock);
-        reservation.ClearEvents();
+        ((IDomainBase)reservation).ClearEvents();
         reservation.CancelUserReservation(userReservation, _mockClock);      
 
         var ex = Record.Exception(() => reservation.CancelUserReservation(userReservation, _mockClock));

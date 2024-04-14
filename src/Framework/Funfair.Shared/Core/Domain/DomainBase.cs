@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Funfair.Shared.Domain;
 
-public abstract class DomainBase
+public abstract class DomainBase : IDomainBase
 {
     [JsonProperty("id")]
     [JsonConverter(typeof(IdJsonConverter))]
@@ -18,7 +18,7 @@ public abstract class DomainBase
     public ReadOnlyCollection<IDomainEvent> DomainEvents 
         => new List<IDomainEvent>(_domainEvents).AsReadOnly();
 
-    public void ClearEvents()
+    void IDomainBase.ClearEvents()
     {
         _domainEvents.Clear();
     }

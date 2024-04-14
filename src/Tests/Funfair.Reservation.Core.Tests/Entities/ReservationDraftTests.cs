@@ -30,7 +30,7 @@ public class ReservationDraftTests
     [Fact]
     public void Create_ShouldCreateReservationDraft()
     {
-        var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy, _mockClock, _plane);
+        var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy,  _plane);
 
         Assert.NotNull(reservationDraft);
     }
@@ -38,10 +38,10 @@ public class ReservationDraftTests
     [Fact]
     public void ChangeDeparture_ShouldUpdateDeparture()
     {
-        var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy, _mockClock, _plane);
+        var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy,  _plane);
         var newDeparture = new Airport("New Departure", "Los angeles", "LAX");
 
-        reservationDraft.ChangeDeparture(newDeparture, _mockClock);
+        reservationDraft.ChangeDeparture(newDeparture);
 
         Assert.Equal(newDeparture, reservationDraft.Journey.Departure);
     }
@@ -49,10 +49,10 @@ public class ReservationDraftTests
     [Fact]
     public void ChangeDestiny_ShouldUpdateDestination()
     {
-        var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy, _mockClock, _plane);
+        var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy,  _plane);
         var newDestination = new Airport("New Departure", "Los angeles", "LAX");
 
-        reservationDraft.ChangeDestiny(newDestination, _mockClock);
+        reservationDraft.ChangeDestiny(newDestination);
 
         Assert.Equal(newDestination, reservationDraft.Journey.Destination);
     }
@@ -60,10 +60,10 @@ public class ReservationDraftTests
     [Fact]
     public void UpdatePlane_ShouldUpdatePlane()
     {
-        var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy, _mockClock, _plane);
+        var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy,  _plane);
         var newPlane = new Plane(Guid.NewGuid(), new ReadOnlyCollection<Seat>(new List<Seat>()));
 
-        reservationDraft.UpdatePlane(newPlane, _mockClock);
+        reservationDraft.UpdatePlane(newPlane);
 
         Assert.Equal(newPlane, reservationDraft.Plane);
     }
@@ -71,10 +71,10 @@ public class ReservationDraftTests
     [Fact]
     public void UpdateDates_ShouldUpdateFlightDate()
     {
-        var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy, _mockClock, _plane);
+        var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy,  _plane);
         var newFlightDate = new FlightDate(DateTimeOffset.UtcNow.AddHours(1), DateTimeOffset.UtcNow.AddHours(3));
 
-        reservationDraft.UpdateDates(newFlightDate, _mockClock);
+        reservationDraft.UpdateDates(newFlightDate);
 
         Assert.Equal(newFlightDate, reservationDraft.FlightDate);
     }
@@ -82,7 +82,7 @@ public class ReservationDraftTests
     [Fact]
     public void Confirm_ShouldCreateReservation()
     {
-        var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy, _mockClock, _plane);
+        var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy,  _plane);
 
         var reservation = reservationDraft.Confirm(_createdBy, _mockClock);
 
@@ -98,7 +98,7 @@ public class ReservationDraftTests
     [Fact]
     public void Confirm_ShouldThrowException_WhenReservationAlreadyExists()
     {
-        var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy, _mockClock, _plane);
+        var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy,  _plane);
         reservationDraft.Confirm(_createdBy, _mockClock);
 
         Assert.Throws<ReservationAlreadyExists>(() => reservationDraft.Confirm(_createdBy, _mockClock));

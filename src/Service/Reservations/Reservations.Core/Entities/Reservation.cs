@@ -20,9 +20,8 @@ public class Reservation : AggregateRoot
     public Worker CreatedBy { get; init; }
     public Plane Plane { get; init; }
     public DateTimeOffset CreatedAt { get; init; }
-
-
-    /// <inheritdoc />
+    
+    
     private Reservation() { }
 
     private Reservation(Id id,Journey journey, FlightDate flightDate, Worker createdBy, DateTimeOffset createdAt, Plane plane)

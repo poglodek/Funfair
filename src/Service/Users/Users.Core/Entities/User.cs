@@ -32,10 +32,7 @@ public class User : DomainBase
     [JsonProperty("partitionKey")]
     public string PartitionKey => $"{CreatedAt.Value:yyyy-MM}";
 
-    private User()
-    {
-        
-    }
+    private User() { }
 
     private User(Name firstName, Name lastName, Date dateOfBirth, Date createdAt, EmailAddress email, Password password, Role role)
     {
