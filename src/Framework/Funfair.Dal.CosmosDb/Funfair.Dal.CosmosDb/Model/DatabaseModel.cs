@@ -6,6 +6,7 @@ public class DatabaseModel<T>
 
     public DateTimeOffset Created { get; set; }
     public T Object { get; set; }
+    public string Type { get; set; }
     public DateTimeOffset Updated { get; set; }
     public Guid Version { get; set; }
 }

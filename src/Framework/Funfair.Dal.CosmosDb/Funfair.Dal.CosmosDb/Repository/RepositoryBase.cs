@@ -13,16 +13,21 @@ internal class RepositoryBase<TContainer>(TContainer containerContext, IClock cl
 {
     private readonly Container _containerContext = containerContext.Container;
 
-    public async Task<bool> CreateItemAsync<TItem>(TItem item,
-        PartitionKey? partitionKey = null, ItemRequestOptions requestOptions = null,
-        CancellationToken cancellationToken = default) where TItem : class, IDomainBase
+    public async Task<bool> CreateItemAsync<TItem>(TItem item, PartitionKey? partitionKey = null, string? type = null,
+        ItemRequestOptions requestOptions = null, CancellationToken cancellationToken = default) where TItem : class, IDomainBase
+
     {
+        if (string.IsNullOrEmpty(type))
+        {
+            type = string.Empty;
+        }
         
         var dbModel = new DatabaseModel<TItem>
         {
             Updated = clock.CurrentDateTime,
             Created = clock.CurrentDateTime,
             Object = item,
+            Type = type,
             Version = Guid.NewGuid(),
             Id = item.Id.Value
 
@@ -32,18 +37,38 @@ internal class RepositoryBase<TContainer>(TContainer containerContext, IClock cl
         
         return result.StatusCode is HttpStatusCode.OK or HttpStatusCode.Created or HttpStatusCode.Accepted;
     }
-
-    public IQueryable<TItem> GetItemLinqQueryable<TItem>(bool allowSynchronousQueryExecution = false,
+    
+    public IQueryable<TItem> GetItemLinqQueryable<TItem>(string? type = null, bool allowSynchronousQueryExecution = false,
         string continuationToken = null, QueryRequestOptions requestOptions = null,
         CosmosLinqSerializerOptions linqSerializerOptions = null)
     {
-        return _containerContext.GetItemLinqQueryable<DatabaseModel<TItem>>(allowSynchronousQueryExecution, continuationToken, requestOptions, linqSerializerOptions)
-            .Select(x => x.Object);
+        var query = _containerContext
+            .GetItemLinqQueryable<DatabaseModel<TItem>>(allowSynchronousQueryExecution, continuationToken,
+                requestOptions, linqSerializerOptions)
+            .Select(x=>x);
+        
+        if(string.IsNullOrWhiteSpace(type))
+        {
+            query = query.Where(x => x.Type == type);
+        }
+        
+        return query
+                .Select(x => x.Object);
+
     }
 
-    public Task<TItem?> GetBytId<TItem>(Id id, CancellationToken cancellationToken) where TItem : class, IDomainBase
+    public Task<TItem?> GetBytId<TItem>(Id id, string? type = null, CancellationToken cancellationToken = default) where TItem : class, IDomainBase
     {
-        return _containerContext.GetItemLinqQueryable<DatabaseModel<TItem>>().Where(x => x.Id == id.Value)
+        var query = _containerContext
+            .GetItemLinqQueryable<DatabaseModel<TItem>>()
+            .Where(x => x.Id == id.Value);
+
+        if (!string.IsNullOrWhiteSpace(type))
+        {
+            query = query.Where(x => x.Type == type);
+        }
+        
+        return query
             .Select(x => x.Object)
             .ToFeedIterator()
             .FirstOrDefaultAsync(cancellationToken);
