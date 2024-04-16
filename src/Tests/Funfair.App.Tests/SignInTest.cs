@@ -13,7 +13,7 @@ namespace Funfair.App.Tests;
 public class SignInTest
 {
     
-    private Task<JWTokenDto> Act(SignInCommand command)
+    private Task<JwtTokenDto> Act(SignInCommand command)
     {
         var handler = new SignInHandler(_userRepository,_hasher,_tokenManager);
         return handler.Handle(command, CancellationToken.None);
@@ -30,7 +30,7 @@ public class SignInTest
 
         _userRepository.SignIn(mail, password,CancellationToken.None).Returns(ReturnValidUserAsync());
         _tokenManager.CreateToken(Arg.Any<Guid>(), mail, Arg.Any<string>(), Arg.Any<IDictionary<string, string>>())
-            .Returns(new JWTokenDto
+            .Returns(new JwtTokenDto
             {
                 Role = Role.Default,
                 JWT = "testJWT",

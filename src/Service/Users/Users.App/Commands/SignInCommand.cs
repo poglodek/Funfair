@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Users.App.Commands;
 
-public class SignInCommand : IRequest<JWTokenDto>
+public class SignInCommand : IRequest<JwtTokenDto>
 {
     public string Email { get; private set; }
     public string Password { get; private set; }

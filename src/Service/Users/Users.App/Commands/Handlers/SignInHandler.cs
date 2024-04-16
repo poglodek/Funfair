@@ -7,7 +7,7 @@ using Users.Core.Repositories;
 
 namespace Users.App.Commands.Handlers;
 
-public class SignInHandler : IRequestHandler<SignInCommand,JWTokenDto>
+public class SignInHandler : IRequestHandler<SignInCommand,JwtTokenDto>
 {
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHasher<User> _hasher;
@@ -20,7 +20,7 @@ public class SignInHandler : IRequestHandler<SignInCommand,JWTokenDto>
         _tokenManager = tokenManager;
     }
     
-    public async Task<JWTokenDto> Handle(SignInCommand request, CancellationToken cancellationToken)
+    public async Task<JwtTokenDto> Handle(SignInCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.SignIn(request.Email,request.Password,cancellationToken);
 
