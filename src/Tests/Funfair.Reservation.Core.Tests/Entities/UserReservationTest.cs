@@ -16,10 +16,10 @@ public class UserReservationTest
     {
         var id = Guid.NewGuid();
         var user = GetValidUser;
-        var seatId = GetValidSeatId;
+        var seat = GetValidSeat;
         var clock = new ClockTest();
         
-        var userReservation = UserReservation.Create(id, user, seatId
+        var userReservation = UserReservation.Create(id, user, seat
             , new Price(12.3, "USD"), clock);
 
         userReservation.ShouldNotBeNull();
@@ -27,7 +27,47 @@ public class UserReservationTest
         userReservation.Price.Value.ShouldBe(12.3);
         userReservation.Id.Value.ShouldBe(id);
         userReservation.User.Id.ShouldBe(user.Id);
-        userReservation.SeatId.Id.ShouldBe(seatId.Id);
+        userReservation.Seat.ShouldBe(seat);
+        userReservation.Purchased.ShouldBe(clock.CurrentDateTime);
+    }
+    
+    [Fact]
+    public void CreateUserPremiumReservation_AllValid_ShouldReturn()
+    {
+        var id = Guid.NewGuid();
+        var user = GetValidUser;
+        var seat = GetValidSeat with{ SeatClass = ClassSeat.Premium };
+        var clock = new ClockTest();
+        
+        var userReservation = UserReservation.Create(id, user, seat
+            , new Price(12.3, "USD"), clock);
+
+        userReservation.ShouldNotBeNull();
+        userReservation.Price.Currency.ShouldBe("USD");
+        userReservation.Price.Value.ShouldBe(12.3 * 1.75);
+        userReservation.Id.Value.ShouldBe(id);
+        userReservation.User.Id.ShouldBe(user.Id);
+        userReservation.Seat.ShouldBe(seat);
+        userReservation.Purchased.ShouldBe(clock.CurrentDateTime);
+    }
+    
+    [Fact]
+    public void CreateUserBusinessReservation_AllValid_ShouldReturn()
+    {
+        var id = Guid.NewGuid();
+        var user = GetValidUser;
+        var seat = GetValidSeat with{ SeatClass = ClassSeat.Business };
+        var clock = new ClockTest();
+        
+        var userReservation = UserReservation.Create(id, user, seat
+            , new Price(12.3, "USD"), clock);
+
+        userReservation.ShouldNotBeNull();
+        userReservation.Price.Currency.ShouldBe("USD");
+        userReservation.Price.Value.ShouldBe(12.3 * 2.22);
+        userReservation.Id.Value.ShouldBe(id);
+        userReservation.User.Id.ShouldBe(user.Id);
+        userReservation.Seat.ShouldBe(seat);
         userReservation.Purchased.ShouldBe(clock.CurrentDateTime);
     }
 
@@ -36,10 +76,10 @@ public class UserReservationTest
     {
         var id = Guid.Empty;
         var user = GetValidUser;
-        var seatId = GetValidSeatId;
+        var seat = GetValidSeat;
         var clock = new ClockTest();
 
-        var ex = Record.Exception(() => UserReservation.Create(id, user, seatId
+        var ex = Record.Exception(() => UserReservation.Create(id, user, seat
             , new Price(12.3, "USD"), clock));
 
         ex.ShouldBeOfType<InvalidReservationArgument>();
@@ -50,10 +90,10 @@ public class UserReservationTest
     {
         var id = Guid.NewGuid();
         var user = GetValidUser;
-        var seatId = GetValidSeatId;
+        var seat = GetValidSeat;
         var clock = new ClockTest();
 
-        var ex = Record.Exception(() => UserReservation.Create(id, user, seatId
+        var ex = Record.Exception(() => UserReservation.Create(id, user, seat
             , new Price(0, "USD"), clock));
 
         ex.ShouldBeOfType<InvalidReservationArgument>();
@@ -64,10 +104,10 @@ public class UserReservationTest
     {
         var id = Guid.NewGuid();
         var user = GetValidUser;
-        var seatId = GetValidSeatId;
+        var seat = GetValidSeat;
         var clock = new ClockTest();
 
-        var ex = Record.Exception(() => UserReservation.Create(id, user, seatId
+        var ex = Record.Exception(() => UserReservation.Create(id, user, seat
             , new Price(-150.75, "USD"), clock));
 
         ex.ShouldBeOfType<InvalidReservationArgument>();
@@ -78,10 +118,10 @@ public class UserReservationTest
     {
         var id = Guid.NewGuid();
         var user = GetValidUser;
-        var seatId = GetValidSeatId;
+        var seat = GetValidSeat;
         var clock = new ClockTest();
 
-        var ex = Record.Exception(() => UserReservation.Create(id, user, seatId
+        var ex = Record.Exception(() => UserReservation.Create(id, user, seat
             , new Price(42.0, ""), clock));
 
         ex.ShouldBeOfType<InvalidReservationArgument>();
@@ -93,10 +133,10 @@ public class UserReservationTest
     {
         var id = Guid.NewGuid();
         var user = GetValidUser;
-        var seatId = GetValidSeatId;
+        var seat = GetValidSeat;
         var clock = new ClockTest();
 
-        var ex = Record.Exception(() => UserReservation.Create(id, user, seatId
+        var ex = Record.Exception(() => UserReservation.Create(id, user, seat
             , new Price(42.0, null), clock));
 
         ex.ShouldBeOfType<InvalidReservationArgument>();
@@ -109,10 +149,10 @@ public class UserReservationTest
     {
         var id = Guid.NewGuid();
         var user = GetValidUser;
-        var seatId = GetValidSeatId;
+        var seat = GetValidSeat;
         var clock = new ClockTest();
 
-        var ex = Record.Exception(() => UserReservation.Create(id, user, seatId
+        var ex = Record.Exception(() => UserReservation.Create(id, user, seat
             , new Price(42.0, "    "), clock));
 
         ex.ShouldBeOfType<InvalidReservationArgument>();
@@ -124,10 +164,10 @@ public class UserReservationTest
     {
         var id = Guid.NewGuid();
         var user = GetValidUser;
-        var seatId = GetValidSeatId;
+        var seat = GetValidSeat;
         var clock = new ClockTest();
 
-        var ex = Record.Exception(() => UserReservation.Create(id, user, seatId
+        var ex = Record.Exception(() => UserReservation.Create(id, user, seat
             , new Price(42.0, "CURRY"), clock));
 
         ex.ShouldBeOfType<InvalidReservationArgument>();
@@ -135,5 +175,5 @@ public class UserReservationTest
 
     
     private static User GetValidUser => new User(Guid.NewGuid());
-    private static SeatId GetValidSeatId => new(Guid.NewGuid());
+    private static Seat GetValidSeat => new(Guid.NewGuid(), "1", "A", ClassSeat.Economy);
 }

@@ -17,6 +17,7 @@ public class ReservationDraftTests
     private readonly FlightDate _flightDate;
     private readonly Worker _createdBy;
     private readonly Plane _plane;
+    private readonly Price _price;
 
     public ReservationDraftTests()
     {
@@ -25,6 +26,7 @@ public class ReservationDraftTests
         _flightDate = new FlightDate(DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddHours(2));
         _createdBy = new Worker(Guid.NewGuid());
         _plane = new Plane(Guid.NewGuid(), new ReadOnlyCollection<Seat>(new List<Seat>()));
+        _price = new Price(100, "USD");
     }
 
     [Fact]
@@ -84,7 +86,7 @@ public class ReservationDraftTests
     {
         var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy,  _plane);
 
-        var reservation = reservationDraft.Confirm(_createdBy, _mockClock);
+        var reservation = reservationDraft.Confirm(_createdBy, _price, _mockClock);
 
         Assert.NotNull(reservation);
         //Asserts for reservation properties

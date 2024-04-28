@@ -62,11 +62,11 @@ public class ReservationDraft : DomainBase
         FlightDate = flightDate;
     }
 
-    public Reservation Confirm(Worker createdBy, IClock clock)
+    public Reservation Confirm(Worker createdBy, Price price ,IClock clock)
     {
         CreatedBy = createdBy;
         
-        var reservation = Reservation.Create(this);
+        var reservation = Reservation.Create(this, price);
         
         if (!new SpecificationDue(clock).Check(reservation))
         {

@@ -19,22 +19,24 @@ public class Reservation : AggregateRoot
     public FlightDate FlightDate { get; init; }
     public Worker CreatedBy { get; init; }
     public Plane Plane { get; init; }
-    
-    
+    public Price StandardPrice { get; private set; }
+
+
     private Reservation() { }
 
-    private Reservation(Id id,Journey journey, FlightDate flightDate, Worker createdBy, Plane plane)
+    private Reservation(Id id,Journey journey, FlightDate flightDate, Worker createdBy, Plane plane, Price standardPrice)
     {
         Id = id ?? throw new ArgumentCoreNullException(nameof(id));
         Journey = journey ?? throw new ArgumentCoreNullException(nameof(journey));
         FlightDate = flightDate ?? throw new ArgumentCoreNullException(nameof(flightDate));
         CreatedBy = createdBy ?? throw new ArgumentCoreNullException(nameof(createdBy));
         Plane = plane ?? throw new ArgumentCoreNullException(nameof(plane));
+        StandardPrice = standardPrice;
     }
 
-    public static Reservation Create(ReservationDraft draft)
+    public static Reservation Create(ReservationDraft draft, Price price)
     {
-        var reservation = new Reservation(draft.Id, draft.Journey, draft.FlightDate, draft.CreatedBy, draft.Plane);
+        var reservation = new Reservation(draft.Id, draft.Journey, draft.FlightDate, draft.CreatedBy, draft.Plane, price);
         
         reservation.RaiseEvent(new NewReservationCreatedEvent(reservation.Id));
 
