@@ -16,6 +16,8 @@ public class CreateReservationCommandHandler(
     IEventProcessor eventProcessor)
     : IRequestHandler<CreateReservationCommand, Unit>
 {
+    private const string RequiredClaim = "Worker";
+    
     public async Task<Unit> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
     {
         var draft = await reservationRepository.GetDraftById(request.DraftId,cancellationToken);
@@ -26,8 +28,8 @@ public class CreateReservationCommandHandler(
         }
 
         var reservation = draft.Confirm(
-            new Worker(userContextAccessor.Get().UserId),
-            new Price(request.Price.Value, request.Price.Currency),
+            new Worker(userContextAccessor.Get(RequiredClaim).UserId),
+            request.Price,
             clock);
 
         

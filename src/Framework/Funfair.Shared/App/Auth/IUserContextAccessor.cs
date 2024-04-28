@@ -6,4 +6,5 @@ public interface IUserContextAccessor
 {
     IUserContext Get();
     IUserContext Get(string claim);
+    void CheckIfUserHasClaim(string claim);
 }

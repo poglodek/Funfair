@@ -3,6 +3,7 @@ using Funfair.Shared.App.Auth;
 using Funfair.Shared.Domain;
 using MediatR;
 using Reservations.App.Dtos;
+using Reservations.App.Exceptions;
 using Reservations.App.Services;
 using Reservations.Core.Entities;
 using Reservations.Core.Repository;
@@ -21,8 +22,15 @@ public class CreateDraftCommandHandler(
 
     public async Task<CreateDraftCommandDto> Handle(CreateDraftCommand request, CancellationToken cancellationToken)
     {
-        var plane = await planeService.GetById(request.PlaneId, cancellationToken);
         var user = userContextAccessor.Get(RequiredClaim);
+        
+        var plane = await planeService.GetById(request.PlaneId, cancellationToken);
+
+        if (plane is null)
+        {
+            throw new DraftCannotBeCreatedException("Plane not found");
+        }
+        
         
         var draftId = Guid.NewGuid();
         

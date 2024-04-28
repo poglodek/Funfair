@@ -5,15 +5,10 @@ using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace Funfair.Shared.App.Auth;
 
-internal class UserContextAccessor : IUserContextAccessor
+internal class UserContextAccessor(IHttpContextAccessor httpContextAccessor) : IUserContextAccessor
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
 
-    public UserContextAccessor(IHttpContextAccessor httpContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
-    }
-    
     public IUserContext Get()
     {
         var claimsIdentity = _httpContextAccessor!.HttpContext!.User.Identity as ClaimsIdentity;
@@ -25,7 +20,7 @@ internal class UserContextAccessor : IUserContextAccessor
         
         var claims = claimsIdentity.Claims;
 
-        if (claims.Any())
+        if (!claims.Any())
         {
             throw new UnauthorizedAccessException();
         }
@@ -47,5 +42,10 @@ internal class UserContextAccessor : IUserContextAccessor
         }
         
         return userContext;
+    }
+
+    public void CheckIfUserHasClaim(string claim)
+    {
+        Get(claim);
     }
 }
