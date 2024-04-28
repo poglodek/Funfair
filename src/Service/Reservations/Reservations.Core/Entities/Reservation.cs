@@ -34,7 +34,7 @@ public class Reservation : AggregateRoot
         StandardPrice = standardPrice;
     }
 
-    public static Reservation Create(ReservationDraft draft, Price price)
+    internal static Reservation Create(ReservationDraft draft, Price price)
     {
         var reservation = new Reservation(draft.Id, draft.Journey, draft.FlightDate, draft.CreatedBy, draft.Plane, price);
         

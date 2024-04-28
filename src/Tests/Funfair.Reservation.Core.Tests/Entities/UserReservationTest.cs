@@ -44,7 +44,7 @@ public class UserReservationTest
 
         userReservation.ShouldNotBeNull();
         userReservation.Price.Currency.ShouldBe("USD");
-        userReservation.Price.Value.ShouldBe(12.3 * 1.75);
+        userReservation.Price.Value.ShouldBe(Math.Round(12.3 * 1.75,2));
         userReservation.Id.Value.ShouldBe(id);
         userReservation.User.Id.ShouldBe(user.Id);
         userReservation.Seat.ShouldBe(seat);
@@ -64,7 +64,7 @@ public class UserReservationTest
 
         userReservation.ShouldNotBeNull();
         userReservation.Price.Currency.ShouldBe("USD");
-        userReservation.Price.Value.ShouldBe(12.3 * 2.22);
+        userReservation.Price.Value.ShouldBe(Math.Round(12.3 * 2.22,2));
         userReservation.Id.Value.ShouldBe(id);
         userReservation.User.Id.ShouldBe(user.Id);
         userReservation.Seat.ShouldBe(seat);

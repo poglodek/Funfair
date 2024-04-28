@@ -1,10 +1,11 @@
+using Funfair.Messaging.EventHubs.Processor;
 using MediatR;
 using Reservations.App.Exceptions;
 using Reservations.Core.Repository;
 
 namespace Reservations.App.Commands.UpdateDraft;
 
-public class UpdatePlaneDraftCommandHandler(IReservationRepository reservationRepository)
+public class UpdatePlaneDraftCommandHandler(IReservationRepository reservationRepository, IEventProcessor eventProcessor)
     : IRequestHandler<UpdatePlaneDraftCommand, Unit>
 {
     public async Task<Unit> Handle(UpdatePlaneDraftCommand request, CancellationToken cancellationToken)
@@ -20,6 +21,7 @@ public class UpdatePlaneDraftCommandHandler(IReservationRepository reservationRe
         
         
         await reservationRepository.Update(draft, cancellationToken);
+        await eventProcessor.ProcessAsync(draft, cancellationToken);
 
         return Unit.Value;
     }

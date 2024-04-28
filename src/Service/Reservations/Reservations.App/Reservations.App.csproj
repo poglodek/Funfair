@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Framework\Funfair.Messaging.EventHubs\Funfair.Messaging.EventHubs.csproj" />
       <ProjectReference Include="..\Reservations.Core\Reservations.Core.csproj" />
     </ItemGroup>
 
