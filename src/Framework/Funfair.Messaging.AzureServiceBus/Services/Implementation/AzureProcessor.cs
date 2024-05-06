@@ -1,9 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using Azure.Messaging.ServiceBus;
-using Funfair.Messaging.AzureServiceBus.Events;
 using Funfair.Messaging.AzureServiceBus.Models;
 using Funfair.Messaging.AzureServiceBus.OutInBoxPattern.Models;
+using Funfair.Shared.App.Events;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -115,7 +115,7 @@ internal class AzureProcessor : IAzureProcessor, IDisposable, IAsyncDisposable
     {
         return new AssembliesService()
             .ReturnTypes()
-            .Where(t => typeof(IMessageEvent).IsAssignableFrom(t)
+            .Where(t => typeof(IIntegrationEvent).IsAssignableFrom(t)
                         && t.GetCustomAttributes(typeof(MessageAttribute), true).Length > 0)
             .ToList()
             .AsReadOnly();

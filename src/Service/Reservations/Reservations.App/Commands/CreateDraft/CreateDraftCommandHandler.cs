@@ -1,5 +1,7 @@
 using Funfair.Messaging.EventHubs.Processor;
 using Funfair.Shared.App.Auth;
+using Funfair.Shared.App.Events;
+using Funfair.Shared.Core.Events;
 using Funfair.Shared.Domain;
 using MediatR;
 using Reservations.App.Dtos;
@@ -15,7 +17,7 @@ public class CreateDraftCommandHandler(
     IPlaneService planeService,
     IUserContextAccessor userContextAccessor,
     IReservationRepository reservationRepository,
-    IEventProcessor eventProcessor)
+    IEventDispatcher eventDispatcher)
     : IRequestHandler<CreateDraftCommand, CreateDraftCommandDto>
 {
     private const string RequiredClaim = "Worker";
@@ -38,7 +40,7 @@ public class CreateDraftCommandHandler(
             new FlightDate(request.Departure, request.Arrival), new Worker(user.UserId), plane);
         
         await reservationRepository.Create(draft, cancellationToken);
-        await eventProcessor.ProcessAsync(draft, cancellationToken);
+        await eventDispatcher.Publish(draft, cancellationToken);
         
         return new CreateDraftCommandDto(draftId);
     }

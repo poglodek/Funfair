@@ -1,6 +1,8 @@
 using Funfair.Messaging.EventHubs.Processor;
 using Funfair.Shared.App.Auth;
+using Funfair.Shared.App.Events;
 using Funfair.Shared.Core;
+using Funfair.Shared.Core.Events;
 using MediatR;
 using Reservations.App.Exceptions;
 using Reservations.Core.Entities;
@@ -13,7 +15,7 @@ public class CreateReservationCommandHandler(
     IReservationRepository reservationRepository,
     IUserContextAccessor userContextAccessor,
     IClock clock,
-    IEventProcessor eventProcessor)
+    IEventDispatcher eventDispatcher)
     : IRequestHandler<CreateReservationCommand, Unit>
 {
     private const string RequiredClaim = "Worker";
@@ -34,7 +36,7 @@ public class CreateReservationCommandHandler(
 
         
         await reservationRepository.AddNewReservation(reservation, draft,cancellationToken);
-        await eventProcessor.ProcessAsync(reservation, cancellationToken);
+        await eventDispatcher.Publish(reservation, cancellationToken);
 
         return Unit.Value;
     }

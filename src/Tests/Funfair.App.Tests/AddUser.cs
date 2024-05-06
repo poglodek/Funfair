@@ -1,4 +1,6 @@
 ﻿using Funfair.Messaging.EventHubs.Processor;
+using Funfair.Shared.App.Events;
+using Funfair.Shared.Core.Events;
 using MediatR;
 using NSubstitute;
 using Shouldly;
@@ -62,6 +64,6 @@ public class AddUser
 
 
     private readonly IUserRepository _userRepository = Substitute.For<IUserRepository>();
-    private readonly IEventProcessor _eventProcessor = Substitute.For<IEventProcessor>();
+    private readonly IEventDispatcher _eventProcessor = Substitute.For<IEventDispatcher>();
 
 }

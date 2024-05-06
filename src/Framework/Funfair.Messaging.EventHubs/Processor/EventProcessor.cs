@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Funfair.Messaging.EventHubs.Events;
 using Funfair.Messaging.EventHubs.OutInBoxPattern;
 using Funfair.Messaging.EventHubs.OutInBoxPattern.Models;
 using Funfair.Shared.Core.Events;
@@ -15,19 +16,11 @@ internal class EventProcessor : IEventProcessor
         _outBoxContainer = outBoxContainer;
     }
 
-    public Task ProcessAsync(IDomainEvent @event, CancellationToken token = default)
+    public Task ProcessAsync(IIntegrationEvent @event, CancellationToken token = default)
     {
         return ProcessEventAsync(@event, token);
     }
-
-    public Task ProcessAsync(DomainBase domainBase, CancellationToken token = default)
-    {
-        var tasks = new List<Task>(domainBase.DomainEvents.Count);
-        
-        tasks.AddRange(domainBase.DomainEvents.Select(@event => ProcessAsync(@event, token)));
-
-        return Task.WhenAll(tasks);
-    }
+    
 
     private Task ProcessEventAsync(object @event, CancellationToken token)
     {

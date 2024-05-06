@@ -15,11 +15,11 @@ public class Reservation : AggregateRoot
     public ReadOnlyCollection<UserReservation> UserReservations
         => _userReservations.ToList().AsReadOnly();
 
-    public Journey Journey { get; private set; }
+    public Journey Journey { get; init; }
     public FlightDate FlightDate { get; init; }
     public Worker CreatedBy { get; init; }
     public Plane Plane { get; init; }
-    public Price StandardPrice { get; private set; }
+    public Price StandardPrice { get; init; }
 
 
     private Reservation() { }
@@ -31,7 +31,7 @@ public class Reservation : AggregateRoot
         FlightDate = flightDate ?? throw new ArgumentCoreNullException(nameof(flightDate));
         CreatedBy = createdBy ?? throw new ArgumentCoreNullException(nameof(createdBy));
         Plane = plane ?? throw new ArgumentCoreNullException(nameof(plane));
-        StandardPrice = standardPrice;
+        StandardPrice = standardPrice ?? throw new ArgumentCoreNullException(nameof(standardPrice));
     }
 
     internal static Reservation Create(ReservationDraft draft, Price price)

@@ -1,8 +1,7 @@
 ﻿using System.Text.Json;
-using Funfair.Messaging.AzureServiceBus.Events;
 using Funfair.Messaging.AzureServiceBus.MessageBus;
 using Funfair.Messaging.AzureServiceBus.OutInBoxPattern.Models;
-using Funfair.Shared.Domain;
+using Funfair.Shared.App.Events;
 
 namespace Funfair.Messaging.AzureServiceBus.Processor;
 
@@ -15,7 +14,7 @@ internal class MessageProcessor : IMessageProcessor
         _busOperator = busOperator;
     }
 
-    public Task ProcessAsync(IMessageEvent @event,CancellationToken token = default)
+    public Task ProcessAsync(IIntegrationEvent @event,CancellationToken token = default)
     {
         return ProcessEventAsync(@event, token);
     }

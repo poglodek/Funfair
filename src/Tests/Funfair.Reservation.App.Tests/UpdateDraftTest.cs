@@ -1,7 +1,9 @@
 using System.Collections.ObjectModel;
 using Funfair.Messaging.EventHubs.Processor;
 using Funfair.Shared.App.Auth;
+using Funfair.Shared.App.Events;
 using Funfair.Shared.Core;
+using Funfair.Shared.Core.Events;
 using Funfair.Shared.Domain;
 using MediatR;
 using NSubstitute;
@@ -20,7 +22,7 @@ namespace Funfair.Reservation.App.Tests;
 public class UpdateDraftTest
 {
     private readonly IReservationRepository _reservationRepositoryMock = Substitute.For<IReservationRepository>();
-    private readonly IEventProcessor _mockEventProcessor =  Substitute.For<IEventProcessor>();
+    private readonly IEventDispatcher _eventDispatcher =  Substitute.For<IEventDispatcher>();
     private readonly IPlaneService _planeMock = Substitute.For<IPlaneService>();
     private readonly IClock _clock = new ClockTest("2022-10-21 12:12:12");
 
@@ -35,12 +37,12 @@ public class UpdateDraftTest
         var flightDate = new FlightDate(clock.CurrentDateTime, clock.CurrentDateTime.AddHours(8));
         var command = new UpdateDateDraftCommand(Guid.NewGuid(), flightDate);
         
-        var handler = new UpdateDateDraftCommandHandler(_reservationRepositoryMock, _mockEventProcessor, GetAccessor());
+        var handler = new UpdateDateDraftCommandHandler(_reservationRepositoryMock, _eventDispatcher, GetAccessor());
 
         var result = await handler.Handle(command, CancellationToken.None);
         
         await _reservationRepositoryMock.Received(1).Update(draft, Arg.Any<CancellationToken>());
-        await _mockEventProcessor.Received(1).ProcessAsync(draft, Arg.Any<CancellationToken>());
+        await _eventDispatcher.Received(1).Publish(draft, Arg.Any<CancellationToken>());
         
         draft.FlightDate.ShouldBe(flightDate);
         result.ShouldBeOfType<Unit>();
@@ -59,7 +61,7 @@ public class UpdateDraftTest
         var claims = new Dictionary<string, string>{{"User","User"}};
         var accessor = GetAccessor(claims:claims);
         
-        var handler = new UpdateDateDraftCommandHandler(_reservationRepositoryMock, _mockEventProcessor, accessor);
+        var handler = new UpdateDateDraftCommandHandler(_reservationRepositoryMock, _eventDispatcher, accessor);
 
         await Should.ThrowAsync<UnauthorizedAccessException>(async () => await handler.Handle(command, CancellationToken.None));
     }
@@ -74,12 +76,12 @@ public class UpdateDraftTest
         var airport = new Airport("New York CIty Airport", "New York", "JFK");
         var command = new UpdateDepartureDraftCommand(Guid.NewGuid(), airport);
         
-        var handler = new UpdateDepartureDraftCommandHandler(_reservationRepositoryMock, _mockEventProcessor, GetAccessor());
+        var handler = new UpdateDepartureDraftCommandHandler(_reservationRepositoryMock, _eventDispatcher, GetAccessor());
 
         var result = await handler.Handle(command, CancellationToken.None);
         
         await _reservationRepositoryMock.Received(1).Update(draft, Arg.Any<CancellationToken>());
-        await _mockEventProcessor.Received(1).ProcessAsync(draft, Arg.Any<CancellationToken>());
+        await _eventDispatcher.Received(1).Publish(draft, Arg.Any<CancellationToken>());
         
         draft.Journey.Departure.ShouldBe(airport);
         result.ShouldBeOfType<Unit>();
@@ -97,7 +99,7 @@ public class UpdateDraftTest
         var claims = new Dictionary<string, string>{{"User","User"}};
         var accessor = GetAccessor(claims:claims);
         
-        var handler = new UpdateDepartureDraftCommandHandler(_reservationRepositoryMock, _mockEventProcessor, accessor);
+        var handler = new UpdateDepartureDraftCommandHandler(_reservationRepositoryMock, _eventDispatcher, accessor);
 
         await Should.ThrowAsync<UnauthorizedAccessException>(async () => await handler.Handle(command, CancellationToken.None));
  
@@ -113,12 +115,12 @@ public class UpdateDraftTest
         var airport = new Airport("New York CIty Airport", "New York", "JFK");
         var command = new UpdateDestinyDraftCommand(Guid.NewGuid(), airport);
         
-        var handler = new UpdateDestinyDraftCommandHandler(_reservationRepositoryMock, _mockEventProcessor, GetAccessor());
+        var handler = new UpdateDestinyDraftCommandHandler(_reservationRepositoryMock, _eventDispatcher, GetAccessor());
 
         var result = await handler.Handle(command, CancellationToken.None);
         
         await _reservationRepositoryMock.Received(1).Update(draft, Arg.Any<CancellationToken>());
-        await _mockEventProcessor.Received(1).ProcessAsync(draft, Arg.Any<CancellationToken>());
+        await _eventDispatcher.Received(1).Publish(draft, Arg.Any<CancellationToken>());
         
         draft.Journey.Departure.ShouldBe(airport);
         result.ShouldBeOfType<Unit>();
@@ -136,7 +138,7 @@ public class UpdateDraftTest
         var claims = new Dictionary<string, string>{{"User","User"}};
         var accessor = GetAccessor(claims:claims);
         
-        var handler = new UpdateDestinyDraftCommandHandler(_reservationRepositoryMock, _mockEventProcessor, accessor);
+        var handler = new UpdateDestinyDraftCommandHandler(_reservationRepositoryMock, _eventDispatcher, accessor);
 
         await Should.ThrowAsync<UnauthorizedAccessException>(async () => await handler.Handle(command, CancellationToken.None));
  
@@ -155,12 +157,12 @@ public class UpdateDraftTest
         
         var command = new UpdatePlaneDraftCommand(Guid.NewGuid(), planeId);
         
-        var handler = new UpdatePlaneDraftCommandHandler(_reservationRepositoryMock, _mockEventProcessor, GetAccessor(), _planeMock);
+        var handler = new UpdatePlaneDraftCommandHandler(_reservationRepositoryMock, _eventDispatcher, GetAccessor(), _planeMock);
 
         var result = await handler.Handle(command, CancellationToken.None);
         
         await _reservationRepositoryMock.Received(1).Update(draft, Arg.Any<CancellationToken>());
-        await _mockEventProcessor.Received(1).ProcessAsync(draft, Arg.Any<CancellationToken>());
+        await _eventDispatcher.Received(1).Publish(draft, Arg.Any<CancellationToken>());
         
         draft.Plane.Id.ShouldBe(planeId);
         result.ShouldBeOfType<Unit>();
@@ -181,7 +183,7 @@ public class UpdateDraftTest
         var claims = new Dictionary<string, string>{{"User","User"}};
         var accessor = GetAccessor(claims:claims);
         
-        var handler = new UpdatePlaneDraftCommandHandler(_reservationRepositoryMock, _mockEventProcessor, accessor, _planeMock);
+        var handler = new UpdatePlaneDraftCommandHandler(_reservationRepositoryMock, _eventDispatcher, accessor, _planeMock);
 
         await Should.ThrowAsync<UnauthorizedAccessException>(async () => await handler.Handle(command, CancellationToken.None));
  
@@ -197,7 +199,7 @@ public class UpdateDraftTest
         
         var command = new UpdatePlaneDraftCommand(Guid.NewGuid(), planeId);
         
-        var handler = new UpdatePlaneDraftCommandHandler(_reservationRepositoryMock, _mockEventProcessor, GetAccessor(), _planeMock);
+        var handler = new UpdatePlaneDraftCommandHandler(_reservationRepositoryMock, _eventDispatcher, GetAccessor(), _planeMock);
         
 
         await Should.ThrowAsync<DraftCannotBeCreatedException>(async () => await handler.Handle(command, CancellationToken.None));

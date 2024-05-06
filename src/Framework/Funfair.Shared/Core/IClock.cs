@@ -7,5 +7,5 @@ public interface IClock
 
 public class ClockNow : IClock
 {
-    public DateTimeOffset CurrentDateTime => DateTime.UtcNow;
+    public DateTimeOffset CurrentDateTime => DateTimeOffset.UtcNow;
 }

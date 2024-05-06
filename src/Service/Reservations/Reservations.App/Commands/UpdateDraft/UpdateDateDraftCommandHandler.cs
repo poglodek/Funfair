@@ -1,12 +1,14 @@
 using Funfair.Messaging.EventHubs.Processor;
 using Funfair.Shared.App.Auth;
+using Funfair.Shared.App.Events;
+using Funfair.Shared.Core.Events;
 using MediatR;
 using Reservations.App.Exceptions;
 using Reservations.Core.Repository;
 
 namespace Reservations.App.Commands.UpdateDraft;
 
-public class UpdateDateDraftCommandHandler (IReservationRepository reservationRepository, IEventProcessor eventProcessor, IUserContextAccessor userContextAccessor) 
+public class UpdateDateDraftCommandHandler (IReservationRepository reservationRepository, IEventDispatcher eventDispatcher, IUserContextAccessor userContextAccessor) 
     : IRequestHandler<UpdateDateDraftCommand,Unit>
 {
     private const string RequiredClaim = "Worker";
@@ -25,7 +27,7 @@ public class UpdateDateDraftCommandHandler (IReservationRepository reservationRe
         draft.UpdateDates(request.FlightDate);
         
         await reservationRepository.Update(draft, cancellationToken);
-        await eventProcessor.ProcessAsync(draft, cancellationToken);
+        await eventDispatcher.Publish(draft, cancellationToken);
         
         return Unit.Value;
     }

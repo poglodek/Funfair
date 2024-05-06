@@ -1,10 +1,8 @@
-﻿using Funfair.Shared.Core.Events;
-using Funfair.Shared.Domain;
+﻿using Funfair.Messaging.EventHubs.Events;
 
 namespace Funfair.Messaging.EventHubs.Processor;
 
 public interface IEventProcessor
 {
-    public Task ProcessAsync(IDomainEvent @event, CancellationToken token = default);
-    public Task ProcessAsync(DomainBase domainBase, CancellationToken token = default);
+    public Task ProcessAsync(IIntegrationEvent @event, CancellationToken token = default);
 }

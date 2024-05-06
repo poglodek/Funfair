@@ -1,8 +1,8 @@
-﻿using Funfair.Messaging.AzureServiceBus.Events;
+﻿using Funfair.Shared.App.Events;
 
 namespace Funfair.Messaging.AzureServiceBus.Processor;
 
 public interface IMessageProcessor
 {
-    public Task ProcessAsync(IMessageEvent @event, CancellationToken token = default);
+    public Task ProcessAsync(IIntegrationEvent @event, CancellationToken token = default);
 }

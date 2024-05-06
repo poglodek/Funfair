@@ -1,7 +1,9 @@
 using System.Collections.ObjectModel;
 using Funfair.Messaging.EventHubs.Processor;
 using Funfair.Shared.App.Auth;
+using Funfair.Shared.App.Events;
 using Funfair.Shared.Core;
+using Funfair.Shared.Core.Events;
 using Funfair.Shared.Domain;
 using Moq;
 using NSubstitute;
@@ -19,7 +21,7 @@ namespace Funfair.Reservation.App.Tests;
 public class CreateDraftTest
 {
     private readonly IReservationRepository _reservationRepositoryMock = Substitute.For<IReservationRepository>();
-    private readonly IEventProcessor _mockEventProcessor =  Substitute.For<IEventProcessor>();
+    private readonly IEventDispatcher _mockEventProcessor =  Substitute.For<IEventDispatcher>();
     private readonly IPlaneService _planeMock = Substitute.For<IPlaneService>();
     private readonly IClock _clock = new ClockTest();
     
@@ -39,7 +41,7 @@ public class CreateDraftTest
         
         await _planeMock.Received(1).GetById(planeId, Arg.Any<CancellationToken>());
         await _reservationRepositoryMock.Received(1).Create(Arg.Any<ReservationDraft>(), Arg.Any<CancellationToken>());
-        await _mockEventProcessor.Received(1).ProcessAsync(Arg.Any<DomainBase>(), Arg.Any<CancellationToken>());
+        await _mockEventProcessor.Received(1).Publish(Arg.Any<DomainBase>(), Arg.Any<CancellationToken>());
         
         result.Id.ShouldNotBe(Guid.Empty);
 

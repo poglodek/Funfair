@@ -23,7 +23,7 @@ public static class Extensions
           .AddAzureLogAnalytics()
           .AddEventHubs()
           .AddCosmosDb<PlaneContainer>(cosmosContainerOptions)
-          .AddPipelineBehavior()
+          .AddShared()
           .Services
             .AddScoped<IPlaneRepository, PlaneRepository>()
             .AddScoped<SharedMiddleware>();

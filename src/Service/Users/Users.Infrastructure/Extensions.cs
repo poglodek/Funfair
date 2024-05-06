@@ -26,7 +26,7 @@ public static class Extensions
           .AddAzureLogAnalytics()
           .AddEventHubs()
           .AddCosmosDb<UserContainer>(cosmosContainerOptions)
-          .AddPipelineBehavior()
+          .AddShared()
           .Services
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IPasswordHasher<User>, PasswordHasher<User>>()
