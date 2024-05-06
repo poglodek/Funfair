@@ -56,6 +56,12 @@ public class Reservation : AggregateRoot
             throw new UserReservationAlreadyExists(
                 $"reservation for id {Id} already exists for user {userReservation.User.Id}");
         }
+        
+        if(_userReservations.Any(x=>x.Seat.Id == userReservation.Seat.Id))
+        {
+            throw new UserReservationSeatAlreadyExists(
+                $"reservation for id {Id} already exists for seat {userReservation.Seat.Id}");
+        }
 
         _userReservations.Add(userReservation);
         
