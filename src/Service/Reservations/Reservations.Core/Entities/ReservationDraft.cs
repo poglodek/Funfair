@@ -33,15 +33,7 @@ public class ReservationDraft : DomainBase
 
         return reservationDraft;
     }
-
-    public void ChangeDeparture(Airport departure)
-    {
-        Journey = Journey with
-        {
-            Departure = departure
-        };
-        
-    }
+    
 
     public void ChangeDestiny(Airport destiny)
     {

@@ -39,7 +39,7 @@ public class CreateReservationTest
         
         var result = await handler.Handle(command, CancellationToken.None);
         
-        await _reservationRepositoryMock.Received(1).AddNewReservation(Arg.Any<Reservations.Core.Entities.Reservation>(), Arg.Any<ReservationDraft>(), Arg.Any<CancellationToken>());
+        await _reservationRepositoryMock.Received(1).AddNewReservation(Arg.Any<Reservations.Core.Entities.Reservation>(),  Arg.Any<CancellationToken>());
 
         var domainEvents = ((EventProcessorTest)eventProcessor).DomainEvents;
         

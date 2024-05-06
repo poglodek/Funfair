@@ -38,17 +38,6 @@ public class ReservationDraftTests
     }
 
     [Fact]
-    public void ChangeDeparture_ShouldUpdateDeparture()
-    {
-        var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy,  _plane);
-        var newDeparture = new Airport("New Departure", "Los angeles", "LAX");
-
-        reservationDraft.ChangeDeparture(newDeparture);
-
-        Assert.Equal(newDeparture, reservationDraft.Journey.Departure);
-    }
-
-    [Fact]
     public void ChangeDestiny_ShouldUpdateDestination()
     {
         var reservationDraft = ReservationDraft.Create(_id, _journey, _flightDate, _createdBy,  _plane);

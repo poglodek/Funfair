@@ -38,7 +38,7 @@ internal class RepositoryBase<TContainer>(TContainer containerContext, IClock cl
         return result.StatusCode is HttpStatusCode.OK or HttpStatusCode.Created or HttpStatusCode.Accepted;
     }
     
-    public IQueryable<TItem> GetItemLinqQueryable<TItem>(string? type = null, bool allowSynchronousQueryExecution = false,
+    public IQueryable<TItem> GetItemLinqQueryable<TItem>(string? type = null, bool allowSynchronousQueryExecution = true,
         string continuationToken = null, QueryRequestOptions requestOptions = null,
         CosmosLinqSerializerOptions linqSerializerOptions = null)
     {
@@ -57,7 +57,7 @@ internal class RepositoryBase<TContainer>(TContainer containerContext, IClock cl
 
     }
 
-    public Task<TItem?> GetBytId<TItem>(Id id, string? type = null, CancellationToken cancellationToken = default) where TItem : class, IDomainBase
+    public Task<TItem?> GetById<TItem>(Id id, string? type = null, CancellationToken cancellationToken = default) where TItem : class, IDomainBase
     {
         var query = _containerContext
             .GetItemLinqQueryable<DatabaseModel<TItem>>()
@@ -72,5 +72,33 @@ internal class RepositoryBase<TContainer>(TContainer containerContext, IClock cl
             .Select(x => x.Object)
             .ToFeedIterator()
             .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public Task UpsertItemAsync<TItem>(TItem item, PartitionKey? partitionKey = null, string? type = null,
+        ItemRequestOptions requestOptions = null, CancellationToken cancellationToken = default) where TItem : class, IDomainBase
+    {
+        
+        if (string.IsNullOrEmpty(type))
+        {
+            type = string.Empty;
+        }
+        
+        var dbModel = new DatabaseModel<TItem>
+        {
+            Updated = clock.CurrentDateTime,
+            Object = item,
+            Type = type,
+            Version = Guid.NewGuid(),
+            Id = item.Id.Value
+
+        };
+        
+        return _containerContext.UpsertItemAsync(dbModel, partitionKey, requestOptions, cancellationToken);
+    }
+    
+    public Task DeleteItemAsync<TItem>(TItem item, PartitionKey partitionKey,
+        ItemRequestOptions requestOptions = null, CancellationToken cancellationToken = default) where TItem : class, IDomainBase
+    {
+        return _containerContext.DeleteItemAsync<TItem>(item.Id.Value.ToString(), partitionKey, requestOptions, cancellationToken);
     }
 }

@@ -16,11 +16,11 @@ public class CreateReservationCommandHandler(
     IUserContextAccessor userContextAccessor,
     IClock clock,
     IEventDispatcher eventDispatcher)
-    : IRequestHandler<CreateReservationCommand, Unit>
+    : IRequestHandler<CreateReservationCommand, ReservationIdDto>
 {
     private const string RequiredClaim = "Worker";
     
-    public async Task<Unit> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
+    public async Task<ReservationIdDto> Handle(CreateReservationCommand request, CancellationToken cancellationToken)
     {
         var draft = await reservationRepository.GetDraftById(request.DraftId,cancellationToken);
 
@@ -35,9 +35,9 @@ public class CreateReservationCommandHandler(
             clock);
 
         
-        await reservationRepository.AddNewReservation(reservation, draft,cancellationToken);
+        await reservationRepository.AddNewReservation(reservation, cancellationToken);
         await eventDispatcher.Publish(reservation, cancellationToken);
 
-        return Unit.Value;
+        return new ReservationIdDto(reservation.Id);
     }
 }

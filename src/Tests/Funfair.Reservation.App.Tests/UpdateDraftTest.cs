@@ -67,44 +67,7 @@ public class UpdateDraftTest
     }
     
     
-    [Fact]
-    public async Task UpdateDepartureDraft_AllValid_ShouldReturnUnit()
-    {
-        var draft = GetValidDraft();
-        _reservationRepositoryMock.GetDraftById(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns(draft);
-        
-        var airport = new Airport("New York CIty Airport", "New York", "JFK");
-        var command = new UpdateDepartureDraftCommand(Guid.NewGuid(), airport);
-        
-        var handler = new UpdateDepartureDraftCommandHandler(_reservationRepositoryMock, _eventDispatcher, GetAccessor());
-
-        var result = await handler.Handle(command, CancellationToken.None);
-        
-        await _reservationRepositoryMock.Received(1).Update(draft, Arg.Any<CancellationToken>());
-        await _eventDispatcher.Received(1).Publish(draft, Arg.Any<CancellationToken>());
-        
-        draft.Journey.Departure.ShouldBe(airport);
-        result.ShouldBeOfType<Unit>();
-    }
     
-    [Fact]
-    public async Task UpdateDepartureDraft_InvalidClaims_ShouldReturnUnit()
-    {
-        var draft = GetValidDraft();
-        _reservationRepositoryMock.GetDraftById(Arg.Any<Guid>(), Arg.Any<CancellationToken>()).Returns(draft);
-        
-        var airport = new Airport("New York CIty Airport", "New York", "JFK");
-        var command = new UpdateDepartureDraftCommand(Guid.NewGuid(), airport);
-        
-        var claims = new Dictionary<string, string>{{"User","User"}};
-        var accessor = GetAccessor(claims:claims);
-        
-        var handler = new UpdateDepartureDraftCommandHandler(_reservationRepositoryMock, _eventDispatcher, accessor);
-
-        await Should.ThrowAsync<UnauthorizedAccessException>(async () => await handler.Handle(command, CancellationToken.None));
- 
-    }
-
 
     [Fact]
     public async Task UpdateDestinyDraft_AllValid_ShouldReturnUnit()
