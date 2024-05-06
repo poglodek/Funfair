@@ -1,6 +1,7 @@
 using Funfair.Shared.Core;
 using Funfair.Shared.Core.Events;
 using MediatR;
+using Reservations.App.Exceptions;
 using Reservations.App.Services;
 using Reservations.Core.Entities;
 using Reservations.Core.Repository;
@@ -14,7 +15,12 @@ public class CreateUserReservationCommandHandler(IReservationRepository reservat
     public async Task<Unit> Handle(CreateUserReservationCommand request, CancellationToken cancellationToken)
     {
         var reservation = await reservationRepository.GetById(request.ReservationId, cancellationToken);
-        var seat = await planeService.GetSeatById(request.SeatId, cancellationToken);
+        if (reservation is null)
+        {
+            throw new ReservationNotFound($"Reservation with id {request.ReservationId} not found");
+        }
+        
+        var seat = await planeService.GetSeatById(request.SeatId, cancellationToken) ?? throw new SeatNotFound($"Seat with id {request.SeatId} not found");
         
         var userReservation = UserReservation.Create(Guid.NewGuid(),new User(request.UserId),seat,reservation.StandardPrice,clock);
         
