@@ -10,4 +10,5 @@ public interface IReservationRepository
     Task AddNewReservation(Reservation reservation, CancellationToken cancellationToken);
     Task<Reservation?> GetById(Guid requestReservationId, CancellationToken cancellationToken);
     Task Update(Reservation reservation, CancellationToken cancellationToken);
+    Task<List<Reservation>> GetUserReservation(Guid requestUserId, CancellationToken cancellationToken);
 }

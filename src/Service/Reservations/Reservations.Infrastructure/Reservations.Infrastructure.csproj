@@ -11,8 +11,4 @@
       <ProjectReference Include="..\Reservations.Core\Reservations.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Query\" />
-    </ItemGroup>
-
 </Project>

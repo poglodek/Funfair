@@ -1,5 +1,7 @@
+using Funfair.Dal.CosmosDb.Linq;
 using Funfair.Dal.CosmosDb.Repository;
 using Microsoft.Azure.Cosmos;
+using Microsoft.Azure.Cosmos.Linq;
 using Reservations.Core.Entities;
 using Reservations.Core.Repository;
 using Reservations.Infrastructure.Dal.Container;
@@ -40,5 +42,15 @@ public class ReservationRepository(IRepositoryBase<ReservationContainer> reposit
     public Task Update(Reservation reservation, CancellationToken cancellationToken)
     {
         return repositoryBase.UpsertItemAsync(reservation, type: ReservationType.Reservation, cancellationToken: cancellationToken);
+    }
+
+    public Task<List<Reservation>> GetUserReservation(Guid requestUserId, CancellationToken cancellationToken)
+    {
+        return repositoryBase.GetItemLinqQueryable<Reservation>()
+            .Where(x => x.UserReservations
+                .Select(c => c.User.Id)
+                .Contains(requestUserId))
+            .ToFeedIterator()
+            .ToListAsync(cancellationToken);
     }
 }
