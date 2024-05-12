@@ -1,4 +1,4 @@
-# Funfair Airlines - In progress..
+# Funfair Airlines - In progress..  ~80%
 
 Funfair Airlines is a project that aims to create an airline platform where users can design their own airplanes, make flight reservations, and book seats. The architecture of the project is based on Domain-Driven Design (DDD) and Event-Driven Architecture (EDA). It leverages various Azure components, such as Azure Service Bus (ASB) and MSSQL, and the infrastructure is provisioned using Terraform. The configuration details can be found in the `main.tf` file.
 
