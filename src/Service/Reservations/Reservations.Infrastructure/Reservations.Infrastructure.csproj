@@ -8,6 +8,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Framework\Funfair.Dal.CosmosDb\Funfair.Dal.CosmosDb\Funfair.Dal.CosmosDb.csproj" />
+      <ProjectReference Include="..\..\..\Framework\Funfair.Logging\Funfair.Logging.csproj" />
+      <ProjectReference Include="..\..\..\Framework\Funfair.Messaging.EventHubs\Funfair.Messaging.EventHubs.csproj" />
       <ProjectReference Include="..\Reservations.Core\Reservations.Core.csproj" />
     </ItemGroup>
 
