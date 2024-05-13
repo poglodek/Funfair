@@ -87,6 +87,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Shared", "src\Tests\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funfair.Reservation.App.Tests", "src\Tests\Funfair.Reservation.App.Tests\Funfair.Reservation.App.Tests.csproj", "{650A48B9-F817-4AAA-B6E9-06C88964D96F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funfair.Dal.Gremlin", "src\Framework\Funfair.Dal.Gremlin\Funfair.Dal.Gremlin.csproj", "{EFB408EC-4752-4F68-B107-18D8CDE6D2A8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -209,6 +211,10 @@ Global
 		{650A48B9-F817-4AAA-B6E9-06C88964D96F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{650A48B9-F817-4AAA-B6E9-06C88964D96F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{650A48B9-F817-4AAA-B6E9-06C88964D96F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFB408EC-4752-4F68-B107-18D8CDE6D2A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFB408EC-4752-4F68-B107-18D8CDE6D2A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFB408EC-4752-4F68-B107-18D8CDE6D2A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFB408EC-4752-4F68-B107-18D8CDE6D2A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -255,6 +261,7 @@ Global
 		{7DE6F85B-F45F-4BFF-90C5-47B638EFB9F2} = {6B6C91D0-2BAF-4430-BD19-AAE466B53A0A}
 		{BE727B73-EC4F-42D0-88E4-6B069A582E33} = {C82437A5-F791-4DC5-81CD-77971DC6C4DF}
 		{650A48B9-F817-4AAA-B6E9-06C88964D96F} = {6B6C91D0-2BAF-4430-BD19-AAE466B53A0A}
+		{EFB408EC-4752-4F68-B107-18D8CDE6D2A8} = {D110B0B0-A01D-418B-A806-04E54B352796}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C103615-2B4C-4283-9520-8F74C96DC454}
