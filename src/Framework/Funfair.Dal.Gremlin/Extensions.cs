@@ -14,6 +14,8 @@ public static class Extensions
     {
         var options = builder.Configuration.GetSection("GremlinOptions").Get<GremlinOptions>();
         
+        ArgumentNullException.ThrowIfNull(options, "GremlinOptions not found in configuration");
+        
         var gremlinServer = new GremlinServer(options.Address, options.Port, enableSsl: options.UseSsl);
         var messageSerializer = new GraphSON2MessageSerializer();
         var gremlinClient = new GremlinClient(gremlinServer, messageSerializer);
