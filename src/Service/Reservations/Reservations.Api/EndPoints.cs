@@ -2,13 +2,17 @@ using MediatR;
 using Reservations.App.Commands.CreateDraft;
 using Reservations.App.Commands.CreateReservation;
 using Reservations.App.Commands.UpdateDraft;
+using Reservations.Infrastructure.Query.GetDraftById;
+using Reservations.Infrastructure.Query.GetReservationById;
+using Reservations.Infrastructure.Query.GetUserReservation;
 
 namespace Reservations.Api;
 
 public static class EndPoints
 {
-    public static void Map( IEndpointRouteBuilder endpoints)
+    public static IEndpointRouteBuilder Map( IEndpointRouteBuilder endpoints)
     {
+        //POST
         endpoints.MapPost("draft", async (CreateDraftCommand command, IMediator mediator) =>
         {
             var result = await mediator.Send(command);
@@ -16,13 +20,6 @@ public static class EndPoints
             return Results.Ok(result);
         });
         
-        //TODO use one endpoint for many updates commands
-        endpoints.MapPut("draft", async (UpdateDateDraftCommand command, IMediator mediator) =>
-        {
-            await mediator.Send(command);
-
-            return Results.Accepted();
-        });
         
         endpoints.MapPost("reservation", async (CreateReservationCommand command, IMediator mediator) =>
         {
@@ -30,5 +27,38 @@ public static class EndPoints
 
             return Results.Ok(result);
         });
+        
+        //PUT
+        endpoints.MapPut("draft", async (UpdateDraftCommandBase command, IMediator mediator) =>
+        {
+            await mediator.Send(command);
+
+            return Results.Accepted();
+        });
+        
+        //GET
+        endpoints.MapGet("draft/{id}", async (Guid id, IMediator mediator) =>
+        {
+            var result = await mediator.Send(new GetDraftByIdCommand(id));
+
+            return Results.Ok(result);
+        });
+        
+        endpoints.MapGet("reservation/{id}", async (Guid id, IMediator mediator) =>
+        {
+            var result = await mediator.Send(new GetReservationByIdCommand(id));
+
+            return Results.Ok(result);
+        });
+        
+        endpoints.MapGet("reservations", async (Guid id, IMediator mediator) =>
+        {
+            var result = await mediator.Send(new GetUserReservationCommand());
+
+            return Results.Ok(result);
+        });
+
+
+        return endpoints;
     }
 }

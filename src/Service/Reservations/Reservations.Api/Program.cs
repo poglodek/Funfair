@@ -3,6 +3,7 @@ using Funfair.KeyVault;
 using Funfair.Messaging.EventHubs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Reservations.Api;
 using Reservations.App;
 using Reservations.Infrastructure;
@@ -19,7 +20,9 @@ builder
     .AddEventHubs()
     .Services.AddAuth(builder.Configuration);
 
-
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto
+);
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy( builder =>
@@ -41,11 +44,7 @@ app.UseInfrastructure();
 
 app.MapGet("/", () => Results.Ok($"Reservations working! - {DateTimeOffset.UtcNow}"));
 
-//POST
-
 EndPoints.Map(app);
-
-//GET
 
 app.UseSwaggerUI();
 await app.RunAsync();
