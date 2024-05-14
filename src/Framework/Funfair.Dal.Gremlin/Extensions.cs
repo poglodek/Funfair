@@ -1,3 +1,4 @@
+using Funfair.Dal.Gremlin.GermlinApi;
 using Funfair.Dal.Gremlin.Options;
 using Gremlin.Net.Driver;
 using Gremlin.Net.Driver.Remote;
@@ -23,7 +24,8 @@ public static class Extensions
         
         builder.Services
             .AddSingleton(gremlinClient)
-            .AddSingleton(options);
+            .AddSingleton(options)
+            .AddSingleton<IGremlinRepository,GremlinRepository>();
         
 
         return builder;
